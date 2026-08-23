@@ -1,0 +1,37 @@
+{
+  "name": "accordion",
+  "description": "Collapsible panels with spring-eased height animation and a rotating chevron.",
+  "category": "components",
+  "dependencies": [
+    "@hugeicons/core-free-icons",
+    "@hugeicons/react",
+    "@lisse/react",
+    "clsx",
+    "motion",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [
+    "react"
+  ],
+  "registryDependencies": [
+    "typography"
+  ],
+  "files": [
+    {
+      "path": "components/stepwise/accordion.tsx",
+      "content": "'use client'\n\nimport { useState } from 'react'\nimport { motion, AnimatePresence } from 'motion/react'\nimport { cn } from '@/lib/utils/cn'\nimport { Surface } from '@/components/stepwise/primitives/surface'\nimport { Chevron } from '@/components/stepwise/primitives/chevron'\nimport { Text } from '@/components/stepwise/typography'\n\nexport interface AccordionItem {\n  id      : string\n  title   : string\n  content : React.ReactNode\n}\n\nexport interface AccordionProps {\n  items     : AccordionItem[]\n  /** Allow multiple panels open at once. Default false. */\n  multiple? : boolean\n  /** Fill tint (any CSS color). Very light at rest, darker when hovered/open. */\n  color?    : string\n  className?: string\n}\n\nconst EASE = [0.22, 1, 0.36, 1] as const\n\nexport function Accordion({ items, multiple = false, color, className }: AccordionProps) {\n  const [open, setOpen] = useState<Set<string>>(new Set())\n  const [hovered, setHovered] = useState<string | null>(null)\n\n  const toggle = (id: string) => {\n    setOpen(prev => {\n      const next = new Set(prev)\n      if (next.has(id)) next.delete(id)\n      else { if (!multiple) next.clear(); next.add(id) }\n      return next\n    })\n  }\n\n  return (\n    <div className={cn('flex flex-col gap-2.5', className)}>\n      {items.map(item => {\n        const isOpen = open.has(item.id)\n        const active = isOpen || hovered === item.id\n\n        // colour: default a barely-there neutral (reads almost like disabled);\n        // hovered/open steps to a darker variant to signal the active row.\n        const tintStyle = color\n          ? { background: `color-mix(in srgb, ${color} ${active ? 26 : 12}%, transparent)` }\n          : undefined\n        const tintClass = color\n          ? ''\n          : active\n            ? 'bg-zinc-200/80 dark:bg-zinc-700/45'\n            : 'bg-zinc-100/70 dark:bg-zinc-800/35'\n\n        return (\n          <Surface key={item.id} radius={16} smoothing={0.6} className=\"overflow-hidden\">\n            <div\n              className={cn('transition-colors duration-200 ease-out', tintClass)}\n              style={{ ...tintStyle, ...(color ? { transition: 'background-color 200ms ease-out' } : {}) }}\n              onMouseEnter={() => setHovered(item.id)}\n              onMouseLeave={() => setHovered(h => (h === item.id ? null : h))}\n            >\n              <button\n                onClick={() => toggle(item.id)}\n                className=\"flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3.5 text-left\"\n                aria-expanded={isOpen}\n              >\n                <Text\n                  variant=\"h6-soft\"\n                  as=\"span\"\n                  className={cn(\n                    'transition-colors duration-200',\n                    active ? 'text-zinc-900 dark:text-white' : 'text-zinc-600 dark:text-zinc-300',\n                  )}\n                >\n                  {item.title}\n                </Text>\n                <motion.span\n                  animate={{ rotate: isOpen ? 180 : 0 }}\n                  transition={{ type: 'spring', duration: 0.3, bounce: 0 }}\n                  className={cn('shrink-0 transition-colors duration-200', active ? 'text-zinc-500 dark:text-zinc-300' : 'text-zinc-400 dark:text-zinc-500')}\n                >\n                  <Chevron size={16} />\n                </motion.span>\n              </button>\n\n              <AnimatePresence initial={false}>\n                {isOpen && (\n                  <motion.div\n                    initial={{ height: 0, opacity: 0 }}\n                    animate={{ height: 'auto', opacity: 1 }}\n                    exit={{ height: 0, opacity: 0 }}\n                    transition={{ duration: 0.3, ease: EASE }}\n                    className=\"overflow-hidden\"\n                  >\n                    {/* answer fades + slides in a touch after the panel opens */}\n                    <motion.div\n                      initial={{ opacity: 0, y: -6, filter: 'blur(3px)' }}\n                      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}\n                      exit={{ opacity: 0, y: -4, filter: 'blur(2px)' }}\n                      transition={{ duration: 0.3, ease: EASE, delay: 0.04 }}\n                    >\n                      <Text variant=\"caption-soft\" as=\"div\" className=\"px-4 pb-4 leading-relaxed text-zinc-500 dark:text-zinc-400\">\n                        {item.content}\n                      </Text>\n                    </motion.div>\n                  </motion.div>\n                )}\n              </AnimatePresence>\n            </div>\n          </Surface>\n        )\n      })}\n    </div>\n  )\n}\n"
+    },
+    {
+      "path": "components/stepwise/primitives/chevron.tsx",
+      "content": "import { HugeiconsIcon } from '@hugeicons/react'\nimport { ChevronDownIcon } from '@hugeicons/core-free-icons'\n\n// Shared down-caret — rotate 180° for the \"up\" state.\nexport function Chevron({ size = 16, open = false, className }: { size?: number; open?: boolean; className?: string }) {\n  return (\n    <HugeiconsIcon\n      icon={ChevronDownIcon}\n      size={size}\n      strokeWidth={3}\n      color=\"currentColor\"\n      className={className}\n      style={{ transform: open ? 'rotate(180deg)' : undefined }}\n    />\n  )\n}\n"
+    },
+    {
+      "path": "components/stepwise/primitives/surface.tsx",
+      "content": "'use client'\n\nimport { forwardRef } from 'react'\nimport { SmoothCorners, type SmoothCornersOwnProps, type SmoothCornerOptions } from '@lisse/react'\nimport { cn } from '@/lib/utils/cn'\n\ninterface SurfaceProps extends React.HTMLAttributes<HTMLDivElement> {\n  radius?: number\n  smoothing?: number\n  /** Override for per-corner config — takes precedence over radius/smoothing. */\n  corners?: SmoothCornerOptions\n  // `className` isn't part of SmoothCornersOwnProps — it comes from the\n  // polymorphic element props (ComponentPropsWithoutRef<E>) instead — but\n  // it's a legitimate, commonly-needed passthrough (e.g. forcing `h-full`\n  // through the SmoothCorners wrapper), so it's added back explicitly here.\n  lisse?: Omit<SmoothCornersOwnProps, 'corners'> & { className?: string }\n}\n\nexport const Surface = forwardRef<HTMLDivElement, SurfaceProps>(({\n  radius = 12,\n  smoothing = 0.6,\n  corners,\n  className,\n  children,\n  lisse,\n  ...rest\n}, ref) => {\n  return (\n    <SmoothCorners corners={corners ?? { radius, smoothing }} {...lisse}>\n      <div ref={ref} className={cn(className)} {...rest}>\n        {children}\n      </div>\n    </SmoothCorners>\n  )\n})\n\nSurface.displayName = 'Surface'\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

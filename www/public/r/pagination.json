@@ -1,0 +1,28 @@
+{
+  "name": "pagination",
+  "description": "Page number navigation with smart ellipsis, prev/next arrows, and an active-page squircle pill.",
+  "category": "components",
+  "dependencies": [
+    "@lisse/react",
+    "clsx",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/pagination.tsx",
+      "content": "'use client'\n\nimport { cn } from '@/lib/utils/cn'\nimport { Surface } from '@/components/stepwise/primitives/surface'\n\nexport interface PaginationProps {\n  page       : number\n  totalPages : number\n  onChange   : (page: number) => void\n  /** How many siblings to show around the current page. Default 1. */\n  siblings?  : number\n  className? : string\n}\n\nfunction buildRange(current: number, total: number, siblings: number): (number | '…')[] {\n  const left  = Math.max(2, current - siblings)\n  const right = Math.min(total - 1, current + siblings)\n  const pages: (number | '…')[] = [1]\n\n  if (left > 2) pages.push('…')\n  for (let i = left; i <= right; i++) pages.push(i)\n  if (right < total - 1) pages.push('…')\n  if (total > 1) pages.push(total)\n\n  return pages\n}\n\nconst BTN = 'inline-flex items-center justify-center w-8 h-8 text-[13px] font-medium transition-colors duration-150 rounded-[8px]'\nconst GHOST = 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800'\n\nexport function Pagination({ page, totalPages, onChange, siblings = 1, className }: PaginationProps) {\n  const pages = buildRange(page, totalPages, siblings)\n\n  return (\n    <nav aria-label=\"Pagination\" className={cn('flex items-center gap-1', className)}>\n      {/* Prev */}\n      <button\n        onClick={() => onChange(page - 1)}\n        disabled={page <= 1}\n        aria-label=\"Previous page\"\n        className={cn(BTN, GHOST, 'rounded-full disabled:opacity-30 disabled:pointer-events-none')}\n      >\n        <svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\">\n          <path d=\"M9 3L5 7l4 4\" stroke=\"currentColor\" strokeWidth=\"1.4\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n        </svg>\n      </button>\n\n      {pages.map((p, i) =>\n        p === '…' ? (\n          <span key={`e${i}`} className=\"inline-flex items-center justify-center w-8 h-8 text-[13px] text-zinc-400\">\n            …\n          </span>\n        ) : p === page ? (\n          <Surface\n            key={p}\n            radius={8}\n            className=\"inline-flex w-8 h-8 items-center justify-center bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 text-[13px] font-semibold tabular-nums\"\n          >\n            {p}\n          </Surface>\n        ) : (\n          <button\n            key={p}\n            onClick={() => onChange(p as number)}\n            className={cn(BTN, GHOST, 'tabular-nums')}\n          >\n            {p}\n          </button>\n        )\n      )}\n\n      {/* Next */}\n      <button\n        onClick={() => onChange(page + 1)}\n        disabled={page >= totalPages}\n        aria-label=\"Next page\"\n        className={cn(BTN, GHOST, 'rounded-full disabled:opacity-30 disabled:pointer-events-none')}\n      >\n        <svg width=\"14\" height=\"14\" viewBox=\"0 0 14 14\" fill=\"none\">\n          <path d=\"M5 3l4 4-4 4\" stroke=\"currentColor\" strokeWidth=\"1.4\" strokeLinecap=\"round\" strokeLinejoin=\"round\"/>\n        </svg>\n      </button>\n    </nav>\n  )\n}\n"
+    },
+    {
+      "path": "components/stepwise/primitives/surface.tsx",
+      "content": "'use client'\n\nimport { forwardRef } from 'react'\nimport { SmoothCorners, type SmoothCornersOwnProps, type SmoothCornerOptions } from '@lisse/react'\nimport { cn } from '@/lib/utils/cn'\n\ninterface SurfaceProps extends React.HTMLAttributes<HTMLDivElement> {\n  radius?: number\n  smoothing?: number\n  /** Override for per-corner config — takes precedence over radius/smoothing. */\n  corners?: SmoothCornerOptions\n  // `className` isn't part of SmoothCornersOwnProps — it comes from the\n  // polymorphic element props (ComponentPropsWithoutRef<E>) instead — but\n  // it's a legitimate, commonly-needed passthrough (e.g. forcing `h-full`\n  // through the SmoothCorners wrapper), so it's added back explicitly here.\n  lisse?: Omit<SmoothCornersOwnProps, 'corners'> & { className?: string }\n}\n\nexport const Surface = forwardRef<HTMLDivElement, SurfaceProps>(({\n  radius = 12,\n  smoothing = 0.6,\n  corners,\n  className,\n  children,\n  lisse,\n  ...rest\n}, ref) => {\n  return (\n    <SmoothCorners corners={corners ?? { radius, smoothing }} {...lisse}>\n      <div ref={ref} className={cn(className)} {...rest}>\n        {children}\n      </div>\n    </SmoothCorners>\n  )\n})\n\nSurface.displayName = 'Surface'\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

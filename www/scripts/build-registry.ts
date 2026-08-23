@@ -13,6 +13,7 @@ const index = registry.map(c => ({
   description: c.description,
   category: c.category,
   dependencies: c.dependencies,
+  peerDependencies: c.peerDependencies,
   registryDependencies: c.registryDependencies,
 }))
 fs.writeFileSync(path.join(outDir, 'index.json'), JSON.stringify(index, null, 2))
@@ -29,6 +30,7 @@ for (const comp of registry) {
     description: comp.description,
     category: comp.category,
     dependencies: comp.dependencies,
+    peerDependencies: comp.peerDependencies,
     registryDependencies: comp.registryDependencies,
     files,
   }

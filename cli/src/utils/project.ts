@@ -32,6 +32,33 @@ export function installPackages(packages: string[], root: string, pm: PackageMan
   execSync(cmd[pm], { cwd: root, stdio: 'inherit' })
 }
 
+/**
+ * Verify the project maps `@/*` to its root — every Stepwise component imports
+ * its siblings and `@/lib/utils/cn` through that alias, so without it nothing
+ * we write will resolve.
+ */
+export function checkPathAlias(root: string): { ok: boolean; message: string } {
+  const configFile = ['tsconfig.json', 'jsconfig.json']
+    .map(f => path.join(root, f))
+    .find(f => fs.existsSync(f))
+
+  if (!configFile) {
+    return { ok: false, message: 'No tsconfig.json or jsconfig.json found.' }
+  }
+
+  const raw = fs.readFileSync(configFile, 'utf-8')
+  // tsconfig allows comments and trailing commas, so a strict JSON.parse can
+  // fail on a perfectly valid config — match the alias directly instead.
+  const hasAlias = /"@\/\*"\s*:\s*\[[^\]]*\]/.test(raw)
+
+  return hasAlias
+    ? { ok: true, message: '' }
+    : {
+        ok: false,
+        message: `Add an "@/*" path alias to ${path.basename(configFile)}.`,
+      }
+}
+
 /** Return packages from the manifest that are not yet in package.json */
 export function missingDependencies(packages: string[], root: string): string[] {
   const pkgPath = path.join(root, 'package.json')

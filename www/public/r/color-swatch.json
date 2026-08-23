@@ -1,0 +1,23 @@
+{
+  "name": "color-swatch",
+  "description": "A row of color circles with a single active selection — the ring springs between swatches as you pick.",
+  "category": "components",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/color-swatch.tsx",
+      "content": "'use client'\n\nimport { useState } from 'react'\nimport { cn } from '@/lib/utils/cn'\n\nexport interface ColorSwatchProps {\n  /** The selectable colors — any CSS color. */\n  colors: string[]\n  value?: string\n  defaultValue?: string\n  onChange?: (color: string) => void\n  /** Circle diameter in px. Default 26. */\n  size?: number\n  /** Optional labels announced to screen readers, parallel to `colors`. */\n  labels?: string[]\n  className?: string\n}\n\n/**\n * A row of colour circles with a single active selection. Selecting a swatch\n * draws a ring in its *own colour* while the inner circle shrinks in to make\n * room — so the footprint never changes and there's no stray hopping ring.\n */\nexport function ColorSwatch({\n  colors,\n  value,\n  defaultValue,\n  onChange,\n  size = 26,\n  labels,\n  className,\n}: ColorSwatchProps) {\n  const [internal, setInternal] = useState(defaultValue ?? colors[0])\n  const active = value ?? internal\n\n  const select = (c: string) => {\n    if (value === undefined) setInternal(c)\n    onChange?.(c)\n  }\n\n  return (\n    <div className={cn('flex items-center gap-3', className)} role=\"radiogroup\">\n      {colors.map((c, i) => {\n        const isActive = c === active\n        return (\n          <button\n            key={c + i}\n            role=\"radio\"\n            aria-checked={isActive}\n            aria-label={labels?.[i] ?? c}\n            onClick={() => select(c)}\n            className={cn(\n              'relative shrink-0 rounded-full outline-none',\n              'transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]',\n              'hover:scale-110 focus-visible:scale-110 active:scale-95',\n            )}\n            style={{ width: size, height: size }}\n          >\n            {/* ring — same colour as the swatch, at the footprint edge; fades in on select */}\n            <span\n              aria-hidden\n              className=\"absolute inset-0 rounded-full transition-opacity duration-200 ease-out\"\n              style={{ boxShadow: `inset 0 0 0 2px ${c}`, opacity: isActive ? 1 : 0 }}\n            />\n            {/* inner colour — shrinks in when selected to reveal the ring; size never grows */}\n            <span\n              aria-hidden\n              className=\"absolute inset-0 rounded-full transition-transform duration-200 ease-[cubic-bezier(0.34,1.35,0.64,1)]\"\n              style={{\n                background: c,\n                transform: isActive ? 'scale(0.7)' : 'scale(1)',\n                boxShadow: isActive ? 'none' : 'inset 0 0 0 1px rgba(0,0,0,0.1)',\n              }}\n            />\n          </button>\n        )\n      })}\n    </div>\n  )\n}\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

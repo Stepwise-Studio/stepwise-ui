@@ -7,11 +7,13 @@
     "stepwise-ui": "./dist/index.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch"
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "commander": "^12.1.0",
@@ -24,5 +26,23 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "keywords": [
+    "ui",
+    "components",
+    "react",
+    "tailwind",
+    "stepwise",
+    "design-system"
+  ],
+  "homepage": "https://ui.stepwise.studio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stepwise-Studio/stepwise-ui.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Stepwise-Studio/stepwise-ui/issues"
+  },
+  "license": "MIT"
 }

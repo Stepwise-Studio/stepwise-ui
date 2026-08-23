@@ -28,9 +28,12 @@ program
 
 program.addHelpText('after', `
 ${pc.dim('Examples:')}
-  ${pc.cyan('npx stepwise-ui add typography')}
-  ${pc.cyan('npx stepwise-ui add button badge')}
-  ${pc.cyan('npx stepwise-ui list')}
+  ${pc.cyan('npx stepwise-ui list')}                    ${pc.dim('see everything available')}
+  ${pc.cyan('npx stepwise-ui add button')}              ${pc.dim('add one component')}
+  ${pc.cyan('npx stepwise-ui add button input toast')}  ${pc.dim('add several at once')}
+  ${pc.cyan('npx stepwise-ui add date-picker')}         ${pc.dim('dependencies come along')}
+
+${pc.dim('Docs:')} ${pc.cyan('https://ui.stepwise.studio')}
 `)
 
 program.parse()

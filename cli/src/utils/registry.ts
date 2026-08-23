@@ -1,5 +1,5 @@
 const REGISTRY_BASE =
-  process.env.STEPWISE_REGISTRY_URL ?? 'https://stepwiseui.dev/r'
+  process.env.STEPWISE_REGISTRY_URL ?? 'https://ui.stepwise.studio/r'
 
 export interface RegistryFile {
   path: string
@@ -11,6 +11,8 @@ export interface ComponentManifest {
   description: string
   category: string
   dependencies: string[]
+  /** Frameworks the host app must provide. Warned about, never installed. */
+  peerDependencies?: string[]
   registryDependencies: string[]
   files: RegistryFile[]
 }

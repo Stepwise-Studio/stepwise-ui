@@ -1,0 +1,31 @@
+{
+  "name": "theme-toggle",
+  "description": "A button that switches between light and dark mode with a circular expand view-transition animation and cross-fading icon swap.",
+  "category": "components",
+  "dependencies": [
+    "@hugeicons/core-free-icons",
+    "@hugeicons/react",
+    "@lisse/react",
+    "clsx",
+    "motion",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/theme-toggle.tsx",
+      "content": "'use client'\n\nimport { ButtonHTMLAttributes } from 'react'\nimport { AnimatePresence, motion } from 'motion/react'\nimport { HugeiconsIcon } from '@hugeicons/react'\nimport { Moon02Icon, Sun01Icon } from '@hugeicons/core-free-icons'\nimport { SmoothCorners } from '@lisse/react'\nimport { useTheme } from '@/lib/theme'\nimport { cn } from '@/lib/utils/cn'\n\nconst iconVariants = {\n  initial: { scale: 0.4, opacity: 0, filter: 'blur(4px)' },\n  animate: { scale: 1,   opacity: 1, filter: 'blur(0px)' },\n  exit:    { scale: 0.4, opacity: 0, filter: 'blur(4px)' },\n}\n\nconst spring = { type: 'spring', duration: 0.2, bounce: 0 } as const\n\nexport function ThemeToggle({ className, onClick, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {\n  const { theme, toggle } = useTheme()\n\n  return (\n    <SmoothCorners asChild corners={{ radius: 13, smoothing: 0.6 }}>\n    <button\n      onClick={e => { toggle(e); onClick?.(e) }}\n      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}\n      className={cn('flex items-center justify-center w-9 h-9 cursor-pointer transition-colors duration-150 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800', className)}\n      {...props}\n    >\n      <span className=\"relative flex items-center justify-center w-[18px] h-[18px]\">\n        <AnimatePresence mode=\"wait\" initial={false}>\n          {theme === 'dark' ? (\n            <motion.span\n              key=\"moon\"\n              className=\"absolute inset-0 flex items-center justify-center\"\n              variants={iconVariants}\n              initial=\"initial\"\n              animate=\"animate\"\n              exit=\"exit\"\n              transition={spring}\n            >\n              <HugeiconsIcon icon={Moon02Icon} size={18} strokeWidth={2} color=\"currentColor\" />\n            </motion.span>\n          ) : (\n            <motion.span\n              key=\"sun\"\n              className=\"absolute inset-0 flex items-center justify-center\"\n              variants={iconVariants}\n              initial=\"initial\"\n              animate=\"animate\"\n              exit=\"exit\"\n              transition={spring}\n            >\n              <HugeiconsIcon icon={Sun01Icon} size={18} strokeWidth={2} color=\"currentColor\" />\n            </motion.span>\n          )}\n        </AnimatePresence>\n      </span>\n    </button>\n    </SmoothCorners>\n  )\n}\n"
+    },
+    {
+      "path": "lib/theme.tsx",
+      "content": "'use client'\n\nimport { createContext, useCallback, useContext, useEffect, useState } from 'react'\n\ntype Theme = 'dark' | 'light'\n\ninterface ThemeContextValue {\n  theme: Theme\n  toggle: (e: React.MouseEvent) => void\n}\n\nconst ThemeContext = createContext<ThemeContextValue>({\n  theme: 'dark',\n  toggle: () => {},\n})\n\nexport function ThemeProvider({ children }: { children: React.ReactNode }) {\n  const [theme, setTheme] = useState<Theme>('dark')\n\n  useEffect(() => {\n    setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light')\n  }, [])\n\n  const toggle = useCallback(\n    (e: React.MouseEvent) => {\n      const next: Theme = theme === 'dark' ? 'light' : 'dark'\n      const x = e.clientX\n      const y = e.clientY\n      const maxRadius = Math.hypot(\n        Math.max(x, window.innerWidth - x),\n        Math.max(y, window.innerHeight - y),\n      )\n\n      const apply = () => {\n        document.documentElement.classList.toggle('dark', next === 'dark')\n        localStorage.setItem('theme', next)\n        setTheme(next)\n      }\n\n      if (!('startViewTransition' in document)) {\n        apply()\n        return\n      }\n\n      const vt = (document as unknown as { startViewTransition: (fn: () => void) => { ready: Promise<void> } })\n        .startViewTransition(apply)\n\n      vt.ready.then(() => {\n        document.documentElement.animate(\n          {\n            clipPath: [\n              `circle(0px at ${x}px ${y}px)`,\n              `circle(${maxRadius}px at ${x}px ${y}px)`,\n            ],\n          },\n          {\n            duration: 600,\n            easing: 'cubic-bezier(0.65, 0, 0.35, 1)',\n            pseudoElement: '::view-transition-new(root)',\n            fill: 'forwards',\n          },\n        )\n      })\n    },\n    [theme],\n  )\n\n  return (\n    <ThemeContext.Provider value={{ theme, toggle }}>\n      {children}\n    </ThemeContext.Provider>\n  )\n}\n\nexport const useTheme = () => useContext(ThemeContext)\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

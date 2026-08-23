@@ -1,0 +1,22 @@
+{
+  "name": "dot-grid-loader",
+  "description": "A 3×3 grid of dots with four personalities.",
+  "category": "components",
+  "dependencies": [
+    "clsx",
+    "motion",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/dot-grid-loader.tsx",
+      "content": "'use client'\n\nimport { motion, useReducedMotion } from 'motion/react'\nimport { cn } from '@/lib/utils/cn'\n\nexport type DotGridPattern = 'wave' | 'ripple' | 'snake' | 'random'\n\nexport interface DotGridLoaderProps {\n  /** How the 3×3 grid animates. Default \"wave\". */\n  pattern?  : DotGridPattern\n  /** Dot diameter in px. Default 6. */\n  dot?      : number\n  /** Gap between dots in px. Default 5. */\n  gap?      : number\n  /** Seconds per cycle. Default 1.4. */\n  duration? : number\n  className?: string\n}\n\n/** Per-pattern delay (0–1 of the cycle) for cell [row, col]. */\nconst DELAY: Record<DotGridPattern, (r: number, c: number) => number> = {\n  // diagonal sweep\n  wave:   (r, c) => (r + c) / 8,\n  // out from the centre\n  ripple: (r, c) => (Math.abs(r - 1) + Math.abs(c - 1)) / 4,\n  // clockwise around the ring, centre last\n  snake:  (r, c) => {\n    const ring = [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0]]\n    const i = ring.findIndex(([rr, cc]) => rr === r && cc === c)\n    return i === -1 ? 1 : i / 8\n  },\n  // deterministic scatter — stable across renders, unlike Math.random()\n  random: (r, c) => ((r * 3 + c) * 5 % 9) / 9,\n}\n\n/**\n * A 3×3 grid of dots. Each cell just gets a delay from the chosen pattern, so\n * the same nine dots read as a sweep, a ripple, a chase, or a scatter.\n */\nexport function DotGridLoader({\n  pattern = 'wave',\n  dot = 6,\n  gap = 5,\n  duration = 1.4,\n  className,\n}: DotGridLoaderProps) {\n  const reduce = useReducedMotion()\n  const cells = [0, 1, 2].flatMap(r => [0, 1, 2].map(c => [r, c] as const))\n\n  return (\n    <span\n      className={cn('inline-grid', className)}\n      role=\"status\"\n      aria-label=\"Loading\"\n      style={{ gridTemplateColumns: `repeat(3, ${dot}px)`, gap }}\n    >\n      {cells.map(([r, c]) => (\n        <motion.span\n          key={`${r}-${c}`}\n          className=\"rounded-full bg-zinc-900 dark:bg-white\"\n          style={{ width: dot, height: dot }}\n          animate={reduce ? { opacity: 0.4 } : { opacity: [0.15, 1, 0.15], scale: [0.7, 1, 0.7] }}\n          transition={\n            reduce\n              ? { duration: 0 }\n              : {\n                  duration,\n                  repeat: Infinity,\n                  ease: 'easeInOut',\n                  delay: DELAY[pattern](r, c) * (duration * 0.6),\n                }\n          }\n        />\n      ))}\n    </span>\n  )\n}\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

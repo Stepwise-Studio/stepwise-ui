@@ -59,6 +59,11 @@ export default function ComboboxPage() {
           </Text>
         </div>
 
+        <section className="flex flex-col gap-4">
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
+          <InlineInstall command="npx stepwise-ui add combobox" />
+        </section>
+
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
           <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">

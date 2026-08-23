@@ -4,6 +4,6 @@ dist/
 .env*
 *.local
 .DS_Store
-public/registry/
+www/public/registry/
 skills/
 .claude/

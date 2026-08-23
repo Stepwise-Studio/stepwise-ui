@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "registry:build": "tsx scripts/build-registry.ts"
+    "registry:gen": "tsx scripts/gen-registry.ts",
+    "registry:check": "tsx scripts/check-registry.ts",
+    "registry:build": "npm run registry:gen && npm run registry:check && tsx scripts/build-registry.ts",
+    "prebuild": "npm run registry:build"
   },
   "dependencies": {
     "@hugeicons/core-free-icons": "^4.2.2",

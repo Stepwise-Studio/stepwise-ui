@@ -1,0 +1,23 @@
+{
+  "name": "separator",
+  "description": "A thin divider between content.",
+  "category": "components",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/separator.tsx",
+      "content": "'use client'\n\nimport { HTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils/cn'\n\nexport interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {\n  orientation?: 'horizontal' | 'vertical'\n  /** Optional centered label — only for horizontal separators. */\n  label?: React.ReactNode\n}\n\nexport function Separator({ orientation = 'horizontal', label, className, ...props }: SeparatorProps) {\n  if (orientation === 'vertical') {\n    return (\n      <div\n        role=\"separator\"\n        aria-orientation=\"vertical\"\n        className={cn('w-px rounded-full self-stretch bg-zinc-200 dark:bg-zinc-800', className)}\n        {...props}\n      />\n    )\n  }\n\n  if (label) {\n    return (\n      <div role=\"separator\" aria-orientation=\"horizontal\" className={cn('flex w-full items-center gap-3', className)} {...props}>\n        <span className=\"h-px flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800\" />\n        <span className=\"text-[12px] font-medium tracking-[-0.01em] text-zinc-400 dark:text-zinc-500\">{label}</span>\n        <span className=\"h-px flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800\" />\n      </div>\n    )\n  }\n\n  return (\n    <div\n      role=\"separator\"\n      aria-orientation=\"horizontal\"\n      className={cn('h-px w-full rounded-full bg-zinc-200 dark:bg-zinc-800', className)}\n      {...props}\n    />\n  )\n}\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}
