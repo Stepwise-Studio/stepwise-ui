@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { cn } from '@/lib/utils/cn'
 
 export interface BreadcrumbItem {
@@ -50,12 +49,12 @@ export function Breadcrumbs({ items, separator = 'slash', className }: Breadcrum
                   {item.label}
                 </span>
               ) : (
-                <Link
+                <a
                   href={item.href}
                   className="text-[13px] tracking-[-0.01em] text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors duration-150"
                 >
                   {item.label}
-                </Link>
+                </a>
               )}
             </li>
           )

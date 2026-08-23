@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ArrowRight02Icon } from '@hugeicons/core-free-icons'
@@ -111,12 +110,10 @@ export function ProductCard({
       {/* ── Image area ── */}
       <div className="relative h-[250px] w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900">
         {images.length > 0 && (
-          <Image
+          <img
             src={images[activeImage] ?? images[0]}
             alt={name}
-            fill
-            className="object-cover"
-            unoptimized
+            className="absolute inset-0 h-full w-full object-cover"
           />
         )}
         {images.length === 0 && (

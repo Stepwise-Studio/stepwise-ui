@@ -49,7 +49,9 @@ export function Toggle({
   const reduce = useReducedMotion()
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'production') return
+    // globalThis, not `process` directly — a bare `process` reference needs
+    // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
+    if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV === 'production') return
     if (!label && !ariaLabel) {
       console.warn('[Stepwise Toggle] Needs a `label` or `ariaLabel` — the switch has no accessible name.')
     }

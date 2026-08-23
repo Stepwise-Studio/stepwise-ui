@@ -164,7 +164,10 @@ export function Popover({
   // so assistive tech would never see them.
   const isElementTrigger = isValidElement<Record<string, unknown>>(trigger)
 
-  if (process.env.NODE_ENV !== 'production' && !isElementTrigger) {
+  // globalThis, not `process` directly — a bare `process` reference needs
+  // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
+  const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV
+  if (nodeEnv !== 'production' && !isElementTrigger) {
     console.warn('[Stepwise Popover] `trigger` should be a single element (e.g. a Button) — a non-element trigger falls back to a plain, non-keyboard-accessible click target.')
   }
 

@@ -53,9 +53,7 @@
       "clsx",
       "tailwind-merge"
     ],
-    "peerDependencies": [
-      "next"
-    ],
+    "peerDependencies": [],
     "registryDependencies": []
   },
   {
@@ -563,7 +561,6 @@
       "tailwind-merge"
     ],
     "peerDependencies": [
-      "next",
       "react"
     ],
     "registryDependencies": [
@@ -581,9 +578,7 @@
       "clsx",
       "tailwind-merge"
     ],
-    "peerDependencies": [
-      "next"
-    ],
+    "peerDependencies": [],
     "registryDependencies": [
       "button",
       "frame"

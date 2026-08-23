@@ -66,7 +66,10 @@ export function SocialButton({
 }: SocialButtonProps) {
   const builtIn = isBuiltIn(provider)
 
-  if (process.env.NODE_ENV !== 'production' && !builtIn && (!icon || !label)) {
+  // globalThis, not `process` directly — a bare `process` reference needs
+  // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
+  const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV
+  if (nodeEnv !== 'production' && !builtIn && (!icon || !label)) {
     console.warn(`[Stepwise SocialButton] provider="${provider}" isn't built in — pass both \`icon\` and \`label\` explicitly.`)
   }
 

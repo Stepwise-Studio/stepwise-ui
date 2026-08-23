@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { cn } from '@/lib/utils/cn'
 import { Frame } from '@/components/stepwise/frame'
 import { Button } from '@/components/stepwise/button'
@@ -48,7 +47,7 @@ export function ProfileCard({
       {!isCompact && (
         <div className="relative h-[120px] w-full overflow-hidden bg-gradient-to-br from-sky-200 via-indigo-200 to-violet-300 dark:from-sky-950 dark:via-indigo-950 dark:to-violet-950">
           {bannerSrc && (
-            <Image src={bannerSrc} alt="" fill className="object-cover" unoptimized />
+            <img src={bannerSrc} alt="" className="absolute inset-0 h-full w-full object-cover" />
           )}
         </div>
       )}
@@ -59,7 +58,7 @@ export function ProfileCard({
         <div className="flex items-center gap-3">
           <div className="relative shrink-0 size-[55px] rounded-full border border-zinc-300 dark:border-zinc-600 overflow-hidden bg-zinc-200 dark:bg-zinc-800">
             {avatarSrc && (
-              <Image src={avatarSrc} alt={name} fill className="object-cover" unoptimized />
+              <img src={avatarSrc} alt={name} className="absolute inset-0 h-full w-full object-cover" />
             )}
             {!avatarSrc && (
               <div className="absolute inset-0 flex items-center justify-center text-[18px] font-semibold text-zinc-500 dark:text-zinc-400">

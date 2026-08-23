@@ -299,7 +299,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   }, [])
 
   useEffect(() => {
-    if (process.env.NODE_ENV === 'production') return
+    // globalThis, not `process` directly — a bare `process` reference needs
+    // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
+    if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV === 'production') return
     if (iconOnly && !props['aria-label'] && !props['aria-labelledby']) {
       console.warn('[Stepwise Button] `iconOnly` needs an `aria-label` — the control has no accessible name.')
     }

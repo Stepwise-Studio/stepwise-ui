@@ -66,7 +66,7 @@ export const registry: RegistryComponent[] = [
     description: "Accessible navigation trail.",
     category: 'components',
     dependencies: ['clsx', 'tailwind-merge'],
-    peerDependencies: ['next'],
+    peerDependencies: [],
     registryDependencies: [],
     files: [
       { src: 'components/stepwise/breadcrumbs.tsx', dest: 'components/stepwise/breadcrumbs.tsx' },
@@ -476,7 +476,7 @@ export const registry: RegistryComponent[] = [
     description: "A flexible e-commerce product card.",
     category: 'components',
     dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', '@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
-    peerDependencies: ['next', 'react'],
+    peerDependencies: ['react'],
     registryDependencies: ['button', 'color-swatch'],
     files: [
       { src: 'components/stepwise/primitives/surface.tsx', dest: 'components/stepwise/primitives/surface.tsx' },
@@ -489,7 +489,7 @@ export const registry: RegistryComponent[] = [
     description: "An agent or user profile card.",
     category: 'components',
     dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', 'clsx', 'tailwind-merge'],
-    peerDependencies: ['next'],
+    peerDependencies: [],
     registryDependencies: ['button', 'frame'],
     files: [
       { src: 'components/stepwise/profile-card.tsx', dest: 'components/stepwise/profile-card.tsx' },
