@@ -1,0 +1,566 @@
+@import "tailwindcss";
+
+/* Class-based dark mode — Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+::selection {
+  background-color: oklch(68.5% 0.169 237.323 / 0.1);
+  color: oklch(58.8% 0.158 241.966);
+}
+
+/* ─── View Transition API ────────────────────────────────────────────────────
+   Disable the default browser cross-fade so our JS clip-path animation runs
+   as the sole transition effect (circular ink-drop from click origin).       */
+::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Start new root hidden so the JS clip-path animation has sole control */
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  clip-path: circle(0px at center);
+}
+
+/* ─── Shiki dual-theme syntax highlighting ───────────────────────────────────
+   With themes: { light, dark } and defaultColor:'light' (the default), Shiki
+   emits color:#hex directly on each span for light, and --shiki-dark as a CSS
+   variable for dark. There is no --shiki-light variable, so we only need to
+   override for dark mode — light mode works via Shiki's direct color values.  */
+html.dark .shiki,
+html.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+}
+
+/* ─── Input error shake (transitions.dev · 12-error-state-shake) ────────────
+   Only the keyframes + class live here. The component handles class toggling
+   via a ref so the shake can replay without a React re-render.              */
+:root {
+  --shake-distance: 6px;
+  --shake-overshoot: 4px;
+  --shake-dur-a: 80ms;
+  --shake-dur-b: 60ms;
+  --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes input-shake {
+  0%      { transform: translateX(0);                                animation-timing-function: var(--shake-ease); }
+  28.57%  { transform: translateX(var(--shake-distance));            animation-timing-function: var(--shake-ease); }
+  57.14%  { transform: translateX(calc(var(--shake-distance) * -1)); animation-timing-function: var(--shake-ease); }
+  78.57%  { transform: translateX(var(--shake-overshoot));           animation-timing-function: var(--shake-ease); }
+  100%    { transform: translateX(0); }
+}
+
+.input-shaking {
+  animation: input-shake calc(var(--shake-dur-a) * 2 + var(--shake-dur-b) * 2) linear;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input-shaking { animation: none !important; transform: none !important; }
+}
+
+/* ─── Shimmer text (transitions.dev · 15-shimmer-text) ──────────────────────
+   Two-layer: base text renders in --shimmer-base; ::before duplicates the
+   glyphs (content: attr(data-text)), paints a moving highlight band and clips
+   it to the text via background-clip. The AI "thinking / generating" shimmer. */
+:root {
+  --shimmer-base: #a1a1aa;        /* zinc-400 — sits closer to the page so the highlight pops */
+  --shimmer-highlight: #18181b;   /* zinc-900 */
+  --shimmer-dur: 2s;
+  --shimmer-band: 300%;
+}
+html.dark {
+  --shimmer-base: #71717a;        /* zinc-500 — sits closer to the page so the highlight pops */
+  --shimmer-highlight: #fafafa;   /* zinc-50 */
+}
+.t-shimmer {
+  position: relative;
+  display: inline-block;
+  color: var(--shimmer-base);
+}
+.t-shimmer::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 40%,
+    var(--shimmer-highlight) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: var(--shimmer-band) 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: t-shimmer var(--shimmer-dur) linear infinite;
+}
+@keyframes t-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-shimmer::before { animation: none !important; }
+}
+
+/* Typewriter caret blink */
+@keyframes tw-caret {
+  0%, 45%  { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100%     { opacity: 1; }
+}
+
+/* ─── Retro Typewriter ──────────────────────────────────────────────────────
+   Circular typewriter keys (cream keytop, chrome ring) + the type-bar strike. */
+.rt-key {
+  font-family: var(--font-typewriter), ui-monospace, monospace;
+  background:
+    radial-gradient(circle at 50% 34%, #fbf7ec 0%, #efe7d4 62%, #ddd2ba 100%);
+  box-shadow:
+    0 0 0 2px #c9bea3,
+    0 0 0 3px rgba(0,0,0,0.28),
+    0 3px 4px rgba(0,0,0,0.4),
+    inset 0 2px 2px rgba(255,255,255,0.85),
+    inset 0 -3px 4px rgba(0,0,0,0.18);
+  transition: transform 90ms cubic-bezier(0.2,0,0,1), box-shadow 90ms ease, filter 90ms ease;
+  cursor: pointer;
+}
+.rt-key:hover { filter: brightness(1.03); }
+.rt-key.rt-key-down,
+.rt-key:active {
+  transform: translateY(3px) scale(0.97);
+  filter: brightness(0.9);
+  box-shadow:
+    0 0 0 2px #b3a888,
+    0 0 0 3px rgba(0,0,0,0.32),
+    0 1px 2px rgba(0,0,0,0.4),
+    inset 0 2px 5px rgba(0,0,0,0.32);
+}
+.rt-spacebar {
+  background: linear-gradient(#f7f1e2, #e2d8c2);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.28),
+    0 3px 4px rgba(0,0,0,0.4),
+    inset 0 2px 2px rgba(255,255,255,0.8),
+    inset 0 -3px 4px rgba(0,0,0,0.18);
+}
+
+.rt-typebar { transform: translateY(6px) scaleY(0.2); opacity: 0; }
+.rt-typebar.rt-strike { animation: rt-strike 130ms cubic-bezier(0.3,0,0.2,1); }
+@keyframes rt-strike {
+  0%   { transform: translateY(6px) scaleY(0.2); opacity: 0; }
+  45%  { transform: translateY(-10px) scaleY(1); opacity: 1; }
+  100% { transform: translateY(6px) scaleY(0.2); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rt-typebar.rt-strike { animation: none !important; }
+  .rt-key.rt-key-down { transform: none; }
+}
+
+@theme {
+  /* === Easing curves — Law 3 === */
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter:   cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit:    cubic-bezier(0.4, 0, 1, 1);
+  --ease-snappy:  cubic-bezier(0.2, 0, 0, 1);
+
+  /* === Duration scale === */
+  --duration-interaction: 150ms;
+  --duration-transition:  200ms;
+  --duration-motion:      300ms;
+  --duration-large:       400ms;
+}
+
+/* ─── Color tokens ───────────────────────────────────────────────────────────
+   Inter Display OpenType features — matched exactly to Figma:
+   Stylistic sets:
+     ss03 = Round quotes & commas
+     ss07 = Square punctuation
+     ss08 = Square quotes
+   Character variants (cv01–cv13):
+     cv01 = Alternate one     cv02 = Open four        cv03 = Open six
+     cv04 = Open nine         cv05 = Lower-case l      cv06 = Simplified u
+     cv07 = Alt sharp s       cv08 = Upper-case i      cv09 = Flat-top three
+     cv10 = Capital G         cv11 = Single-story a    cv12 = Compact f
+     cv13 = Compact t                                                         */
+:root {
+  --font-sans: var(--font-inter-display);
+
+  --font-features:
+    "ss03" 1, "ss07" 1, "ss08" 1,
+    "cv01" 1, "cv02" 1, "cv03" 1, "cv04" 1, "cv05" 1,
+    "cv09" 1, "cv10" 1, "cv11" 1, "cv12" 1, "cv13" 1;
+
+  /* Light theme (default) */
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.13 0 0);
+
+  /* UI border tokens — used by Surface middleBorder */
+  --ui-border: #e4e4e7;        /* zinc-200 */
+  --ui-border-subtle: #f4f4f5; /* zinc-100 */
+
+  /* Modal motion — transitions.dev */
+  --modal-open-dur: 250ms;
+  --modal-close-dur: 150ms;
+  --modal-scale: 0.96;
+  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Scrollbar — no rail, thumb only; darkens on hover, darkens further
+     while actually being dragged. */
+  --scrollbar-thumb:       rgba(24, 24, 27, 0.22);   /* zinc-900 @ 22% — resting */
+  --scrollbar-thumb-hover: rgba(24, 24, 27, 0.20);   /* zinc-900 @ 20% — hover   */
+  --scrollbar-thumb-active: #3f3f46;                 /* zinc-700 — dragging */
+}
+
+/* Dark theme — applied when html.dark is present (set by ThemeProvider) */
+html.dark {
+  --background: oklch(0.09 0 0);
+  --foreground: oklch(0.93 0 0);
+
+  --ui-border: #27272a;        /* zinc-800 */
+  --ui-border-subtle: #18181b; /* zinc-900 */
+
+  --scrollbar-thumb:       rgba(244, 244, 245, 0.18); /* zinc-100 @ 18% */
+  --scrollbar-thumb-hover: rgba(244, 244, 245, 0.20);
+  --scrollbar-thumb-active: #d4d4d8;                  /* zinc-300 — dragging, lighter for contrast on dark bg */
+}
+
+/* Touch targets: sm/default/lg are shorter than the 44px touch guideline, so
+   extend the hit area vertically with a pseudo-element. Vertical only —
+   widening it too would let neighbouring buttons in a row overlap. */
+@media (pointer: coarse) {
+  .stepwise-btn-hit::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    translate: 0 -50%;
+    height: max(100%, 44px);
+  }
+}
+
+.stepwise-btn-ripple {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  transform: scale(0);
+  animation: stepwise-ripple 500ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes stepwise-ripple {
+  from { transform: scale(0); opacity: 0.6; }
+  to   { transform: scale(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepwise-btn-ripple { animation: none; display: none; }
+}
+
+/* HeroButton glow — color and shape are two separate concerns sharing one
+   element. All three glow layers (wash + both corners) point their
+   `background` at this SAME class, so at any instant every layer is
+   reading the identical patch of one continuous, pre-authored rainbow —
+   guaranteed to fuse, since it's literally one gradient. A hue-rotate
+   filter would rotate each layer's own distinct palette independently and
+   could momentarily line up unrelated hues at their shared edges; sliding
+   one shared strip avoids that by construction. Shape (the corner pooling
+   falloff, the vertical/horizontal tapers) lives entirely in each layer's
+   own `mask-image` below, untouched by this animation. */
+.stepwise-glow-color {
+  background-image: linear-gradient(
+    90deg,
+    #ff5f6d, #ffc371, #ffe566, #6bff8f, #4facfe, #a06bff, #ff5f6d
+  );
+  background-size: 200% 100%;
+  animation: stepwise-glow-flow 7s linear infinite;
+}
+@keyframes stepwise-glow-flow {
+  to { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stepwise-glow-color { animation: none; }
+}
+
+/* Hover vibrancy — `--glow-blur` is set inline per element (it depends on
+   button size, computed in JS); `--glow-saturate` is the static half and
+   lives here instead, specifically so a `.group:hover` rule at higher
+   specificity can raise it. An inline `filter` on the element would win
+   over any class rule regardless of :hover, so the actual `filter`
+   property has to live in CSS too, not in the component's style prop. */
+.stepwise-glow-filter {
+  filter: blur(var(--glow-blur, 0px)) saturate(var(--glow-saturate, 1));
+  transition: filter 200ms ease-out;
+}
+.stepwise-glow-filter-corner { --glow-saturate: 1.45; }
+.stepwise-glow-filter-wash   { --glow-saturate: 1.5; }
+
+.group:hover .stepwise-glow-filter-corner { --glow-saturate: 1.75; }
+.group:hover .stepwise-glow-filter-wash   { --glow-saturate: 1.85; }
+/* The speed-up on hover is NOT done here via `animation-duration` — changing
+   a running CSS animation's duration keeps its *elapsed real time* constant
+   and just reinterprets that against the new duration, which snaps the
+   background-position to a different fraction of the loop (reads as the
+   flow "restarting"). The component instead nudges each layer's Web
+   Animations `playbackRate` on pointer enter/leave, which speeds up motion
+   forward from wherever it currently is — no jump, no restart. */
+
+.stepwise-glow-wash-shape {
+  position: absolute;
+  -webkit-mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 86%),
+    linear-gradient(90deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 86%),
+    linear-gradient(90deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+          mask-composite: intersect;
+}
+
+.stepwise-glow-corner-shape {
+  position: absolute;
+  bottom: 0;
+  width: 48%;
+  height: 64%;
+}
+.stepwise-glow-corner-shape-left {
+  left: 0;
+  /* Back to intersecting a vertical fade with the ellipse (caps the reach
+     tighter than the ellipse's own radius alone would). The straight-edge
+     artifact wasn't the intersect itself — it was the ellipse having too
+     small a solid core and too narrow a fade band (30%→72%), so its curve
+     had almost no room to actually round off before hitting full
+     transparency. Widening that band (10%→92%) gives the curve space to
+     read as a proper soft ellipse instead of a shape with a hard edge. */
+  -webkit-mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 60%),
+    radial-gradient(ellipse 66% 92% at 0% 100%, #000 0%, #000 10%, transparent 92%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 60%),
+    radial-gradient(ellipse 66% 92% at 0% 100%, #000 0%, #000 10%, transparent 92%);
+          mask-composite: intersect;
+}
+.stepwise-glow-corner-shape-right {
+  right: 0;
+  -webkit-mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 60%),
+    radial-gradient(ellipse 66% 92% at 100% 100%, #000 0%, #000 10%, transparent 92%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 60%),
+    radial-gradient(ellipse 66% 92% at 100% 100%, #000 0%, #000 10%, transparent 92%);
+          mask-composite: intersect;
+}
+
+/* TestButton — balanced rainbow: warm → cool, no single hue dominating. */
+.stepwise-test-rainbow-wash {
+  position: absolute;
+  background-image: linear-gradient(
+    90deg,
+    #ff5f6d, #ffb347, #ffe566, #72d572, #5eb0ff, #a78bfa, #ff5f6d
+  );
+  -webkit-mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 86%),
+    linear-gradient(90deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to top, #000 0%, #000 18%, transparent 86%),
+    linear-gradient(90deg, transparent 0%, #000 20%, #000 80%, transparent 100%);
+          mask-composite: intersect;
+}
+
+.stepwise-test-rainbow-corner {
+  position: absolute;
+  bottom: 0;
+  width: 48%;
+  height: 64%;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 18%, transparent 74%);
+          mask-image: linear-gradient(to top, #000 0%, #000 18%, transparent 74%);
+}
+
+.stepwise-test-rainbow-corner-left {
+  left: 0;
+  background: radial-gradient(
+    ellipse 88% 92% at 0% 100%,
+    #ff5f6d 0%,
+    #ffb347 26%,
+    #ffe566 48%,
+    #72d572 60%,
+    transparent 72%
+  );
+}
+
+.stepwise-test-rainbow-corner-right {
+  right: 0;
+  background: radial-gradient(
+    ellipse 88% 92% at 100% 100%,
+    #a78bfa 0%,
+    #5eb0ff 30%,
+    #e879f9 52%,
+    #ffb347 62%,
+    transparent 74%
+  );
+}
+
+/* A label longer than its button (fullWidth container, long/custom text
+   e.g. SocialButton's custom-provider name) must truncate instead of
+   spilling outside the squircle. overflow:hidden also zeroes this element's
+   contribution to its flex/grid ancestors' automatic min-width, so the
+   whole row can actually shrink to the button's real width. */
+.stepwise-btn-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Hero / liquid-metal button variants render live paper.design shaders
+   (see button.tsx) instead of CSS gradients — no keyframes needed here;
+   `speed={0}` on the shader itself is what freezes them for
+   prefers-reduced-motion. */
+
+/* Firefox/Gecko renders Inter Display's glyphs a ~1px hair lower within an
+   identical, geometrically-verified line box than Blink does (confirmed via
+   getBoundingClientRect — the boxes measure pixel-identical to the icon next
+   to them; only the rasterized ink differs). -moz-appearance is a genuine
+   Gecko-only property, so this only ever applies in Firefox-based engines
+   (incl. Firefox forks like Zen), never Chromium/WebKit. */
+@supports (-moz-appearance: none) {
+  .stepwise-btn-label { transform: translateY(-1px); }
+}
+
+/* Slider thumb — 3px visible line, 24×44px hit target (WCAG 2.5.8). */
+.stepwise-slider-thumb::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 24px;
+  height: 44px;
+}
+
+/* Reserve the vertical scrollbar's gutter always, on every page — without
+   this, navigating from a short docs page (no scrollbar) to a tall one (has
+   one) shifts all the content sideways by the scrollbar's width. This only
+   affects the page's own native scrollbar; ScrollArea's custom thumb is a
+   position:absolute overlay that never participates in layout, so it never
+   needed this in the first place. */
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter-display), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: -0.03em;
+  font-feature-settings: var(--font-features);
+
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
+}
+
+/* ─── Subtle scrollbar — site-wide ───────────────────────────────────────────
+   Fully transparent track — no rail line — with a slim rounded thumb that
+   darkens on hover and picks up the accent blue while actually being
+   dragged.
+
+   IMPORTANT: Chromium ignores ::-webkit-scrollbar entirely once scrollbar-color
+   is set, so the standard properties are scoped to engines WITHOUT the
+   pseudo-element (Firefox) via @supports. Chromium uses ::-webkit-scrollbar.  */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  /* 2px transparent border, equal on both sides → a thumb centered in the
+     8px lane, inset from the track edges. Border-width stays constant across
+     states (only the color changes) — an animated border-width throws off
+     Chromium's thumb centering. */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 150ms ease-out;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--scrollbar-thumb-active);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Opt out of the site-wide scrollbar styling for specific elements. Plain, unlayered CSS
+   (this file isn't wrapped in @layer) always beats Tailwind's @layer
+   utilities regardless of selector specificity, so a `[&::-webkit-scrollbar]`
+   utility class can never win against the rules above — it has to be
+   overridden here instead. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* ─── Carousel (stepwise/carousel.tsx) ─────────────────────────────────────── */
+.ax-c { --ax-c-veil: oklch(0.985 0 0 / 0.94); }
+html.dark .ax-c { --ax-c-veil: oklch(0.16 0 0 / 0.9); }
+
+.ax-c-stage {
+  position: relative;
+  width: 100%;
+}
+
+.ax-c-anim {
+  animation-duration: var(--ax-c-dur);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.ax-c-marquee { animation-name: ax-c-marquee; }
+.ax-c-helix { animation-name: ax-c-helix; }
+.ax-c-reverse { animation-direction: reverse; }
+
+.ax-c[data-paused="true"] .ax-c-anim { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ax-c:not([data-paused="false"]) .ax-c-anim { animation-play-state: paused; }
+}
+
+@keyframes ax-c-marquee {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes ax-c-helix {
+  from { transform: rotateX(10deg) rotateY(0deg); }
+  to   { transform: rotateX(10deg) rotateY(360deg); }
+}
+

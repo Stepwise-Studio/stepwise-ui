@@ -1,0 +1,13 @@
+[
+  {
+    "name": "typography",
+    "description": "Consistent type scale with 22 semantic variants built on Inter Display.",
+    "category": "foundations",
+    "dependencies": [
+      "class-variance-authority",
+      "clsx",
+      "tailwind-merge"
+    ],
+    "registryDependencies": []
+  }
+]
