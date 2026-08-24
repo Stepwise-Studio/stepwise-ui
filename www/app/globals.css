@@ -229,6 +229,7 @@ html.dark {
   --ui-border: #27272a;        /* zinc-800 */
   --ui-border-subtle: #18181b; /* zinc-900 */
 
+
   --scrollbar-thumb:       rgba(244, 244, 245, 0.18); /* zinc-100 @ 18% */
   --scrollbar-thumb-hover: rgba(244, 244, 245, 0.20);
   --scrollbar-thumb-active: #d4d4d8;                  /* zinc-300 — dragging, lighter for contrast on dark bg */
@@ -529,38 +530,4 @@ body {
   height: 0;
 }
 
-/* ─── Carousel (stepwise/carousel.tsx) ─────────────────────────────────────── */
-.ax-c { --ax-c-veil: oklch(0.985 0 0 / 0.94); }
-html.dark .ax-c { --ax-c-veil: oklch(0.16 0 0 / 0.9); }
-
-.ax-c-stage {
-  position: relative;
-  width: 100%;
-}
-
-.ax-c-anim {
-  animation-duration: var(--ax-c-dur);
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: transform;
-}
-
-.ax-c-marquee { animation-name: ax-c-marquee; }
-.ax-c-helix { animation-name: ax-c-helix; }
-.ax-c-reverse { animation-direction: reverse; }
-
-.ax-c[data-paused="true"] .ax-c-anim { animation-play-state: paused; }
-
-@media (prefers-reduced-motion: reduce) {
-  .ax-c:not([data-paused="false"]) .ax-c-anim { animation-play-state: paused; }
-}
-
-@keyframes ax-c-marquee {
-  to { transform: translate3d(-50%, 0, 0); }
-}
-
-@keyframes ax-c-helix {
-  from { transform: rotateX(10deg) rotateY(0deg); }
-  to   { transform: rotateX(10deg) rotateY(360deg); }
-}
 

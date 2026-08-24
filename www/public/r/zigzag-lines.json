@@ -1,0 +1,23 @@
+{
+  "name": "zigzag-lines",
+  "description": "A zig-zag line pattern for section backgrounds.",
+  "category": "components",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/zigzag-lines.tsx",
+      "content": "'use client'\n\nimport * as React from 'react'\nimport { cn } from '@/lib/utils/cn'\n\nexport interface ZigzagLinesProps extends React.HTMLAttributes<HTMLDivElement> {\n  /** Wave direction. Default 'horizontal'. */\n  variant?: 'horizontal' | 'vertical'\n  /** Pattern tile size in px. Default 24. */\n  size?: number\n  /** Fade the pattern out toward the edges. Default true. */\n  faded?: boolean\n}\n\n/**\n * A zig-zag line pattern for section backgrounds. Absolutely positioned to\n * fill its nearest positioned ancestor — give the parent `relative` and a\n * height.\n */\nexport const ZigzagLines = React.forwardRef<HTMLDivElement, ZigzagLinesProps>(\n  ({ className, style, variant = 'horizontal', size = 24, faded = true, ...props }, ref) => {\n    const patternId = React.useId()\n    const cx = size / 2\n    const cy = size / 2\n\n    const maskStyle = faded\n      ? {\n          maskImage: 'radial-gradient(ellipse at center, white 30%, transparent 100%)',\n          WebkitMaskImage: 'radial-gradient(ellipse at center, white 30%, transparent 100%)',\n        }\n      : {}\n\n    const path =\n      variant === 'horizontal'\n        ? `M 0 ${size / 4} L ${cx} ${size * 0.5} L ${size} ${size / 4}`\n        : `M ${size / 4} 0 L ${size * 0.5} ${cy} L ${size / 4} ${size}`\n\n    return (\n      <div\n        ref={ref}\n        aria-hidden\n        className={cn('absolute inset-0 z-0 h-full w-full pointer-events-none overflow-hidden', className)}\n        style={{ ...maskStyle, ...style }}\n        {...props}\n      >\n        <svg className=\"absolute inset-0 h-full w-full text-zinc-200/80 dark:text-zinc-800/80\">\n          <defs>\n            <pattern id={patternId} width={size} height={size} patternUnits=\"userSpaceOnUse\">\n              <path d={path} fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1\" />\n            </pattern>\n          </defs>\n          <rect width=\"100%\" height=\"100%\" fill={`url(#${patternId})`} />\n        </svg>\n      </div>\n    )\n  }\n)\nZigzagLines.displayName = 'ZigzagLines'\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

@@ -6,9 +6,7 @@ import { Frame } from '@/components/stepwise/frame'
    smoothing, border, and resting shadow. No content baked in; consumers
    fill it with whatever they want (see FrameHeader/Title/etc for one way). */
 export function FrameBasicPreview() {
-  return (
-    <div className="w-full max-w-[280px]">
-      <Frame className="h-32" />
-    </div>
-  )
+  // Square, so the preview reads as the surface itself rather than implying a
+  // card shape — Frame has no intrinsic aspect ratio, the consumer sets it.
+  return <Frame className="size-[220px]" />
 }

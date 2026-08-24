@@ -7,6 +7,9 @@ export type SpinnerStatus = 'loading' | 'success' | 'error'
 export type SpinnerSize = 'sm' | 'default' | 'lg'
 export type SpinnerVariant = 'arc' | 'dots'
 
+/** One arc rotation, seconds — exported so callers can time a resolve to land on a full spin. */
+export const SPINNER_ARC_DURATION = 0.7
+
 export interface SpinnerProps {
   /** Drive this from your async state. Default "loading". */
   status?   : SpinnerStatus
@@ -20,8 +23,16 @@ export interface SpinnerProps {
 
 const SIZE_MAP: Record<SpinnerSize, number> = { sm: 16, default: 24, lg: 32 }
 const DOTS = 8
-const TICK  = 'M6 12.5 L10.2 16.6 L18 8.4'
-const CROSS = 'M8 8 L16 16 M16 8 L8 16'
+// Glyphs sit well inside the r=11 disc — a tick that reaches the rim reads as
+// cramped at 16px and heavy at 32px.
+const TICK  = 'M7.9 12.3 L10.7 15.1 L16.1 9.4'
+const CROSS = 'M9.3 9.3 L14.7 14.7 M14.7 9.3 L9.3 14.7'
+
+// The disc grows out of where the ring was rather than popping in from
+// nothing, so the resolve reads as one gesture. Soft enough not to overshoot
+// into a bounce, which would fight the glyph drawing on top of it.
+const DISC_SPRING = { type: 'spring' as const, stiffness: 300, damping: 30, mass: 0.85 }
+const FADE = { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const }
 
 /**
  * The loading indicator, and the moment after it. Give it a `status` and it
@@ -59,9 +70,9 @@ export function Spinner({ status = 'loading', size = 'default', variant = 'arc',
               width={px} height={px} viewBox={`0 0 ${px} ${px}`}
               className="absolute inset-0"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.92 }}
+              transition={FADE}
             >
               {/* track */}
               <circle
@@ -82,7 +93,7 @@ export function Spinner({ status = 'loading', size = 'default', variant = 'arc',
                 strokeDasharray={`${c * 0.28} ${c * 0.72}`}
                 style={{
                   transformOrigin: '50% 50%',
-                  animation: reduce ? undefined : 'stepwise-spinner-spin 0.7s linear infinite',
+                  animation: reduce ? undefined : `stepwise-spinner-spin ${SPINNER_ARC_DURATION}s linear infinite`,
                 }}
               />
             </motion.svg>
@@ -91,9 +102,9 @@ export function Spinner({ status = 'loading', size = 'default', variant = 'arc',
               key="dots"
               className="absolute inset-0"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.12 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.92 }}
+              transition={FADE}
             >
               {Array.from({ length: DOTS }).map((_, i) => (
                 <span
@@ -121,23 +132,28 @@ export function Spinner({ status = 'loading', size = 'default', variant = 'arc',
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.12 }}
+            transition={FADE}
           >
             <motion.circle
               cx="12" cy="12" r={11}
               fill={tint}
-              initial={reduce ? { scale: 1 } : { scale: 0 }}
+              initial={reduce ? { scale: 1 } : { scale: 0.55 }}
               animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 420, damping: 26 }}
+              transition={DISC_SPRING}
               style={{ transformOrigin: '50% 50%' }}
             />
             <motion.path
               d={status === 'success' ? TICK : CROSS}
-              fill="none" stroke="#fff" strokeWidth={2.4}
+              fill="none" stroke="#fff" strokeWidth={2.1}
               strokeLinecap="round" strokeLinejoin="round"
-              initial={reduce ? { pathLength: 1 } : { pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: reduce ? 0 : 0.22, delay: reduce ? 0 : 0.06, ease: [0.22, 1, 0.36, 1] }}
+              // Opacity rides along with the draw so the first frame isn't a
+              // stray dot sitting on the disc before the stroke has length.
+              initial={reduce ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: 1 }}
+              transition={{
+                pathLength: { duration: reduce ? 0 : 0.3, delay: reduce ? 0 : 0.1, ease: [0.22, 1, 0.36, 1] },
+                opacity:    { duration: reduce ? 0 : 0.1, delay: reduce ? 0 : 0.1 },
+              }}
             />
           </motion.svg>
         )}

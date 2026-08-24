@@ -16,6 +16,14 @@ export const textEffectsNav: DocsNavItem[] = [
   { href: '/docs/squiggly-underline', label: 'Squiggly Underline' },
   { href: '/docs/circle-annotation',    label: 'Circle Annotation' },
   { href: '/docs/retro-typewriter',     label: 'Retro Typewriter' },
+  { href: '/docs/animated-gradient',    label: 'Animated Gradient' },
+]
+
+export const backgroundsNav: DocsNavItem[] = [
+  { href: '/docs/diagonal-lines',   label: 'Diagonal Lines' },
+  { href: '/docs/zigzag-lines',     label: 'Zigzag Lines' },
+  { href: '/docs/dotted-grid',      label: 'Dotted Grid' },
+  { href: '/docs/dotted-spotlight', label: 'Dotted Spotlight' },
 ]
 
 export const componentsNav: DocsNavItem[] = [
@@ -24,9 +32,7 @@ export const componentsNav: DocsNavItem[] = [
   { href: '/docs/avatar',                label: 'Avatar' },
   { href: '/docs/breadcrumbs',           label: 'Breadcrumbs' },
   { href: '/docs/button',                label: 'Button' },
-  { href: '/docs/test-button',           label: 'Test Button' },
   { href: '/docs/calendar',              label: 'Calendar' },
-  { href: '/docs/carousel',              label: 'Carousel' },
   { href: '/docs/checkbox',              label: 'Checkbox' },
   { href: '/docs/chip',                  label: 'Chip' },
   { href: '/docs/color-picker',          label: 'Color Picker' },
@@ -39,13 +45,11 @@ export const componentsNav: DocsNavItem[] = [
   { href: '/docs/drawer',                label: 'Drawer' },
   { href: '/docs/dropdown-menu',         label: 'Dropdown Menu' },
   { href: '/docs/file-uploader',         label: 'File Uploader' },
-  { href: '/docs/flower-loader',         label: 'Flower Loader' },
   { href: '/docs/folder',                label: 'Folder' },
   { href: '/docs/glow-button',           label: 'Glow Button' },
   { href: '/docs/infinite-canvas',       label: 'Infinite Canvas' },
   { href: '/docs/input',                 label: 'Input' },
   { href: '/docs/kbd',                   label: 'Kbd' },
-  { href: '/docs/logo-reveal',           label: 'Logo Reveal' },
   { href: '/docs/modal',                 label: 'Modal' },
   { href: '/docs/multiselect',           label: 'Multiselect' },
   { href: '/docs/otp-input',             label: 'OTP Input' },
@@ -54,6 +58,7 @@ export const componentsNav: DocsNavItem[] = [
   { href: '/docs/progress',              label: 'Progress' },
   { href: '/docs/qty-input',             label: 'Quantity Input' },
   { href: '/docs/radio',                 label: 'Radio' },
+  { href: '/docs/scale',                 label: 'Scale' },
   { href: '/docs/scroll-area',           label: 'Scroll Area' },
   { href: '/docs/segment',               label: 'Segment' },
   { href: '/docs/select',                label: 'Select' },
@@ -69,7 +74,6 @@ export const componentsNav: DocsNavItem[] = [
   { href: '/docs/tooltip',               label: 'Tooltip' },
   { href: '/docs/typography',            label: 'Typography' },
   { href: '/docs/video-player',          label: 'Video Player' },
-  { href: '/docs/voice-orb',             label: 'Voice Orb' },
 ]
 
 export const cardsNav: DocsNavItem[] = [
@@ -77,11 +81,18 @@ export const cardsNav: DocsNavItem[] = [
   { href: '/docs/profile-card',  label: 'Profile Card' },
   { href: '/docs/product-card',  label: 'Product Card' },
   { href: '/docs/pricing-card',  label: 'Pricing Card' },
-  { href: '/docs/stat-card',     label: 'Stat Card' },
+]
+
+export const carouselsNav: DocsNavItem[] = [
+  { href: '/docs/arc-carousel',  label: 'Arc' },
+  { href: '/docs/lens-carousel', label: 'Lens' },
+  { href: '/docs/deck-carousel', label: 'Deck' },
 ]
 
 export const docsNav: DocsNavSection[] = [
   { label: 'All Components',  items: componentsNav },
   { label: 'Cards',           items: cardsNav },
+  { label: 'Carousels',       items: carouselsNav },
+  { label: 'Backgrounds',     items: backgroundsNav },
   { label: 'Text Effects',    items: textEffectsNav },
 ]

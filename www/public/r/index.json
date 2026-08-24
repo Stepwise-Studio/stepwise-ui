@@ -19,6 +19,20 @@
     ]
   },
   {
+    "name": "animated-gradient",
+    "description": "A colorful gradient sweeps across the text on a loop, playing only while it's in view.",
+    "category": "components",
+    "dependencies": [
+      "clsx",
+      "motion",
+      "tailwind-merge"
+    ],
+    "peerDependencies": [
+      "react"
+    ],
+    "registryDependencies": []
+  },
+  {
     "name": "apple-select",
     "description": "An iOS-style text highlight — a fixed span the author chooses, with a translucent accent band and a lollipop handle at each end.",
     "category": "components",
@@ -30,6 +44,22 @@
       "react"
     ],
     "registryDependencies": []
+  },
+  {
+    "name": "arc-carousel",
+    "description": "Photographs riding a shallow arc.",
+    "category": "components",
+    "dependencies": [
+      "clsx",
+      "motion",
+      "tailwind-merge"
+    ],
+    "peerDependencies": [
+      "react"
+    ],
+    "registryDependencies": [
+      "frame"
+    ]
   },
   {
     "name": "avatar",
@@ -75,21 +105,6 @@
   {
     "name": "calendar",
     "description": "Standalone month-view calendar components.",
-    "category": "components",
-    "dependencies": [
-      "@lisse/react",
-      "clsx",
-      "motion",
-      "tailwind-merge"
-    ],
-    "peerDependencies": [
-      "react"
-    ],
-    "registryDependencies": []
-  },
-  {
-    "name": "carousel",
-    "description": "Three patterns.",
     "category": "components",
     "dependencies": [
       "@lisse/react",
@@ -248,6 +263,35 @@
     ]
   },
   {
+    "name": "deck-carousel",
+    "description": "A fanned hand of cards — the front one square on, its neighbours falling away to either side.",
+    "category": "components",
+    "dependencies": [
+      "clsx",
+      "motion",
+      "tailwind-merge"
+    ],
+    "peerDependencies": [
+      "react"
+    ],
+    "registryDependencies": [
+      "frame"
+    ]
+  },
+  {
+    "name": "diagonal-lines",
+    "description": "Diagonal hairlines for section backgrounds, leaning left or right.",
+    "category": "components",
+    "dependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "peerDependencies": [
+      "react"
+    ],
+    "registryDependencies": []
+  },
+  {
     "name": "dot-grid-loader",
     "description": "A 3×3 grid of dots with four personalities.",
     "category": "components",
@@ -257,6 +301,33 @@
       "tailwind-merge"
     ],
     "peerDependencies": [],
+    "registryDependencies": []
+  },
+  {
+    "name": "dotted-grid",
+    "description": "A static dot grid for section backgrounds.",
+    "category": "components",
+    "dependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "peerDependencies": [
+      "react"
+    ],
+    "registryDependencies": []
+  },
+  {
+    "name": "dotted-spotlight",
+    "description": "A dot grid with a mouse-follow flashlight — dots brighten near the cursor.",
+    "category": "components",
+    "dependencies": [
+      "clsx",
+      "motion",
+      "tailwind-merge"
+    ],
+    "peerDependencies": [
+      "react"
+    ],
     "registryDependencies": []
   },
   {
@@ -327,18 +398,6 @@
       "folder",
       "modal"
     ]
-  },
-  {
-    "name": "flower-loader",
-    "description": "A cute little flower that spins slowly while its petals pulse in a wave — each petal blooms and eases back a beat after the one before it, so the wait reads as a flower gently opening and closing.",
-    "category": "components",
-    "dependencies": [
-      "clsx",
-      "motion",
-      "tailwind-merge"
-    ],
-    "peerDependencies": [],
-    "registryDependencies": []
   },
   {
     "name": "folder",
@@ -436,8 +495,8 @@
     "registryDependencies": []
   },
   {
-    "name": "logo-reveal",
-    "description": "An opening sequence off a drafting table.",
+    "name": "lens-carousel",
+    "description": "Photographs sized as if bounded by an ellipse laid over the row — tallest at the centre, tapering toward a shared height at either rim, rather than moving up or down.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -445,10 +504,11 @@
       "tailwind-merge"
     ],
     "peerDependencies": [
-      "react",
-      "react-dom"
+      "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [
+      "frame"
+    ]
   },
   {
     "name": "modal",
@@ -640,6 +700,17 @@
     "registryDependencies": []
   },
   {
+    "name": "scale",
+    "description": "A ruler-tick strip — diagonal hairlines at a fixed pitch.",
+    "category": "components",
+    "dependencies": [
+      "clsx",
+      "tailwind-merge"
+    ],
+    "peerDependencies": [],
+    "registryDependencies": []
+  },
+  {
     "name": "scramble-text",
     "description": "Each character scrambles together first, then letters lock in one-by-one from left to right while the rest keep churning until the last one settles.",
     "category": "components",
@@ -780,20 +851,6 @@
     "registryDependencies": []
   },
   {
-    "name": "stat-card",
-    "description": "A dashboard metric tile — icon, label, a big number, an up/down/neutral change chip, and an optional inline sparkline.",
-    "category": "components",
-    "dependencies": [
-      "@lisse/react",
-      "clsx",
-      "tailwind-merge"
-    ],
-    "peerDependencies": [
-      "react"
-    ],
-    "registryDependencies": []
-  },
-  {
     "name": "table",
     "description": "A typed, column-driven data table with alternating rows, a dark header, and horizontal scroll on overflow.",
     "category": "components",
@@ -811,20 +868,6 @@
     "registryDependencies": [
       "separator"
     ]
-  },
-  {
-    "name": "test-button",
-    "description": "A fully rounded pill with a subtle rainbow inner glow along the bottom edge.",
-    "category": "components",
-    "dependencies": [
-      "@lisse/react",
-      "clsx",
-      "tailwind-merge"
-    ],
-    "peerDependencies": [
-      "react"
-    ],
-    "registryDependencies": []
   },
   {
     "name": "theme-toggle",
@@ -952,8 +995,8 @@
     "registryDependencies": []
   },
   {
-    "name": "voice-orb",
-    "description": "A dotted 3D sphere for voice and agent UIs — grains on a globe, depth-sorted, slowly tumbling.",
+    "name": "zigzag-lines",
+    "description": "A zig-zag line pattern for section backgrounds.",
     "category": "components",
     "dependencies": [
       "clsx",

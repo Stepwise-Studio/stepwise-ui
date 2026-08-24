@@ -57,6 +57,8 @@ interface NavEntry {
 const SECTION_CATEGORY: Record<string, Category> = {
   'All Components': 'components',
   Cards: 'components',
+  Carousels: 'components',
+  Backgrounds: 'components',
   'Text Effects': 'components',
 }
 

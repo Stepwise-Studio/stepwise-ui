@@ -1,0 +1,24 @@
+{
+  "name": "animated-gradient",
+  "description": "A colorful gradient sweeps across the text on a loop, playing only while it's in view.",
+  "category": "components",
+  "dependencies": [
+    "clsx",
+    "motion",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [
+    "react"
+  ],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/animated-gradient.tsx",
+      "content": "'use client'\n\nimport React, { useRef } from 'react'\nimport { motion, type HTMLMotionProps, useInView } from 'motion/react'\nimport { cn } from '@/lib/utils/cn'\n\nexport interface AnimatedGradientProps extends HTMLMotionProps<'span'> {\n  text: string\n  duration?: number\n  withGrain?: boolean\n  loop?: boolean\n}\n\nexport const AnimatedGradient = React.forwardRef<HTMLSpanElement, AnimatedGradientProps>(\n  (\n    {\n      text,\n      duration = 5,\n      withGrain = false,\n      loop = true,\n      className,\n      ...props\n    },\n    ref\n  ) => {\n    const localRef = useRef<HTMLSpanElement>(null)\n    const isInView = useInView(localRef, { once: false, amount: 0.5 })\n\n    return (\n      // The outer span is a plain DOM element, but `props` is typed as\n      // HTMLMotionProps (this component's own prop type extends it) — cast\n      // narrows back to plain span attributes for the spread; behavior is\n      // unaffected since only DOM-valid props are ever actually passed here.\n      <span className={cn('relative inline-block', className)} {...(props as React.HTMLAttributes<HTMLSpanElement>)}>\n        {/* Base dark text behind the gradient */}\n        <span className=\"text-slate-900 dark:text-slate-100\">{text}</span>\n        {/* The animated colorful gradient overlaid exactly on top with transparent gaps */}\n        <motion.span\n          ref={(node) => {\n            if (typeof ref === 'function') ref(node)\n            else if (ref) ref.current = node\n            if (localRef) localRef.current = node\n          }}\n          initial={{ backgroundPosition: '-200% 50%' }}\n          animate={isInView ? { backgroundPosition: '200% 50%' } : { backgroundPosition: '-200% 50%' }}\n          transition={{\n            duration: duration,\n            repeat: loop ? Infinity : 0,\n            ease: 'linear',\n          }}\n          className=\"absolute inset-0 block bg-clip-text text-transparent bg-[length:300%_auto] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]\"\n          style={{\n            // Discontinuous \"strip\" highlights separated by transparent gaps\n            backgroundImage: `linear-gradient(165deg, transparent 15%, #06b6d4 22%, transparent 29%, transparent 40%, #ec4899 47%, transparent 54%, transparent 65%, #eab308 72%, transparent 79%)`,\n            ...(withGrain\n              ? {\n                  backgroundBlendMode: 'overlay',\n                }\n              : {}),\n          }}\n        >\n          {text}\n        </motion.span>\n      </span>\n    )\n  }\n)\n\nAnimatedGradient.displayName = 'AnimatedGradient'\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

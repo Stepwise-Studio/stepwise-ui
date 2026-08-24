@@ -21,16 +21,14 @@ const usageCode = `import { ScrambleText } from '@/components/stepwise/scramble-
 </ScrambleText>`
 
 const tocItems = [
-  { id: 'preview',      label: 'Preview',      child: false },
-  { id: 'installation', label: 'Installation', child: false },
-  { id: 'usage',        label: 'Usage',        child: false },
-  { id: 'props',        label: 'Props',        child: false },
+  { id: 'preview', label: 'Preview', child: false },
+  { id: 'props',   label: 'Props',   child: false },
 ]
 
 export default function ScrambleTextPage() {
   return (
     <div className="flex gap-12">
-      <div className="flex-1 min-w-0 flex flex-col gap-12">
+      <div className="flex min-w-0 flex-1 flex-col gap-12">
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Scramble Text</Text>
@@ -41,21 +39,16 @@ export default function ScrambleTextPage() {
           </Text>
         </div>
 
+        <section className="flex flex-col gap-4">
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
+          <InlineInstall command="npx stepwise-ui add scramble-text" />
+        </section>
+
         <section id="preview" className="scroll-mt-20">
           <PreviewCode
             preview={<ScramblePreview />}
             code={<CodeBlock code={usageCode} lang="tsx" className="rounded-none" flat />}
           />
-        </section>
-
-        <section id="installation" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
-          <InlineInstall command="npx stepwise-ui add scramble-text" />
-        </section>
-
-        <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
-          <CodeBlock code={usageCode} lang="tsx" />
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
@@ -71,8 +64,7 @@ export default function ScrambleTextPage() {
         </section>
 
       </div>
-
-      <aside className="w-44 shrink-0 hidden xl:block">
+      <aside className="hidden w-44 shrink-0 xl:block">
         <OnThisPage items={tocItems} />
       </aside>
     </div>

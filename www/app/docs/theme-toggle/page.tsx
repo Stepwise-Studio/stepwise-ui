@@ -76,10 +76,9 @@ export function ThemeToggle() {
 /* ─── page sections ─────────────────────────────────────────────────────── */
 
 const tocItems = [
-  { id: 'preview',      label: 'Preview',      child: false },
-  { id: 'installation', label: 'Installation', child: false },
-  { id: 'usage',        label: 'Usage',        child: false },
-  { id: 'api',          label: 'API',          child: false },
+  { id: 'preview', label: 'Preview', child: false },
+  { id: 'usage',   label: 'Usage',   child: false },
+  { id: 'api',     label: 'API',     child: false },
 ]
 
 /* ─── page ──────────────────────────────────────────────────────────────── */
@@ -87,7 +86,7 @@ const tocItems = [
 export default async function ThemeTogglePage() {
   return (
     <div className="flex gap-12">
-      <div className="flex-1 min-w-0 flex flex-col gap-12">
+      <div className="flex min-w-0 flex-1 flex-col gap-12">
 
         {/* Header */}
         <div className="flex flex-col gap-3">
@@ -99,6 +98,12 @@ export default async function ThemeTogglePage() {
             view-transition animation and cross-fading icon swap.
           </Text>
         </div>
+
+        {/* Installation */}
+        <section className="flex flex-col gap-4">
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
+          <InlineInstall command="npx stepwise-ui add theme-toggle" />
+        </section>
 
         {/* Preview + Code */}
         <section id="preview" className="scroll-mt-20">
@@ -118,13 +123,8 @@ export default async function ThemeTogglePage() {
           />
         </section>
 
-        {/* Installation */}
-        <section id="installation" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
-          <InlineInstall command="npx stepwise-ui add theme-toggle" />
-        </section>
-
-        {/* Usage */}
+        {/* Usage — distinct from the Preview's code tab, which shows the
+            component's own source rather than how to drop it into a layout */}
         <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
           <CodeBlock code={usageCode} lang="tsx" />
@@ -173,7 +173,7 @@ export default async function ThemeTogglePage() {
       </div>
 
       {/* On this page — hidden until xl breakpoint */}
-      <aside className="w-44 shrink-0 hidden xl:block">
+      <aside className="hidden w-44 shrink-0 xl:block">
         <OnThisPage items={tocItems} />
       </aside>
     </div>

@@ -143,7 +143,7 @@ function toCssAspect(ratio: string) {
 
 export function VideoPlayer({
   src, poster, autoPlay = false, loop = false,
-  radius = 24, ambient = true, aspectRatio = '16/9',
+  radius = 32, ambient = true, aspectRatio = '16/9',
   className,
 }: VideoPlayerProps) {
   const videoRef      = useRef<HTMLVideoElement>(null)

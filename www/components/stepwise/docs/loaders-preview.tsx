@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Spinner, type SpinnerStatus, type SpinnerSize } from '@/components/stepwise/spinner'
+import { Spinner, SPINNER_ARC_DURATION, type SpinnerStatus, type SpinnerSize } from '@/components/stepwise/spinner'
 import { Button } from '@/components/stepwise/button'
 
 /* ── spinner ─────────────────────────────────────────────────────────────── */
@@ -39,7 +39,7 @@ export function SpinnerStatusPreview() {
 
   const run = (end: SpinnerStatus) => {
     setStatus('loading')
-    setTimeout(() => setStatus(end), 1600)
+    setTimeout(() => setStatus(end), SPINNER_ARC_DURATION * 1000)
   }
 
   return (

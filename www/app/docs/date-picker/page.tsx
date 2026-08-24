@@ -30,13 +30,12 @@ const tocItems = [
   { id: 'preview',  label: 'Preview',   child: false },
   { id: 'variants', label: 'Variants',  child: false },
   { id: 'props',    label: 'Props',     child: false },
-  { id: 'usage',    label: 'Usage',     child: false },
 ]
 
 export default async function DatePickerPage() {
   return (
     <div className="flex gap-12">
-      <div className="flex-1 min-w-0 flex flex-col gap-12">
+      <div className="flex min-w-0 flex-1 flex-col gap-12">
 
         {/* Header */}
         <div className="flex flex-col gap-3">
@@ -49,6 +48,12 @@ export default async function DatePickerPage() {
           </Text>
         </div>
 
+        {/* Installation */}
+        <section className="flex flex-col gap-4">
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
+          <InlineInstall command="npx stepwise-ui add date-picker" />
+        </section>
+
         {/* Preview */}
         <section id="preview" className="scroll-mt-20">
           <PreviewCode
@@ -57,12 +62,6 @@ export default async function DatePickerPage() {
             preview={<DatePickerPreview />}
             code={<CodeBlock code={usageCode} lang="tsx" className="rounded-none" flat />}
           />
-        </section>
-
-        {/* Installation */}
-        <section className="flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
-          <InlineInstall command="npx stepwise-ui add date-picker" />
         </section>
 
         {/* Variants */}
@@ -91,15 +90,9 @@ export default async function DatePickerPage() {
           ]} />
         </section>
 
-        {/* Usage */}
-        <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
-          <CodeBlock code={usageCode} lang="tsx" />
-        </section>
-
       </div>
 
-      <aside className="w-44 shrink-0 hidden xl:block">
+      <aside className="hidden w-44 shrink-0 xl:block">
         <OnThisPage items={tocItems} />
       </aside>
     </div>

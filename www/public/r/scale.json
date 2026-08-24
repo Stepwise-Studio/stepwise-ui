@@ -1,0 +1,21 @@
+{
+  "name": "scale",
+  "description": "A ruler-tick strip — diagonal hairlines at a fixed pitch.",
+  "category": "components",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "peerDependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "components/stepwise/scale.tsx",
+      "content": "import { cn } from '@/lib/utils/cn'\n\nexport interface ScaleProps {\n  /** Strip direction. Default 'horizontal'. */\n  orientation?: 'horizontal' | 'vertical'\n  className?: string\n}\n\n/**\n * A ruler-tick strip — diagonal hairlines at a fixed pitch, bounded by a\n * border on the strip's long edges. Reads its line color from a `--pattern`\n * CSS variable, left undefined so the consumer sets it per context rather\n * than the component guessing a color that won't fit everywhere it's used.\n */\nexport function Scale({ orientation = 'horizontal', className }: ScaleProps) {\n  const horizontal = orientation === 'horizontal'\n  return (\n    <div\n      className={cn(\n        horizontal ? 'h-10 w-full border-y' : 'w-10 h-full border-x',\n        'bg-[repeating-linear-gradient(315deg,var(--pattern)_0,var(--pattern)_1px,transparent_1px,transparent_50%)] bg-size-[10px_10px] border-(--pattern) pointer-events-none',\n        className,\n      )}\n    />\n  )\n}\n"
+    },
+    {
+      "path": "lib/utils/cn.ts",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n"
+    }
+  ]
+}

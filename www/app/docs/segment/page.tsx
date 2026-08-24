@@ -128,14 +128,14 @@ const tocItems = [
   { id: 'preview',   label: 'Preview',   child: false },
   { id: 'underline', label: 'Underline', child: false },
   { id: 'tabs',      label: 'Tabs',      child: false },
-  { id: 'props',     label: 'Props',     child: false },
   { id: 'usage',     label: 'Usage',     child: false },
+  { id: 'props',     label: 'Props',     child: false },
 ]
 
 export default async function SegmentPage() {
   return (
     <div className="flex gap-12">
-      <div className="flex-1 min-w-0 flex flex-col gap-12">
+      <div className="flex min-w-0 flex-1 flex-col gap-12">
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Segment</Text>
@@ -146,6 +146,11 @@ export default async function SegmentPage() {
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">content</code> panel to turn it into a tab group.
           </Text>
         </div>
+
+        <section className="flex flex-col gap-4">
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
+          <InlineInstall command="npx stepwise-ui add segment" />
+        </section>
 
         <section id="preview" className="scroll-mt-20">
           <PreviewCode
@@ -176,9 +181,11 @@ export default async function SegmentPage() {
           />
         </section>
 
-        <section className="flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Installation</Text>
-          <InlineInstall command="npx stepwise-ui add segment" />
+        {/* Usage — distinct from the Preview's code tab, which shows the
+            component's own source rather than practical call sites */}
+        <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
+          <CodeBlock code={usageCode} lang="tsx" />
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
@@ -194,14 +201,9 @@ export default async function SegmentPage() {
           ]} />
         </section>
 
-        <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
-          <CodeBlock code={usageCode} lang="tsx" />
-        </section>
-
       </div>
 
-      <aside className="w-44 shrink-0 hidden xl:block">
+      <aside className="hidden w-44 shrink-0 xl:block">
         <OnThisPage items={tocItems} />
       </aside>
     </div>

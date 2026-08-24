@@ -37,10 +37,8 @@ export default function LoadersPage() {
           <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
             An honest circular spinner that resolves into its own answer. Two variants — a sweeping
             arc for general use, and a dotted activity-indicator style for a lighter touch. Looking for the{' '}
-            <a href="/docs/flower-loader" className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-700 dark:hover:text-zinc-200">flower</a>{' '}
-            or{' '}
-            <a href="/docs/dot-grid-loader" className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-700 dark:hover:text-zinc-200">dot grid</a>?
-            They each have their own page now.
+            <a href="/docs/dot-grid-loader" className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-700 dark:hover:text-zinc-200">dot grid</a>{' '}
+            loader? It has its own page now.
           </Text>
         </div>
 

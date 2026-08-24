@@ -7,11 +7,7 @@ import { MeshGradient } from '@paper-design/shaders-react'
 import { Surface } from '@/components/stepwise/primitives/surface'
 import { Button } from '@/components/stepwise/button'
 import { ThemeToggle } from '@/components/stepwise/theme-toggle'
-import { LogoReveal } from '@/components/stepwise/logo-reveal'
 import { useTheme } from '@/lib/theme'
-
-const STAR = 'M256 40 L318 190 L480 202 L356 308 L394 466 L256 380 L118 466 L156 308 L32 202 L194 190 Z'
-const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']
 
 const LIGHT_AURA = ['#ffffff', '#7dd3fc', '#bae6fd', '#e0f2fe', '#ddd6fe']
 const DARK_AURA  = ['#09090b', '#0369a1', '#075985', '#155e75', '#1e1b4b']
@@ -66,30 +62,10 @@ export function HomeHero() {
 
   const [greet, setGreet] = useState('')
   const [copied, setCopied] = useState(false)
-  const [reveal, setReveal] = useState(false)
   const [burst, setBurst] = useState(0)
   const clicks = useRef<number[]>([])
-  const konamiIdx = useRef(0)
 
   useEffect(() => { setGreet(greeting()) }, [])
-
-  // Konami code → full-screen logo reveal
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const expected = KONAMI[konamiIdx.current]
-      if (e.key === expected || e.key.toLowerCase() === expected) {
-        konamiIdx.current++
-        if (konamiIdx.current === KONAMI.length) {
-          konamiIdx.current = 0
-          setReveal(true)
-        }
-      } else {
-        konamiIdx.current = e.key === KONAMI[0] ? 1 : 0
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
 
   // logo ×5 within 2s → petal bloom
   const onLogoClick = () => {
@@ -254,16 +230,6 @@ export function HomeHero() {
           Everything below is real — poke it.
         </motion.p>
       </section>
-
-      {/* Konami reward — the drafting-sheet reveal, matching the theme */}
-      {reveal && (
-        <LogoReveal
-          path={STAR}
-          preset={dark ? 'black' : 'white'}
-          size={160}
-          onFinish={() => setReveal(false)}
-        />
-      )}
     </div>
   )
 }

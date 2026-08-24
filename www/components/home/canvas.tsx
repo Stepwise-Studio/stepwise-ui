@@ -26,8 +26,6 @@ import { ShimmerText } from '@/components/stepwise/shimmer-text'
 import { SquigglyUnderline } from '@/components/stepwise/squiggly-underline'
 import { ScrambleText } from '@/components/stepwise/scramble-text'
 import { Typewriter } from '@/components/stepwise/typewriter'
-import { FlowerLoader } from '@/components/stepwise/flower-loader'
-import { VoiceOrb } from '@/components/stepwise/voice-orb'
 import { Tooltip } from '@/components/stepwise/tooltip'
 import { ThemeToggle } from '@/components/stepwise/theme-toggle'
 import { ProfileCard } from '@/components/stepwise/profile-card'
@@ -104,10 +102,8 @@ function ComboboxDemo() {
 
 /* ── curated list: one of each comp, ordered by visual magnetism ─────── */
 const ITEMS: { node: React.ReactNode; w?: string }[] = [
-  { node: <VoiceOrb variant="azure" size={120} />, w: 'w-[200px]' },
   { node: <ColorPicker value="#8b5cf6" /> },
   { node: <ProfileCard name="Akhil Reji" verified role="Design Engineer" stats={[{ label: 'Components', value: '50+' }, { label: 'Stars', value: '1.2k' }]} />, w: 'w-[260px]' },
-  { node: <FlowerLoader size={80} /> },
   { node: <div className="flex gap-3 items-center"><Spinner size={36} /><Spinner status="success" size={36} /><Spinner status="error" size={36} /></div> },
   { node: <AvatarGroup max={4} avatars={[{ name: 'Akhil Reji' }, { name: 'Sarah Chen' }, { name: 'Marcus Wright' }, { name: 'Priya Nair' }, { name: 'Leo Kim' }]} /> },
   { node: <Toggle defaultChecked /> },
