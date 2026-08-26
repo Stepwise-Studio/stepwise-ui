@@ -4,7 +4,7 @@ import { PricingCard } from '@/components/stepwise/pricing-card'
 
 export function PricingCardTiersPreview() {
   return (
-    <div className="flex flex-wrap items-start justify-center gap-5">
+    <div className="flex flex-wrap items-start justify-center gap-6 py-4">
       <PricingCard
         planName="Starter"
         description="For solo builders trying things out."
@@ -30,19 +30,6 @@ export function PricingCardTiersPreview() {
           { label: 'Priority support' },
           { label: 'Custom domains' },
           { label: 'Up to 10 team seats' },
-        ]}
-      />
-      <PricingCard
-        planName="Enterprise"
-        description="For orgs that need more control."
-        price="Custom"
-        period=""
-        ctaLabel="Contact sales"
-        features={[
-          { label: 'Unlimited everything' },
-          { label: 'Dedicated support' },
-          { label: 'SSO & audit logs' },
-          { label: 'Unlimited team seats' },
         ]}
       />
     </div>

@@ -9,21 +9,21 @@ export interface DocsNavSection {
 }
 
 export const textEffectsNav: DocsNavItem[] = [
-  { href: '/docs/typewriter',      label: 'Typewriter' },
-  { href: '/docs/shimmer-text',    label: 'Shimmer Text' },
-  { href: '/docs/scramble-text',   label: 'Scramble Text' },
-  { href: '/docs/fade-text',       label: 'Fade Text' },
-  { href: '/docs/squiggly-underline', label: 'Squiggly Underline' },
-  { href: '/docs/circle-annotation',    label: 'Circle Annotation' },
-  { href: '/docs/retro-typewriter',     label: 'Retro Typewriter' },
   { href: '/docs/animated-gradient',    label: 'Animated Gradient' },
+  { href: '/docs/circle-annotation',    label: 'Circle Annotation' },
+  { href: '/docs/fade-text',            label: 'Fade Text' },
+  { href: '/docs/retro-typewriter',     label: 'Retro Typewriter' },
+  { href: '/docs/scramble-text',        label: 'Scramble Text' },
+  { href: '/docs/shimmer-text',         label: 'Shimmer Text' },
+  { href: '/docs/squiggly-underline',   label: 'Squiggly Underline' },
+  { href: '/docs/typewriter',           label: 'Typewriter' },
 ]
 
 export const backgroundsNav: DocsNavItem[] = [
   { href: '/docs/diagonal-lines',   label: 'Diagonal Lines' },
-  { href: '/docs/zigzag-lines',     label: 'Zigzag Lines' },
   { href: '/docs/dotted-grid',      label: 'Dotted Grid' },
   { href: '/docs/dotted-spotlight', label: 'Dotted Spotlight' },
+  { href: '/docs/zigzag-lines',     label: 'Zigzag Lines' },
 ]
 
 export const componentsNav: DocsNavItem[] = [
@@ -78,21 +78,21 @@ export const componentsNav: DocsNavItem[] = [
 
 export const cardsNav: DocsNavItem[] = [
   { href: '/docs/frame',         label: 'Frame' },
-  { href: '/docs/profile-card',  label: 'Profile Card' },
-  { href: '/docs/product-card',  label: 'Product Card' },
   { href: '/docs/pricing-card',  label: 'Pricing Card' },
+  { href: '/docs/product-card',  label: 'Product Card' },
+  { href: '/docs/profile-card',  label: 'Profile Card' },
 ]
 
 export const carouselsNav: DocsNavItem[] = [
   { href: '/docs/arc-carousel',  label: 'Arc' },
-  { href: '/docs/lens-carousel', label: 'Lens' },
   { href: '/docs/deck-carousel', label: 'Deck' },
+  { href: '/docs/lens-carousel', label: 'Lens' },
 ]
 
 export const docsNav: DocsNavSection[] = [
   { label: 'All Components',  items: componentsNav },
+  { label: 'Backgrounds',     items: backgroundsNav },
   { label: 'Cards',           items: cardsNav },
   { label: 'Carousels',       items: carouselsNav },
-  { label: 'Backgrounds',     items: backgroundsNav },
   { label: 'Text Effects',    items: textEffectsNav },
 ]

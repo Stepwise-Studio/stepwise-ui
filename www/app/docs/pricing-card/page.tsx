@@ -35,9 +35,9 @@ export default function PricingCardPage() {
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Pricing Card</Text>
           <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A subscription tier card — plan name, price, a feature checklist (excluded items
-            strike through), and a CTA. Pass <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">highlighted</code> to
-            call out the recommended plan with an accent border and glow.
+            A subscription tier card with two looks: plain, and the recommended-tier
+            treatment. Pass <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">highlighted</code> to
+            invert the card to the opposite polarity of the page and trace its edge with a glow.
           </Text>
         </div>
 
@@ -66,8 +66,8 @@ export default function PricingCardPage() {
             { name: 'features',    type: 'PricingFeature[]',   desc: '{ label, included? } — included defaults true; false strikes it through.' },
             { name: 'ctaLabel',    type: 'string',             desc: 'CTA button label. Default "Get started".' },
             { name: 'onCta',       type: '() => void',         desc: 'CTA click handler.' },
-            { name: 'highlighted', type: 'boolean',            desc: '"Most popular" treatment — accent border, glow, solid CTA.' },
-            { name: 'badge',       type: 'string',             desc: 'Small chip above the plan name.' },
+            { name: 'highlighted', type: 'boolean',            desc: 'The recommended-tier treatment — inverts the card, adds a rainbow border glow.' },
+            { name: 'badge',       type: 'string',             desc: 'Dot chip next to the plan name, e.g. "Most popular".' },
           ]} />
         </section>
 
