@@ -174,8 +174,8 @@ export function SkeletonCard() {
 }
 
 function FanNav({
-  dir, onClick, style,
-}: { dir: 'prev' | 'next'; onClick: () => void; style: React.CSSProperties }) {
+  dir, onClick, onEngage, style,
+}: { dir: 'prev' | 'next'; onClick: () => void; onEngage: () => void; style: React.CSSProperties }) {
   return (
     <motion.button
       type="button"
@@ -196,7 +196,18 @@ function FanNav({
         // untouched.
         if (e.detail !== 0) e.currentTarget.blur()
       }}
-      onPointerDown={e => e.stopPropagation()}
+      // The nav buttons sit right at the edge of the 40px hover-catch
+      // buffer, and a real cursor doesn't travel in a perfectly straight
+      // line to reach one — a slightly wide approach can graze just
+      // outside that buffer for a frame, firing onMouseLeave a beat
+      // before the click lands. That collapses the fan mid-click, so the
+      // click either misses (button already gone) or lands on a card
+      // that's mid-exit-animation from the collapse, which is what read
+      // as "a card stuck sitting in the folder". `onEngage` re-asserts
+      // hover the instant a press starts on either button — before that
+      // race has any window to run — independent of whether the physical
+      // cursor position still reads as "inside" the buffer.
+      onPointerDown={e => { e.stopPropagation(); onEngage() }}
       className={cn(
         'absolute flex h-7 w-7 items-center justify-center rounded-full',
         'bg-white/90 text-zinc-600 shadow-[0_2px_8px_rgba(0,0,0,0.14)] backdrop-blur',
@@ -245,6 +256,25 @@ export function Folder({
   const [focusedIn, setFocusedIn] = useState(false)
   const [pinned, setPinned] = useState(false)
   const [fanStart, setFanStart] = useState(0)
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (closeTimerRef.current) clearTimeout(closeTimerRef.current) }, [])
+  const engage = () => {
+    if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null }
+    setHovered(true)
+  }
+  // Guards against paging faster than a card's own exit animation (~0.16s):
+  // firing a second page() while the previous one's outgoing card is still
+  // mid-exit re-adds that same rawKey to AnimatePresence while it's still
+  // classified as exiting, which can leave it stuck at its exit's mid-fade
+  // values instead of restarting a proper enter — it reads as a card frozen
+  // half-faded "sitting in the folder" instead of sliding back into place.
+  const lastPageAtRef = useRef(0)
+  const page = (dir: 1 | -1) => {
+    const now = performance.now()
+    if (now - lastPageAtRef.current < 180) return
+    lastPageAtRef.current = now
+    setFanStart(s => s + dir)
+  }
   const reduce = useReducedMotion()
 
   const items: FolderFile[] = files?.length ? files : Array.from({ length: peek }, () => ({}))
@@ -425,8 +455,18 @@ export function Folder({
     <div ref={wrapRef} className={cn('inline-flex flex-col items-center gap-4', className)} style={cardVars}>
       <div
         {...dropHandlers}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onMouseEnter={engage}
+        // A short grace period, not an immediate close — the nav buttons
+        // sit right at the edge of the hover-catch buffer, and a real
+        // cursor doesn't travel in a perfectly straight line to reach one.
+        // A momentary graze just outside that buffer used to close the fan
+        // mid-click, so the click either missed (button already gone) or
+        // landed on a card mid-exit from the collapse — read as "a card
+        // stuck sitting in the folder". Any genuine re-entry (including
+        // the nav buttons' own onEngage) cancels this before it fires.
+        onMouseLeave={() => {
+          closeTimerRef.current = setTimeout(() => setHovered(false), 220)
+        }}
         // focus anywhere inside (the folder itself or a paging arrow) keeps
         // the fan open; leaving the subtree entirely closes it
         onFocus={() => setFocusedIn(true)}
@@ -538,6 +578,25 @@ export function Folder({
                   )}
                 </div>
               )
+              // Dragging any fanned card left/right pages the whole fan,
+              // same as the chevrons — same `page()` (and its debounce), so
+              // a fast flick can't hit the same exit/re-enter race the
+              // chevrons could. No `dragConstraints`: the card is free to
+              // follow the pointer, and once released, `animate.x` (still
+              // targeting `c.x`) pulls it straight back with the same
+              // spring — there's no separate "snap back" to write.
+              const dragProps = (!reduce && fanned && canPage) ? {
+                drag: 'x' as const,
+                dragMomentum: false,
+                dragElastic: 0.35,
+                whileDrag: { cursor: 'grabbing' },
+                onDragEnd: (e: PointerEvent, info: { offset: { x: number }; velocity: { x: number } }) => {
+                  e.stopPropagation()
+                  const { offset, velocity } = info
+                  if (offset.x < -36 || velocity.x < -350) page(1)
+                  else if (offset.x > 36 || velocity.x > 350) page(-1)
+                },
+              } : {}
               return (
                 <motion.div
                   key={rawKey}
@@ -548,6 +607,7 @@ export function Folder({
                     borderRadius: w * 0.05,
                     zIndex: c.z,
                     boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.04), 0 5px 16px -6px rgba(0,0,0,0.28)',
+                    cursor: fanned && canPage ? 'grab' : undefined,
                   }}
                   initial={reduce
                     ? { opacity: 0, x: c.x, y: topBase + c.y, rotate: c.rot, scale: 1 }
@@ -567,6 +627,7 @@ export function Folder({
                     // dismissal has to feel immediate
                     delay: entryDelay(rawKey) ?? (fanned ? Math.abs(off) * 0.03 : 0),
                   }}
+                  {...dragProps}
                 >
                   {fanned && f.name ? (
                     <Tooltip content={f.name} side="top">
@@ -586,12 +647,14 @@ export function Folder({
             <div className="absolute inset-0" style={{ zIndex: 12 }} key="nav">
               <FanNav
                 dir="prev"
-                onClick={() => setFanStart(s => s - 1)}
+                onClick={() => page(-1)}
+                onEngage={engage}
                 style={{ left: w / 2 - halfSpan - 34, top: topBase + fanLift + cardH / 2 - 14 }}
               />
               <FanNav
                 dir="next"
-                onClick={() => setFanStart(s => s + 1)}
+                onClick={() => page(1)}
+                onEngage={engage}
                 style={{ left: w / 2 + halfSpan + 6, top: topBase + fanLift + cardH / 2 - 14 }}
               />
             </div>

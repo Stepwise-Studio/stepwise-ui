@@ -10,7 +10,7 @@ const defaultCode = `import { ProfileCard } from '@/components/stepwise/profile-
 <ProfileCard
   variant="default"
   bannerSrc="/banner.jpg"
-  avatarSrc="/avatar.jpg"
+  avatarSrc="/your-photo.jpg"
   name="Snoofy Ackerman"
   verified
   role="Marketing Agent"
@@ -25,7 +25,7 @@ const defaultCode = `import { ProfileCard } from '@/components/stepwise/profile-
 
 const compactCode = `<ProfileCard
   variant="compact"
-  avatarSrc="/avatar.jpg"
+  avatarSrc="/your-photo.jpg"
   name="Snoofy Ackerman"
   verified
   role="Marketing Agent"
@@ -82,6 +82,8 @@ export default function ProfileCardPage() {
             { name: 'variant',   type: '"default" | "compact"',   desc: 'Layout. Default "default" includes a banner image.' },
             { name: 'bannerSrc', type: 'string',                  desc: 'Banner image URL (default variant only).' },
             { name: 'avatarSrc', type: 'string',                  desc: 'Avatar image URL. Falls back to initials.' },
+            { name: 'avatarImagePosition', type: 'string',        desc: 'object-position for the avatar photo, e.g. "top". Default "center".' },
+            { name: 'avatarImageScale', type: 'number',           desc: 'Scales the avatar photo within its cover fit. Under 1 zooms out a touch. Default 1.' },
             { name: 'name',      type: 'string',                  desc: 'Display name.' },
             { name: 'verified',  type: 'boolean',                 desc: 'Shows a blue verified badge.' },
             { name: 'role',      type: 'string',                  desc: 'Role or title below the name.' },

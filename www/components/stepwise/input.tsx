@@ -220,6 +220,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((
       <div ref={borderRef} className="group relative w-full h-11">
         <Surface
           radius={18}
+          lisse={{ middleBorder: { width: 1, opacity: 1, color: borderColor } }}
           className={cn(
             'relative h-11 w-full bg-white dark:bg-zinc-900',
             disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text',
@@ -318,19 +319,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((
             {...props}
           />
         </Surface>
-
-        {/* Border overlay */}
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            borderRadius: 18,
-            borderWidth: '1px',
-            borderStyle: 'solid',
-            borderColor,
-            transition: 'border-color 350ms ease-in-out',
-          }}
-        />
       </div>
 
       {/* Password hint — always shown, color based on length */}

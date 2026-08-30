@@ -371,8 +371,11 @@ export function Calendar({ defaultSelected, selected: ctrl, onSelect, className 
   const [internal, setInternal] = useState<Date | null>(defaultSelected ?? null)
   const selected = ctrl !== undefined ? ctrl : internal
 
-  const [viewYear,  setViewYear]  = useState(today.getFullYear())
-  const [viewMonth, setViewMonth] = useState(today.getMonth())
+  // Open on the selected date's own month, not always today's — otherwise a
+  // `defaultSelected` far from the current month renders with nothing
+  // visible and no indication the calendar even has a selection.
+  const [viewYear,  setViewYear]  = useState((defaultSelected ?? today).getFullYear())
+  const [viewMonth, setViewMonth] = useState((defaultSelected ?? today).getMonth())
   const [direction, setDirection] = useState(0)
   const [pickerOpen, setPickerOpen] = useState(false)
 

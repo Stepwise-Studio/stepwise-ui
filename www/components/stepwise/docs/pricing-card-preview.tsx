@@ -2,36 +2,72 @@
 
 import { PricingCard } from '@/components/stepwise/pricing-card'
 
-export function PricingCardTiersPreview() {
+const SOLO_FEATURES = [
+  { label: 'User Management' },
+  { label: 'Analytics Dashboard' },
+  { label: 'Automated Reporting' },
+  { label: 'Integrations with Third-Party Apps' },
+  { label: 'Custom API Development', included: false },
+  { label: 'Real-Time Data Syncing', included: false },
+  { label: 'User Authentication and Security', included: false },
+]
+
+const TEAM_FEATURES = [
+  { label: 'User Management' },
+  { label: 'Analytics Dashboard' },
+  { label: 'Automated Reporting' },
+  { label: 'Integrations with Third-Party Apps' },
+  { label: 'Custom API Development' },
+  { label: 'Real-Time Data Syncing' },
+  { label: 'User Authentication and Security' },
+]
+
+export function PricingCardStandardFlatPreview() {
   return (
-    <div className="flex flex-wrap items-start justify-center gap-6 py-4">
-      <PricingCard
-        planName="Starter"
-        description="For solo builders trying things out."
-        price={0}
-        period="/forever"
-        ctaLabel="Start for free"
-        features={[
-          { label: 'Up to 3 projects' },
-          { label: 'Community support' },
-          { label: 'Custom domains', included: false },
-          { label: 'Team seats', included: false },
-        ]}
-      />
-      <PricingCard
-        planName="Pro"
-        description="For teams shipping to production."
-        price={29}
-        badge="Most popular"
-        highlighted
-        ctaLabel="Start free trial"
-        features={[
-          { label: 'Unlimited projects' },
-          { label: 'Priority support' },
-          { label: 'Custom domains' },
-          { label: 'Up to 10 team seats' },
-        ]}
-      />
-    </div>
+    <PricingCard
+      planName="Solo"
+      description="Perfect for individuals looking to get started!"
+      price={25}
+      features={SOLO_FEATURES}
+    />
+  )
+}
+
+export function PricingCardStandardFramedPreview() {
+  return (
+    <PricingCard
+      planName="Solo"
+      description="Perfect for individuals looking to get started!"
+      price={25}
+      surface="framed"
+      features={SOLO_FEATURES}
+    />
+  )
+}
+
+export function PricingCardPopularFlatPreview() {
+  return (
+    <PricingCard
+      planName="Team"
+      description="Perfect for a team of minimum 4"
+      price={20}
+      period="/month/seat"
+      highlighted
+      features={TEAM_FEATURES}
+    />
+  )
+}
+
+export function PricingCardPopularFramedPreview() {
+  return (
+    <PricingCard
+      planName="Team"
+      description="Perfect for a team of minimum 4"
+      price={20}
+      period="/month/seat"
+      highlighted
+      surface="framed"
+      features={TEAM_FEATURES}
+    />
   )
 }

@@ -383,11 +383,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     }
   }, [pressed])
 
+  // `height: '100%'` here, not a second independently-rounded `s.iconPx` —
+  // the slideIcon row height (`rowH` below) is its own rounded pixel value
+  // that doesn't always divide evenly against `s.iconPx` (default size:
+  // rowH=17 vs iconPx=16, a 1px remainder). Two separately-rounded integers
+  // that are supposed to represent the same "center of this row" is exactly
+  // the kind of thing Chromium and Firefox are free to split asymmetrically
+  // — spec-compliant either way, but it reads as a visible cross-browser
+  // misalignment. Matching the parent's real height by percentage instead
+  // of a second rounded constant removes the remainder entirely.
   const iconBox = (node: React.ReactNode) => (
     <span
       aria-hidden="true"
       className="flex shrink-0 items-center justify-center"
-      style={{ width: s.iconPx, height: s.iconPx }}
+      style={{ width: s.iconPx, height: '100%' }}
     >
       {node}
     </span>

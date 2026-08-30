@@ -22,10 +22,12 @@ export default function LensCarouselPage() {
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Lens Carousel</Text>
           <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Photographs sized as if bounded by an ellipse laid over the row — tallest at
-            the centre, tapering toward a shared height at either rim, rather than moving
-            up or down. Every card follows one shared path, so the set spreads evenly
-            along the row with no per-frame work. Hovering halts it.
+            Photographs pinched by a lens laid across the row — full size at either rim,
+            shrinking toward the middle, so the strip's top and bottom edges each trace an
+            ellipse arc. Rather than drifting, the row rests on a card then slides
+            smoothly to the next one — and you can take over any time with the chevrons
+            or by dragging the strip, which settles back onto whole cards when you let
+            go. Hovering halts the auto-advance.
           </Text>
         </div>
 
@@ -38,6 +40,7 @@ export default function LensCarouselPage() {
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
           <PreviewCode
             minHeight={280}
+            bleed
             preview={<LensCarouselPreview />}
             code={<CodeBlock code={basicCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -49,11 +52,15 @@ export default function LensCarouselPage() {
             cols="150px 200px 1fr"
             rows={[
               { name: 'items',        type: 'LensCarouselItem[]', desc: 'Images to loop. { src, alt? }.' },
-              { name: 'maxRatio',     type: 'number',  desc: 'Tallest card\'s height ÷ width, at the centre. Default 1.5.' },
-              { name: 'minRatio',     type: 'number',  desc: 'Shortest card\'s height ÷ width, at the rim. Default 0.85.' },
-              { name: 'spread',       type: 'number',  desc: 'Card-widths from the peak at which a card reaches its shortest. Default 4.' },
-              { name: 'duration',     type: 'number',  desc: 'Seconds for one full pass. Default 34.' },
-              { name: 'itemWidth',    type: 'number',  desc: 'Card width in px — constant across the row. Default 116.' },
+              { name: 'ratio',        type: 'number',  desc: 'Card height ÷ width. Default 1.5.' },
+              { name: 'minScale',     type: 'number',  desc: 'Scale at the centre of the row — the pinch. Default 0.6.' },
+              { name: 'maxScale',     type: 'number',  desc: 'Scale at either rim — the largest cards get on screen. Default 1.' },
+              { name: 'autoplay',     type: 'boolean', desc: 'Advance on its own. Default true.' },
+              { name: 'interval',     type: 'number',  desc: 'Seconds a card rests before the row advances. Default 2.4.' },
+              { name: 'transition',   type: 'number',  desc: 'Seconds one slide takes. Default 0.85.' },
+              { name: 'controls',     type: 'boolean', desc: 'Show the prev / next chevrons. Default true.' },
+              { name: 'draggable',    type: 'boolean', desc: 'Allow dragging the row left and right. Default true.' },
+              { name: 'itemWidth',    type: 'number',  desc: 'Card width at full size, px. Default 124.' },
               { name: 'gap',          type: 'number',  desc: 'Space between cards, px. Default 10.' },
               { name: 'radius',       type: 'number',  desc: 'Card corner radius. Default 16.' },
               { name: 'reverse',      type: 'boolean', desc: 'Travel left-to-right instead.' },

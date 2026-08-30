@@ -78,6 +78,12 @@ interface PreviewCodeProps {
   allowOverflow?: boolean
   /** Let preview content (glows, popovers) paint outside the box. */
   overflowVisible?: boolean
+  /**
+   * Drop the preview panel's padding so the demo gets the box's full width —
+   * for components that measure their own container (carousels, marquees)
+   * and should be shown edge to edge.
+   */
+  bleed?: boolean
 }
 
 // Standard preview-box height — matches the Theme Toggle showcase and gives the
@@ -85,7 +91,8 @@ interface PreviewCodeProps {
 // (calendar, date-picker) are honored.
 const STANDARD_MIN_HEIGHT = 440
 
-export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, className, allowOverflow, overflowVisible }: PreviewCodeProps) {
+export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, className, allowOverflow, overflowVisible, bleed }: PreviewCodeProps) {
+  const previewPad = bleed ? '' : 'p-4 sm:p-8'
   const h               = Math.max(minHeight, STANDARD_MIN_HEIGHT)
   const uid             = useId()
   const [tab, setTab]   = useState<Tab>('preview')
@@ -196,7 +203,8 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
         >
           <div
             className={cn(
-              'flex items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950',
+              'flex items-center justify-center bg-zinc-50 dark:bg-zinc-950',
+              previewPad,
               tab !== 'preview' && 'hidden',
             )}
             style={{ minHeight: h }}
@@ -222,7 +230,10 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
         >
           <div
             ref={previewRef}
-            className="absolute inset-0 overflow-auto flex items-center justify-center p-8 bg-zinc-50 dark:bg-zinc-950 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className={cn(
+              'absolute inset-0 overflow-auto flex items-center justify-center bg-zinc-50 dark:bg-zinc-950 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+              previewPad,
+            )}
             style={{ zIndex: 2 }}
           >
             {preview}

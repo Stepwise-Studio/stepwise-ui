@@ -62,7 +62,7 @@ const HUE_TRACK = 'linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f,
 
 const POP_W  = 248
 const POP_H  = 400
-const PAD    = 16
+const PAD    = 14
 const SQUARE = POP_W - PAD * 2   // big SV field — the dominant preview, like the reference
 
 // The SV field clips to a squircle (overflow-hidden), so a thumb centered at
@@ -96,17 +96,19 @@ export interface ColorPickerProps {
   showPresets? : boolean
   /** Trigger swatch size. Default "md". */
   size?        : ColorPickerSize
+  /** Render the popover open on mount. Default false. */
+  defaultOpen? : boolean
   className?   : string
 }
 
-export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, size = 'md', className }: ColorPickerProps) {
+export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, size = 'md', defaultOpen = false, className }: ColorPickerProps) {
   const sz = SIZES[size]
   const init = parseHex(value)
   const [h, setH] = useState(init.h)
   const [s, setS] = useState(init.s)
   const [v, setV] = useState(init.v)
   const [a, setA] = useState(init.a)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(defaultOpen)
   const [hexInput, setHexInput] = useState(value.toUpperCase())
   const [eyedropperSupported, setEyedropperSupported] = useState(false)
   // Page-sampling fallback state — no browser feature-detection needed, this
@@ -143,14 +145,18 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     setPos({ left, top, origin: below ? 'top center' : 'bottom center' })
   }, [])
 
-  useLayoutEffect(() => { if (open) place() }, [open, place])
+  // `defaultOpen` is a showcase/screenshot mode — the popover stays anchored
+  // to the trigger in normal flow instead of a viewport-fixed, scroll-tracked
+  // overlay, so it scrolls away with the page like any other open dropdown
+  // instead of pinning itself to the same screen position forever.
+  useLayoutEffect(() => { if (open && !defaultOpen) place() }, [open, defaultOpen, place])
   useEffect(() => {
-    if (!open) return
+    if (!open || defaultOpen) return
     const onScroll = () => place()
     window.addEventListener('scroll', onScroll, true)
     window.addEventListener('resize', onScroll)
     return () => { window.removeEventListener('scroll', onScroll, true); window.removeEventListener('resize', onScroll) }
-  }, [open, place])
+  }, [open, defaultOpen, place])
 
   const emit = useCallback((nh: number, ns: number, nv: number, na: number) => {
     const out = hsvToHex(nh, ns, nv, na)
@@ -162,7 +168,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
   // a keyboard user isn't dropped onto the page with no indication of where
   // focus went.
   useEffect(() => {
-    if (!open) return
+    if (!open || defaultOpen) return
     const handler = (e: MouseEvent) => {
       if (!popRef.current?.contains(e.target as Node) && !triggerRef.current?.contains(e.target as Node)) setOpen(false)
     }
@@ -343,6 +349,106 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     '#f43f5e', '#a3e635', '#06b6d4', '#6366f1', '#78716c', '#525252', '#0f172a', '#ffffff',
   ]
 
+  // Shared between the anchored (defaultOpen) and portaled render paths —
+  // same panel either way, only the positioning strategy around it differs.
+  const panelBody = (
+    <>
+      {/* Concentric with the inner SV Surface: 14 (its radius) + 14
+          (this padding) = 28. */}
+      <Surface
+        radius={28}
+        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+        className="w-full bg-white shadow-2xl dark:bg-zinc-900"
+        style={{ padding: PAD }}
+      >
+      {/* ── big SV preview — the dominant swatch ── */}
+      <Surface radius={20} className="relative overflow-hidden">
+        <div
+          ref={svRef}
+          role="slider"
+          tabIndex={0}
+          aria-label="Color saturation and brightness"
+          aria-valuenow={Math.round(s * 100)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuetext={`Saturation ${Math.round(s * 100)}%, brightness ${Math.round(v * 100)}%`}
+          onPointerDown={e => { drag.current = 'sv'; applySv(e.clientX, e.clientY) }}
+          onKeyDown={onSvKeyDown}
+          className="relative cursor-crosshair touch-none outline-offset-2"
+          style={{
+            width: SQUARE, height: SQUARE,
+            background: `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, hsl(${h}, 100%, 50%))`,
+          }}
+        >
+          <span
+            className="pointer-events-none absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_1px_3px_rgba(0,0,0,0.4)]"
+            style={{ left: `${THUMB_MIN + s * THUMB_RANGE}%`, top: `${THUMB_MIN + (1 - v) * THUMB_RANGE}%`, background: solidHex }}
+          />
+        </div>
+      </Surface>
+
+      {/* ── hue rail — plain horizontal slider, not a ring ── */}
+      <div
+        ref={hueRef}
+        role="slider"
+        tabIndex={0}
+        aria-label="Hue"
+        aria-valuenow={Math.round(h)}
+        aria-valuemin={0}
+        aria-valuemax={360}
+        onPointerDown={e => { drag.current = 'hue'; applyHue(e.clientX) }}
+        onKeyDown={onHueKeyDown}
+        className="relative mt-3 h-4 w-full cursor-pointer touch-none select-none rounded-full outline-offset-2"
+        style={{ background: HUE_TRACK }}
+      >
+        <span
+          className="pointer-events-none absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
+          style={{ left: `${(h / 360) * 100}%`, background: `hsl(${h}, 100%, 50%)` }}
+        />
+      </div>
+
+      {/* hex + swatch — the swatch doubles as the eyedropper trigger, revealed on hover */}
+      <div className="mt-3 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={pickFromScreen}
+          aria-label="Pick color from screen"
+          className="group relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-zinc-200 dark:border-zinc-700"
+        >
+          <span className="absolute inset-0" style={{ background: CHECKER }} />
+          <span className="absolute inset-0" style={{ background: hex }} />
+          <span className="absolute inset-0 flex items-center justify-center bg-black/0 text-transparent transition-colors duration-150 group-hover:bg-black/45 group-hover:text-white">
+            <HugeiconsIcon icon={ColorPickerIcon} size={13} strokeWidth={2} color="currentColor" />
+          </span>
+        </button>
+        <input
+          value={hexInput}
+          onChange={e => commitHex(e.target.value)}
+          spellCheck={false}
+          maxLength={9}
+          aria-label="Hex color value"
+          className="h-8 min-w-0 flex-1 rounded-[13.5px] border border-zinc-200 bg-transparent px-2.5 text-center font-mono text-[12px] tracking-wider text-zinc-700 outline-none transition-colors focus:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:focus:border-zinc-500"
+        />
+      </div>
+
+      {/* presets — opt-in via showPresets */}
+      {showPresets && (
+        <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+          {PRESETS.map(p => (
+            <button
+              key={p}
+              onClick={() => commitHex(p)}
+              aria-label={p}
+              className="h-5 w-5 rounded-full border border-black/10 transition-transform duration-100 hover:scale-115 active:scale-90 dark:border-white/15"
+              style={{ background: p }}
+            />
+          ))}
+        </div>
+      )}
+      </Surface>
+    </>
+  )
+
   return (
     <div className={cn('relative inline-block', className)}>
       {/* trigger — glossy squircle swatch with a pencil badge, like a saved-palette tile */}
@@ -385,7 +491,21 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
         </span>
       </motion.button>
 
-      {typeof document !== 'undefined' && createPortal(
+      {defaultOpen ? (
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              ref={popRef}
+              initial={{ opacity: 0, scale: 0.92, y: 8 }}
+              animate={{ opacity: pageSampling ? 0.3 : 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 6 }}
+              transition={{ type: 'spring', duration: 0.32, bounce: 0.08 }}
+              className={cn('absolute left-1/2 top-full z-[60] mt-3 -translate-x-1/2', pageSampling && 'pointer-events-none')}
+              style={{ width: POP_W, transformOrigin: 'top center' }}
+            >{panelBody}</motion.div>
+          )}
+        </AnimatePresence>
+      ) : typeof document !== 'undefined' && createPortal(
         <AnimatePresence>
           {open && pos && (
             <motion.div
@@ -400,101 +520,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
               transition={{ type: 'spring', duration: 0.32, bounce: 0.08 }}
               className={cn('fixed z-[9999]', pageSampling && 'pointer-events-none')}
               style={{ left: pos.left, top: pos.top, width: POP_W, transformOrigin: pos.origin }}
-            >
-              {/* Concentric with the inner SV Surface: 18 (its radius) + 16
-                  (this padding) = 34. */}
-              <Surface
-                radius={34}
-                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
-                className="w-full bg-white shadow-2xl dark:bg-zinc-900"
-                style={{ padding: PAD }}
-              >
-              {/* ── big SV preview — the dominant swatch ── */}
-              <Surface radius={18} className="relative overflow-hidden">
-                <div
-                  ref={svRef}
-                  role="slider"
-                  tabIndex={0}
-                  aria-label="Color saturation and brightness"
-                  aria-valuenow={Math.round(s * 100)}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuetext={`Saturation ${Math.round(s * 100)}%, brightness ${Math.round(v * 100)}%`}
-                  onPointerDown={e => { drag.current = 'sv'; applySv(e.clientX, e.clientY) }}
-                  onKeyDown={onSvKeyDown}
-                  className="relative cursor-crosshair touch-none outline-offset-2"
-                  style={{
-                    width: SQUARE, height: SQUARE,
-                    background: `linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, hsl(${h}, 100%, 50%))`,
-                  }}
-                >
-                  <span
-                    className="pointer-events-none absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_1px_3px_rgba(0,0,0,0.4)]"
-                    style={{ left: `${THUMB_MIN + s * THUMB_RANGE}%`, top: `${THUMB_MIN + (1 - v) * THUMB_RANGE}%`, background: solidHex }}
-                  />
-                </div>
-              </Surface>
-
-              {/* ── hue rail — plain horizontal slider, not a ring ── */}
-              <div
-                ref={hueRef}
-                role="slider"
-                tabIndex={0}
-                aria-label="Hue"
-                aria-valuenow={Math.round(h)}
-                aria-valuemin={0}
-                aria-valuemax={360}
-                onPointerDown={e => { drag.current = 'hue'; applyHue(e.clientX) }}
-                onKeyDown={onHueKeyDown}
-                className="relative mt-3 h-4 w-full cursor-pointer touch-none select-none rounded-full outline-offset-2"
-                style={{ background: HUE_TRACK }}
-              >
-                <span
-                  className="pointer-events-none absolute top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_1px_4px_rgba(0,0,0,0.35)]"
-                  style={{ left: `${(h / 360) * 100}%`, background: `hsl(${h}, 100%, 50%)` }}
-                />
-              </div>
-
-              {/* hex + swatch — the swatch doubles as the eyedropper trigger, revealed on hover */}
-              <div className="mt-3 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={pickFromScreen}
-                  aria-label="Pick color from screen"
-                  className="group relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-zinc-200 dark:border-zinc-700"
-                >
-                  <span className="absolute inset-0" style={{ background: CHECKER }} />
-                  <span className="absolute inset-0" style={{ background: hex }} />
-                  <span className="absolute inset-0 flex items-center justify-center bg-black/0 text-transparent transition-colors duration-150 group-hover:bg-black/45 group-hover:text-white">
-                    <HugeiconsIcon icon={ColorPickerIcon} size={13} strokeWidth={2} color="currentColor" />
-                  </span>
-                </button>
-                <input
-                  value={hexInput}
-                  onChange={e => commitHex(e.target.value)}
-                  spellCheck={false}
-                  maxLength={9}
-                  aria-label="Hex color value"
-                  className="h-8 min-w-0 flex-1 rounded-xl border border-zinc-200 bg-transparent px-2.5 text-center font-mono text-[12px] tracking-wider text-zinc-700 outline-none transition-colors focus:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:focus:border-zinc-500"
-                />
-              </div>
-
-              {/* presets — opt-in via showPresets */}
-              {showPresets && (
-                <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-                  {PRESETS.map(p => (
-                    <button
-                      key={p}
-                      onClick={() => commitHex(p)}
-                      aria-label={p}
-                      className="h-5 w-5 rounded-full border border-black/10 transition-transform duration-100 hover:scale-115 active:scale-90 dark:border-white/15"
-                      style={{ background: p }}
-                    />
-                  ))}
-                </div>
-              )}
-              </Surface>
-            </motion.div>
+            >{panelBody}</motion.div>
           )}
         </AnimatePresence>,
         document.body,

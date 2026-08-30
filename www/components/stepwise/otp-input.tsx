@@ -9,6 +9,8 @@ export interface OtpInputProps {
   /** 'numeric' → digits only (default). 'alphanumeric' → letters + digits (security code). */
   type?       : 'numeric' | 'alphanumeric'
   value?      : string
+  /** Initial value for uncontrolled use — ignored once `value` is passed. */
+  defaultValue?: string
   onChange?   : (value: string) => void
   /** Fires once when every box is filled. */
   onComplete? : (code: string) => void
@@ -25,6 +27,7 @@ export function OtpInput({
   length      = 6,
   type        = 'numeric',
   value,
+  defaultValue = '',
   onChange,
   onComplete,
   onResend,
@@ -37,7 +40,7 @@ export function OtpInput({
   // keep only allowed characters; security codes are upper-cased for legibility
   const sanitize = (s: string) =>
     isAlpha ? s.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() : s.replace(/\D/g, '')
-  const [internal, setInternal] = useState('')
+  const [internal, setInternal] = useState(defaultValue)
   const [focusedIdx, setFocusedIdx] = useState<number | null>(null)
   const [countdown, setCountdown] = useState(resendAfter)
   const val     = value ?? internal

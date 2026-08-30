@@ -1,6 +1,7 @@
 'use client'
 
-import { forwardRef, useRef, ButtonHTMLAttributes } from 'react'
+import { forwardRef, useRef, useState, ButtonHTMLAttributes, ReactNode } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { SmoothCorners } from '@lisse/react'
 import { cn } from '@/lib/utils/cn'
 import { useTheme } from '@/lib/theme'
@@ -9,6 +10,15 @@ export type GlowButtonSize = 'default' | 'lg'
 
 export interface GlowButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> {
   size?: GlowButtonSize
+  /** Stretches the button to 100% of its parent's width. */
+  fullWidth?: boolean
+  /** Corner radius in px. Defaults to the size's own step; pass `height / 2` for a full pill. */
+  radius?: number
+  /** Icon shown on hover, same `slideIcon` roll technique as Button. */
+  icon?: ReactNode
+  /** Rolls the label up on hover to reveal a second row with the icon attached — instead of just showing/hiding the icon in place. */
+  slideIcon?: boolean
+  iconPosition?: 'left' | 'right'
 }
 
 // Same two sizes and typography as Button's own "default"/"lg" steps
@@ -32,15 +42,39 @@ const edgeColor = { light: 'rgb(0 0 0 / 6%)', dark: 'rgb(255 255 255 / 6%)' }
  */
 export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
   size = 'default',
+  fullWidth = false,
+  radius,
+  icon,
+  slideIcon = false,
+  iconPosition = 'left',
   className,
   children,
   style,
   ...props
 }, ref) => {
   const s = metrics[size]
+  const r = radius ?? s.r
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const glowRef = useRef<HTMLSpanElement>(null)
+  const [hovered, setHovered] = useState(false)
+  const reduceMotion = useReducedMotion()
+
+  const isSliding = !!icon && slideIcon
+  const iconOnLeft = iconPosition === 'left'
+  const rowH = Math.round(s.text * 1.2)
+  // No fixed width/height here — sizing the box off `s.text` (the metrics
+  // table's own font-size step) broke whenever a caller overrode the font
+  // size via `style` (the hero CTA does, 18px vs the "lg" step's 15px),
+  // cramming a visually-18px icon into a 15px box. Firefox and Chromium
+  // handle that overflow differently (only one of them visibly re-centers
+  // it), which is what read as a cross-browser misalignment — it was
+  // actually a size mismatch. Sizing to content sidesteps both.
+  const iconBox = (node: ReactNode) => (
+    <span aria-hidden="true" className="inline-flex shrink-0 items-center justify-center leading-none">
+      {node}
+    </span>
+  )
 
   // Speeds the glow up from wherever it currently sits, instead of via CSS
   // `animation-duration` — changing a running animation's duration keeps its
@@ -56,13 +90,17 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
 
   return (
     <div
-      className="group relative inline-flex origin-center transition-transform duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.96] motion-reduce:active:scale-100"
-      style={{ borderRadius: s.r }}
-      onMouseEnter={() => setGlowRate(1.35)}
-      onMouseLeave={() => setGlowRate(1)}
+      className={cn(
+        'group relative origin-center transition-transform duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.96] motion-reduce:active:scale-100',
+        fullWidth ? 'block w-full' : 'inline-flex',
+      )}
+      style={{ borderRadius: r }}
+      onMouseEnter={() => { setGlowRate(1.35); setHovered(true) }}
+      onMouseLeave={() => { setGlowRate(1); setHovered(false) }}
     >
       <SmoothCorners
-        corners={{ radius: s.r, smoothing: 0.6 }}
+        corners={{ radius: r, smoothing: 0.6 }}
+        className={fullWidth ? 'block w-full' : undefined}
         autoEffects={false}
         middleBorder={{ width: 1, opacity: 1, color: isDark ? edgeColor.dark : edgeColor.light }}
       >
@@ -87,9 +125,10 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
             // (`.group:hover .stepwise-glow-filter-*`) carries light mode's
             // hover feedback instead.
             'transition-[filter] duration-150 dark:hover:brightness-110',
+            fullWidth && 'w-full',
             className,
           )}
-          style={{ height: s.h, padding: `0 ${s.px}px`, borderRadius: s.r, fontSize: s.text, lineHeight: 1.2, ...style }}
+          style={{ height: s.h, padding: `0 ${s.px}px`, borderRadius: r, fontSize: s.text, lineHeight: 1.2, ...style }}
           {...props}
         >
           {/* Rainbow inner glow. Every layer's `background` points at the
@@ -102,7 +141,7 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
             ref={glowRef}
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
-            style={{ borderRadius: s.r }}
+            style={{ borderRadius: r }}
           >
             <span
               className="stepwise-glow-corner-shape stepwise-glow-corner-shape-left stepwise-glow-color stepwise-glow-filter stepwise-glow-filter-corner mix-blend-normal opacity-[0.62] dark:mix-blend-plus-lighter dark:opacity-[0.88]"
@@ -124,7 +163,51 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
             />
           </span>
 
-          <span className="relative z-[1]">{children}</span>
+          {isSliding ? (
+            reduceMotion ? (
+              <span className="relative z-[1] grid items-center justify-center overflow-hidden">
+                <span className="[grid-area:1/1] flex items-center justify-center transition-opacity duration-150 ease-out" style={{ opacity: hovered ? 0 : 1 }}>
+                  {children}
+                </span>
+                <span className="[grid-area:1/1] flex items-center justify-center transition-opacity duration-150 ease-out" style={{ opacity: hovered ? 1 : 0 }}>
+                  {iconOnLeft && <span className="flex shrink-0" style={{ marginRight: 8 }}>{iconBox(icon)}</span>}
+                  <span>{children}</span>
+                  {!iconOnLeft && <span className="flex shrink-0" style={{ marginLeft: 8 }}>{iconBox(icon)}</span>}
+                </span>
+              </span>
+            ) : (
+              // Text roll: both rows live in one wrapper twice the line height,
+              // clipped to a single line by the outer overflow-hidden window —
+              // same technique as Button's own slideIcon variant. The mask
+              // fades the top/bottom couple px of the clip window so the
+              // next/prev row's edge never reads as a hard, visible sliver
+              // mid-roll — softer than tightening the easing curve alone.
+              <span
+                className="relative z-[1] overflow-hidden"
+                style={{
+                  height: rowH,
+                  maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
+                }}
+              >
+                <motion.span
+                  initial={false}
+                  className="flex flex-col items-center"
+                  animate={{ y: hovered ? '-50%' : '0%' }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <span className="flex items-center justify-center leading-none" style={{ height: rowH }}>{children}</span>
+                  <span className="flex items-center justify-center leading-none" style={{ height: rowH }}>
+                    {iconOnLeft && <span className="flex shrink-0" style={{ marginRight: 8 }}>{iconBox(icon)}</span>}
+                    <span>{children}</span>
+                    {!iconOnLeft && <span className="flex shrink-0" style={{ marginLeft: 8 }}>{iconBox(icon)}</span>}
+                  </span>
+                </motion.span>
+              </span>
+            )
+          ) : (
+            <span className="relative z-[1]">{children}</span>
+          )}
         </button>
       </SmoothCorners>
     </div>

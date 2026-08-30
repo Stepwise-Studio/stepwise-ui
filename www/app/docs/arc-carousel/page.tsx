@@ -41,6 +41,7 @@ export default function ArcCarouselPage() {
           </Text>
           <PreviewCode
             minHeight={380}
+            bleed
             preview={<ArcCarouselPreview />}
             code={<CodeBlock code={basicCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -52,9 +53,7 @@ export default function ArcCarouselPage() {
             cols="150px 210px 1fr"
             rows={[
               { name: 'items',        type: 'ArcCarouselItem[]', desc: 'Images to loop. { src, alt? }.' },
-              { name: 'arc',          type: 'number',  desc: 'Total sweep of the arc in degrees. 0 is flat. Default 29.' },
-              { name: 'lift',         type: 'number',  desc: 'How far a card falls below the peak, px. Negative bows it the other way. Default 49.' },
-              { name: 'spread',       type: 'number',  desc: 'Card-widths from the peak at which the full angle is reached. Higher is gentler. Default 4.5.' },
+              { name: 'arc',          type: 'number',  desc: 'Degrees of arc swept across the visible width — sets both the bow and the card tilt, which on a real curve are the same thing. 0 is flat. Default 30.' },
               { name: 'duration',     type: 'number',  desc: 'Seconds for one full pass. Default 38.' },
               { name: 'itemWidth',    type: 'number',  desc: 'Card width in px. Default 128.' },
               { name: 'ratio',        type: 'number',  desc: 'Card height ÷ width. Default 1.3.' },

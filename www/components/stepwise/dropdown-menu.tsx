@@ -34,11 +34,14 @@ export interface DropdownMenuProps {
   items: DropdownEntry[]
   /** Horizontal edge to anchor the panel to. Default 'start'. */
   align?: 'start' | 'end'
+  /** Render the menu already open — for showcases and screenshots. Default false. */
+  defaultOpen?: boolean
   className?: string
 }
 
 const EASE = [0.22, 1, 0.36, 1] as const
-const PANEL_CLASS = 'min-w-[190px] bg-white p-1.5 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_2px_6px_-2px_rgba(0,0,0,0.06)] dark:bg-zinc-900 dark:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.6)]'
+export const DROPDOWN_PANEL_CLASS = 'min-w-[190px] bg-white p-1.5 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_2px_6px_-2px_rgba(0,0,0,0.06)] dark:bg-zinc-900 dark:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.6)]'
+const PANEL_CLASS = DROPDOWN_PANEL_CLASS
 const ITEM_CLASS = 'flex w-full items-center gap-1.5 rounded-[12px] px-2.5 py-2 text-left text-[13px] font-medium tracking-[-0.01em] transition-colors duration-100 disabled:opacity-40 disabled:pointer-events-none'
 
 /** A level's own menuitems only — excludes anything inside a nested open
@@ -90,7 +93,7 @@ function focusFirstItem(menuRef: React.RefObject<HTMLDivElement | null>) {
  *  submenu triggers. Used for both the root panel and every nested submenu,
  *  each with its own `subOpenIndex` so only one child submenu is open at a
  *  time within that level. */
-function MenuList({ items, menuRef, menuRootId, onRequestCloseAll }: {
+export function DropdownMenuList({ items, menuRef, menuRootId, onRequestCloseAll }: {
   items: DropdownEntry[]
   menuRef: React.RefObject<HTMLDivElement | null>
   /** Shared with the root's outside-click check — every portaled submenu
@@ -320,7 +323,7 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
                     className={PANEL_CLASS}
                     role="menu"
                   >
-                    <MenuList items={entry.items} menuRef={subMenuRef} menuRootId={menuRootId} onRequestCloseAll={onRequestCloseAll} />
+                    <DropdownMenuList items={entry.items} menuRef={subMenuRef} menuRootId={menuRootId} onRequestCloseAll={onRequestCloseAll} />
                   </Surface>
                 </motion.div>
               </motion.div>
@@ -333,8 +336,8 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
   )
 }
 
-export function DropdownMenu({ trigger, items, align = 'start', className }: DropdownMenuProps) {
-  const [open, setOpen] = useState(false)
+export function DropdownMenu({ trigger, items, align = 'start', defaultOpen = false, className }: DropdownMenuProps) {
+  const [open, setOpen] = useState(defaultOpen)
   // The requested alignment can flip at runtime if the panel would overflow
   // the viewport at that edge — see the layout effect below.
   const [resolvedAlign, setResolvedAlign] = useState(align)
@@ -464,7 +467,7 @@ export function DropdownMenu({ trigger, items, align = 'start', className }: Dro
                 className={PANEL_CLASS}
                 role="menu"
               >
-                <MenuList items={items} menuRef={menuRef} menuRootId={menuId} onRequestCloseAll={() => setOpen(false)} />
+                <DropdownMenuList items={items} menuRef={menuRef} menuRootId={menuId} onRequestCloseAll={() => setOpen(false)} />
               </Surface>
             </motion.div>
           </motion.div>

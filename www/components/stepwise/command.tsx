@@ -25,6 +25,12 @@ export interface CommandGroup {
 
 export interface CommandPaletteProps {
   groups: CommandGroup[]
+  /**
+   * Portal target. Defaults to `document.body`. Point it at an element that
+   * establishes a containing block to scope the palette's `fixed` overlay to
+   * that box instead of the viewport.
+   */
+  container?: HTMLElement | null
   open?: boolean
   onOpenChange?: (open: boolean) => void
   /** Bind ⌘K / Ctrl+K to toggle. Default true. */
@@ -36,6 +42,7 @@ const EASE = [0.22, 1, 0.36, 1] as const
 
 export function CommandPalette({
   groups,
+  container,
   open: controlledOpen,
   onOpenChange,
   hotkey = true,
@@ -224,6 +231,6 @@ export function CommandPalette({
         </motion.div>
       )}
     </AnimatePresence>,
-    document.body,
+    container ?? document.body,
   )
 }

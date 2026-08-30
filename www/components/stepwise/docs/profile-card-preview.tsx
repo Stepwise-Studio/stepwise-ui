@@ -12,6 +12,10 @@ export function ProfileCardDefaultPreview() {
   return (
     <ProfileCard
       variant="default"
+      bannerSrc="/banners/cloud-tunnel.webp"
+      avatarSrc="/avatars/avatar5.svg"
+      avatarImagePosition="top"
+      avatarImageScale={0.88}
       name="Snoofy Ackerman"
       verified
       role="Marketing Agent"
@@ -26,6 +30,9 @@ export function ProfileCardCompactPreview() {
   return (
     <ProfileCard
       variant="compact"
+      avatarSrc="/avatars/avatar5.svg"
+      avatarImagePosition="top"
+      avatarImageScale={0.88}
       name="Snoofy Ackerman"
       verified
       role="Marketing Agent"

@@ -9,6 +9,20 @@ import { Surface } from '@/components/stepwise/primitives/surface'
 import { Button } from '@/components/stepwise/button'
 
 export interface ModalProps {
+  /**
+   * Portal target. Defaults to `document.body`. Point it at an element that
+   * establishes a containing block (one with a `transform`/`filter`/`contain`)
+   * to scope the modal's `fixed` backdrop to that box instead of the viewport —
+   * how the landing page shows a modal open inside a showcase tile.
+   */
+  container?  : HTMLElement | null
+  /**
+   * Presentational mode: render the dialog in place without locking page
+   * scroll, marking the rest of the page `inert`, or pulling focus. For
+   * showing a modal open inside a preview tile — never for a real dialog,
+   * which needs every one of those behaviours.
+   */
+  inline?     : boolean
   open        : boolean
   onClose     : () => void
   title       : string
@@ -40,6 +54,8 @@ const CONTENT_DELAY = 0.08
 const CONTENT_DUR = 0.22
 
 export function Modal({
+  container,
+  inline = false,
   open,
   onClose,
   title,
@@ -77,14 +93,14 @@ export function Modal({
   }, [open, description])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || inline) return
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape' && !loading) onClose() }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [open, onClose, loading])
+  }, [open, inline, onClose, loading])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || inline) return
     // Locking scroll removes the page's scrollbar, which reclaims its width
     // and shifts everything else on the page sideways. Pad it back so the
     // page doesn't visibly jump when the modal opens or closes.
@@ -98,7 +114,7 @@ export function Modal({
   }, [open])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || inline) return
     const root = rootRef.current
     if (!root) return
     const touched: HTMLElement[] = []
@@ -112,7 +128,7 @@ export function Modal({
   }, [open])
 
   useEffect(() => {
-    if (!open) return
+    if (!open || inline) return
     triggerRef.current = document.activeElement as HTMLElement | null
     const panel = panelRef.current
     const focusable = panel?.querySelector<HTMLElement>(
@@ -302,6 +318,6 @@ export function Modal({
         </div>
       )}
     </AnimatePresence>,
-    document.body,
+    container ?? document.body,
   )
 }

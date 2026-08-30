@@ -2,17 +2,20 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'motion/react'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Menu01Icon, Cancel01Icon } from '@hugeicons/core-free-icons'
+import { Menu01Icon, Cancel01Icon, GithubIcon } from '@hugeicons/core-free-icons'
 import { SmoothCorners } from '@lisse/react'
 import { Text } from '@/components/stepwise/typography'
-import { Surface } from '@/components/stepwise/primitives/surface'
 import { ThemeToggle } from '@/components/stepwise/theme-toggle'
 import { CommandPalette, type CommandGroup } from '@/components/stepwise/command'
 import { Kbd } from '@/components/stepwise/kbd'
+import { useTheme } from '@/lib/theme'
 import { SidebarNav } from './sidebar-nav'
+
+const REPO_URL = 'https://github.com/Stepwise-Studio/stepwise-ui'
 
 interface NavItem { href: string; label: string }
 interface NavSection { label: string; items: NavItem[] }
@@ -27,6 +30,8 @@ export function DocsHeader({ sections }: { sections: NavSection[] }) {
   const [open, setOpen] = useState(false)
   const [cmdOpen, setCmdOpen] = useState(false)
   const router = useRouter()
+  const { theme } = useTheme()
+  const dark = theme === 'dark'
 
   const groups: CommandGroup[] = sections.map(section => ({
     heading: section.label,
@@ -39,42 +44,48 @@ export function DocsHeader({ sections }: { sections: NavSection[] }) {
 
   return (
     <>
-      {/* Sticky top bar */}
-      <header className="sticky top-0 z-40 flex items-center h-14 px-3 border-b border-zinc-100 dark:border-zinc-900 bg-white/85 dark:bg-[oklch(0.09_0_0)]/85 backdrop-blur-md">
-        {/* Hamburger — mobile only */}
-        <SmoothCorners asChild corners={{ radius: 11, smoothing: 0.6 }}>
-        <button
-          onClick={() => setOpen(o => !o)}
-          className="md:hidden flex items-center justify-center w-9 h-9 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-150"
-          aria-label="Toggle navigation"
-        >
-          <span className="relative flex items-center justify-center w-[18px] h-[18px]">
-            <AnimatePresence mode="wait" initial={false}>
-              {open ? (
-                <motion.span key="close" className="absolute inset-0 flex items-center justify-center" variants={iconVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.12 }}>
-                  <HugeiconsIcon icon={Cancel01Icon} size={18} strokeWidth={2} color="currentColor" />
-                </motion.span>
-              ) : (
-                <motion.span key="menu" className="absolute inset-0 flex items-center justify-center" variants={iconVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.12 }}>
-                  <HugeiconsIcon icon={Menu01Icon} size={18} strokeWidth={2} color="currentColor" />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </span>
-        </button>
-        </SmoothCorners>
+      {/* Sticky top bar — three zones: brand, centered search, theme/github */}
+      <header className="sticky top-0 z-40 grid grid-cols-[1fr_auto_1fr] items-center h-14 px-3 border-b border-zinc-100 dark:border-zinc-900 bg-white/85 dark:bg-[oklch(0.09_0_0)]/85 backdrop-blur-md">
+        {/* Left — hamburger (mobile) + brand */}
+        <div className="flex items-center gap-1 justify-self-start">
+          <SmoothCorners asChild corners={{ radius: 11, smoothing: 0.6 }}>
+          <button
+            onClick={() => setOpen(o => !o)}
+            className="md:hidden flex items-center justify-center w-9 h-9 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-150"
+            aria-label="Toggle navigation"
+          >
+            <span className="relative flex items-center justify-center w-[18px] h-[18px]">
+              <AnimatePresence mode="wait" initial={false}>
+                {open ? (
+                  <motion.span key="close" className="absolute inset-0 flex items-center justify-center" variants={iconVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.12 }}>
+                    <HugeiconsIcon icon={Cancel01Icon} size={18} strokeWidth={2} color="currentColor" />
+                  </motion.span>
+                ) : (
+                  <motion.span key="menu" className="absolute inset-0 flex items-center justify-center" variants={iconVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.12 }}>
+                    <HugeiconsIcon icon={Menu01Icon} size={18} strokeWidth={2} color="currentColor" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </span>
+          </button>
+          </SmoothCorners>
 
-        {/* Brand — mobile only (desktop sidebar has it) */}
-        <Link href="/" className="flex items-center gap-2 px-2 md:hidden">
-          <Surface radius={5} className="w-5 h-5 bg-zinc-900 dark:bg-white" />
-          <Text variant="h6" as="span" className="text-zinc-900 dark:text-white">Stepwise UI</Text>
-        </Link>
+          <Link href="/" className="flex items-center gap-2 px-2">
+            <Image
+              src={dark ? '/brand/logo-mark-dark.svg' : '/brand/logo-mark.svg'}
+              alt=""
+              width={31}
+              height={12}
+              className="h-3 w-auto"
+            />
+            <Text variant="h6" as="span" className="text-zinc-900 dark:text-white">Stepwise UI</Text>
+          </Link>
+        </div>
 
-        <div className="flex-1" />
-
+        {/* Center — search */}
         <button
           onClick={() => setCmdOpen(true)}
-          className="mr-2 hidden h-9 items-center gap-2 rounded-full border border-zinc-200 px-3 text-[13px] text-zinc-500 transition-colors hover:border-zinc-300 hover:text-zinc-800 sm:flex dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-200"
+          className="hidden h-9 items-center gap-2 rounded-full border border-zinc-200 px-3 text-[13px] text-zinc-500 transition-colors hover:border-zinc-300 hover:text-zinc-800 sm:flex dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-200"
         >
           <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" className="shrink-0">
             <circle cx="9" cy="9" r="6" />
@@ -84,7 +95,19 @@ export function DocsHeader({ sections }: { sections: NavSection[] }) {
           <Kbd className="ml-1">⌘K</Kbd>
         </button>
 
-        <ThemeToggle />
+        {/* Right — github + theme */}
+        <div className="flex items-center gap-1 justify-self-end">
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View source on GitHub"
+            className="flex items-center justify-center w-9 h-9 text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors duration-150"
+          >
+            <HugeiconsIcon icon={GithubIcon} size={18} strokeWidth={1.8} color="currentColor" />
+          </a>
+          <ThemeToggle />
+        </div>
       </header>
 
       <CommandPalette

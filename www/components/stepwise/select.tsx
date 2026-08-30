@@ -20,6 +20,9 @@ export interface SelectProps {
   placeholder? : string
   label?       : string
   disabled?    : boolean
+  /** Render open on mount and ignore outside clicks/Escape — for showcases
+   *  and screenshots that don't want to fight the panel's own space. */
+  defaultOpen? : boolean
   className?   : string
 }
 
@@ -33,11 +36,12 @@ export function Select({
   placeholder = 'Select an option',
   label,
   disabled,
+  defaultOpen = false,
   className,
 }: SelectProps) {
   const { theme } = useTheme()
   const dark = theme === 'dark'
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(defaultOpen)
   const [selected, setSelected] = useState(value)
   const [active, setActive] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,7 +57,7 @@ export function Select({
   const close = () => setIsOpen(false)
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen || defaultOpen) return
     const onMouse = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) close()
     }
@@ -64,7 +68,7 @@ export function Select({
       document.removeEventListener('mousedown', onMouse)
       document.removeEventListener('keydown', onKey)
     }
-  }, [isOpen])
+  }, [isOpen, defaultOpen])
 
   const selectedIndex = options.findIndex(o => o.value === selected)
   const selectedLabel = selectedIndex >= 0 ? options[selectedIndex].label : undefined
@@ -72,7 +76,7 @@ export function Select({
   const handleSelect = (val: string) => {
     setSelected(val)
     onChange?.(val)
-    close()
+    if (!defaultOpen) close()
     triggerRef.current?.focus()
   }
 

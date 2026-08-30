@@ -24,6 +24,9 @@ export interface MultiselectProps {
   label?       : string
   disabled?    : boolean
   maxVisible?  : number
+  /** Render open on mount and ignore outside clicks/Escape — for showcases
+   *  and screenshots that don't want to fight the panel's own space. */
+  defaultOpen? : boolean
   className?   : string
 }
 
@@ -85,18 +88,19 @@ export function Multiselect({
   label,
   disabled,
   maxVisible = 2,
+  defaultOpen = false,
   className,
 }: MultiselectProps) {
   const { theme } = useTheme()
   const dark = theme === 'dark'
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(defaultOpen)
   const [selected, setSelected] = useState<string[]>(value ?? [])
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => { if (value !== undefined) setSelected(value) }, [value])
 
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen || defaultOpen) return
     const onMouse = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) setIsOpen(false)
     }
@@ -107,7 +111,7 @@ export function Multiselect({
       document.removeEventListener('mousedown', onMouse)
       document.removeEventListener('keydown', onKey)
     }
-  }, [isOpen])
+  }, [isOpen, defaultOpen])
 
   const toggle = (val: string) => {
     const next = selected.includes(val)

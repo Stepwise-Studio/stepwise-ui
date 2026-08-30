@@ -22,9 +22,8 @@ export default function AnimatedGradientPage() {
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Animated Gradient</Text>
           <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A colorful gradient sweeps across the text on a loop, playing only while it's in
-            view. Newly recovered from an old drive — imports have been updated to this
-            project's conventions, but the component itself hasn't been reworked yet.
+            A full rainbow band wipes smoothly across the text on a loop, playing only
+            while it's in view.
           </Text>
         </div>
 
@@ -44,9 +43,9 @@ export default function AnimatedGradientPage() {
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
-            { name: 'text',       type: 'string',  desc: 'Text to render and sweep the gradient across.' },
-            { name: 'duration',   type: 'number',  desc: 'Sweep duration in seconds. Default 5.' },
-            { name: 'loop',       type: 'boolean', desc: 'Repeat the sweep indefinitely. Default true.' },
+            { name: 'text',       type: 'string',  desc: 'Text to render and wipe the gradient across.' },
+            { name: 'duration',   type: 'number',  desc: 'Wipe duration in seconds. Default 8.' },
+            { name: 'loop',       type: 'boolean', desc: 'Repeat the wipe indefinitely. Default true.' },
             { name: 'withGrain',  type: 'boolean', desc: 'Blend the gradient with overlay blend mode. Default false.' },
             { name: 'className',  type: 'string',  desc: 'Extra classes (set font size / weight here).' },
           ]} />

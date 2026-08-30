@@ -178,7 +178,7 @@ function ToastItem({
           // 135deg = top-left → bottom-right, so the tint reads as bleeding
           // in from the corner rather than sweeping across from the side.
           background: `linear-gradient(135deg, ${c.tint} 4%, transparent 30%), var(--toast-bg)`,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)',
+          boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)',
         }}
       >
         {/* Left: icon + text */}
@@ -222,7 +222,16 @@ function ToastItem({
 }
 
 // ── Toaster ───────────────────────────────────────────────────────────────────
-export function Toaster() {
+export interface ToasterProps {
+  /**
+   * Portal target. Defaults to `document.body`. Point it at an element that
+   * establishes a containing block to dock the stack inside that box instead
+   * of the viewport.
+   */
+  container?: HTMLElement | null
+}
+
+export function Toaster({ container }: ToasterProps = {}) {
   const [items,   setItems]   = useState<ToastData[]>([])
   const [mounted, setMounted] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -291,6 +300,6 @@ export function Toaster() {
         </AnimatePresence>
       </div>
     </div>,
-    document.body,
+    container ?? document.body,
   )
 }

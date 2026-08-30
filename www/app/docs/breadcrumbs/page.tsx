@@ -3,17 +3,15 @@ import { CodeBlock, InlineInstall } from '@/components/stepwise/docs/code-block'
 import { PreviewCode } from '@/components/stepwise/docs/preview-code'
 import { OnThisPage } from '@/components/stepwise/docs/on-this-page'
 import { PropsTable } from '@/components/stepwise/docs/props-table'
-import { BreadcrumbsSlashPreview, BreadcrumbsChevronPreview } from '@/components/stepwise/docs/breadcrumbs-preview'
+import { BreadcrumbsSlashPreview, BreadcrumbsChevronPreview, BreadcrumbsOverflowPreview } from '@/components/stepwise/docs/breadcrumbs-preview'
 
 const basicCode = `import { Breadcrumbs } from '@/components/stepwise/breadcrumbs'
 
+// \`onNavigate\` intercepts the click and prevents the href navigation —
+// drive the trail from state (or your router) instead of a page load.
 <Breadcrumbs
-  items={[
-    { label: 'Home',       href: '/' },
-    { label: 'Docs',       href: '/docs' },
-    { label: 'Components', href: '/docs/components' },
-    { label: 'Breadcrumbs' },
-  ]}
+  items={trail}
+  onNavigate={(item, i) => setDepth(i + 1)}
 />`
 
 const chevronCode = `<Breadcrumbs
@@ -25,10 +23,27 @@ const chevronCode = `<Breadcrumbs
   ]}
 />`
 
+const overflowCode = `// Past \`maxItems\` the middle collapses to an expandable "…"
+<Breadcrumbs
+  maxItems={4}      // default
+  itemsBefore={1}   // crumbs kept at the head
+  itemsAfter={2}    // crumbs kept at the tail
+  items={[
+    { label: 'Home',        href: '#' },
+    { label: 'Workspace',   href: '#' },
+    { label: 'Projects',    href: '#' },
+    { label: 'Stepwise UI', href: '#' },
+    { label: 'Components',  href: '#' },
+    { label: 'Navigation',  href: '#' },
+    { label: 'Breadcrumbs' },
+  ]}
+/>`
+
 const toc = [
-  { id: 'slash',   label: 'Slash',   child: false },
-  { id: 'chevron', label: 'Chevron', child: false },
-  { id: 'props',   label: 'Props',   child: false },
+  { id: 'slash',    label: 'Slash',    child: false },
+  { id: 'chevron',  label: 'Chevron',  child: false },
+  { id: 'overflow', label: 'Overflow', child: false },
+  { id: 'props',    label: 'Props',    child: false },
 ]
 
 export default function BreadcrumbsPage() {
@@ -67,11 +82,30 @@ export default function BreadcrumbsPage() {
           />
         </section>
 
+        <section id="overflow" className="scroll-mt-20 flex flex-col gap-4">
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Overflow</Text>
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+            Past <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">maxItems</code> the
+            middle collapses to an expandable <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">…</code> so
+            the trail stays on one line however deep the hierarchy gets. The head and the current
+            page always survive.
+          </Text>
+          <PreviewCode
+            minHeight={140}
+            preview={<BreadcrumbsOverflowPreview />}
+            code={<CodeBlock code={overflowCode} lang="tsx" className="rounded-none" flat />}
+          />
+        </section>
+
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
-            { name: 'items',     type: 'BreadcrumbItem[]',    desc: 'Ordered path items. Last item is the current page.' },
-            { name: 'separator', type: '"slash" | "chevron"', desc: 'Separator style. Default "slash".' },
+            { name: 'items',       type: 'BreadcrumbItem[]',    desc: 'Ordered path items. Last item is the current page.' },
+            { name: 'separator',   type: '"slash" | "chevron"', desc: 'Separator style. Default "slash".' },
+            { name: 'maxItems',    type: 'number',              desc: 'Collapse the middle past this many crumbs. 0 never collapses. Default 4.' },
+            { name: 'itemsBefore', type: 'number',              desc: 'Crumbs kept at the head when collapsed. Default 1.' },
+            { name: 'itemsAfter',  type: 'number',              desc: 'Crumbs kept at the tail when collapsed. Default 2.' },
+            { name: 'onNavigate',  type: '(item, index) => void', desc: 'Called on crumb click; prevents the default href navigation.' },
           ]} />
 
           <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">BreadcrumbItem</Text>

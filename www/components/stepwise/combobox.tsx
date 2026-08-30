@@ -27,6 +27,11 @@ export interface ComboboxProps {
   /** Shown when the query matches nothing. */
   emptyMessage?: string
   disabled?    : boolean
+  /** Render open on mount and ignore outside clicks — for showcases and
+   *  screenshots that don't want to fight the panel's own space. */
+  defaultOpen? : boolean
+  /** Initial search query — for showcases that want to open pre-filtered. */
+  defaultQuery?: string
   className?   : string
 }
 
@@ -56,6 +61,8 @@ export function Combobox({
   label,
   emptyMessage = 'No results found',
   disabled,
+  defaultOpen = false,
+  defaultQuery = '',
   className,
 }: ComboboxProps) {
   const { theme } = useTheme()
@@ -66,8 +73,8 @@ export function Combobox({
   const listboxId = `${uid}-listbox`
   const optionId = (i: number) => `${uid}-option-${i}`
 
-  const [open, setOpen]       = useState(false)
-  const [query, setQuery]     = useState('')
+  const [open, setOpen]       = useState(defaultOpen)
+  const [query, setQuery]     = useState(defaultQuery)
   const [active, setActive]   = useState(0)
   const [focused, setFocused] = useState(false)
   const [selected, setSelected] = useState(value)
@@ -93,17 +100,24 @@ export function Combobox({
 
   // close on outside click / Escape
   useEffect(() => {
-    if (!open) return
+    if (!open || defaultOpen) return
     const onDown = (e: MouseEvent) => {
       if (!rootRef.current?.contains(e.target as Node)) close()
     }
     document.addEventListener('mousedown', onDown)
     return () => document.removeEventListener('mousedown', onDown)
-  }, [open])
+  }, [open, defaultOpen])
 
-  // keep the active option scrolled into view
+  // keep the active option scrolled into view — skipped on the panel's
+  // first open (including `defaultOpen` showcases mounted already-open):
+  // `scrollIntoView` with no prior scroll offset can walk past a listbox
+  // that already fully contains the option and scroll the actual page
+  // instead, which is exactly what was hijacking scroll position on load.
+  // There's nothing to keep in view yet on that first render anyway.
+  const skipNextScrollRef = useRef(true)
   useEffect(() => {
-    if (!open) return
+    if (!open) { skipNextScrollRef.current = true; return }
+    if (skipNextScrollRef.current) { skipNextScrollRef.current = false; return }
     const el = listRef.current?.querySelector<HTMLElement>(`[data-idx="${active}"]`)
     el?.scrollIntoView({ block: 'nearest' })
   }, [active, open])
@@ -122,7 +136,7 @@ export function Combobox({
   const commit = (opt: ComboboxOption) => {
     setSelected(opt.value)
     onChange?.(opt.value)
-    close()
+    if (!defaultOpen) close()
     // Focus stays on the input — it already shows the selected label once
     // closed, and a keyboard user's next Tab should continue naturally from
     // this field rather than being dropped to the page body.

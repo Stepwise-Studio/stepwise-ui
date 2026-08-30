@@ -15,7 +15,7 @@ export const AnimatedGradient = React.forwardRef<HTMLSpanElement, AnimatedGradie
   (
     {
       text,
-      duration = 5,
+      duration = 8,
       withGrain = false,
       loop = true,
       className,
@@ -34,7 +34,7 @@ export const AnimatedGradient = React.forwardRef<HTMLSpanElement, AnimatedGradie
       <span className={cn('relative inline-block', className)} {...(props as React.HTMLAttributes<HTMLSpanElement>)}>
         {/* Base dark text behind the gradient */}
         <span className="text-slate-900 dark:text-slate-100">{text}</span>
-        {/* The animated colorful gradient overlaid exactly on top with transparent gaps */}
+        {/* The animated rainbow band wipes across, overlaid exactly on top */}
         <motion.span
           ref={(node) => {
             if (typeof ref === 'function') ref(node)
@@ -50,8 +50,10 @@ export const AnimatedGradient = React.forwardRef<HTMLSpanElement, AnimatedGradie
           }}
           className="absolute inset-0 block bg-clip-text text-transparent bg-[length:300%_auto] [-webkit-background-clip:text] [-webkit-text-fill-color:transparent]"
           style={{
-            // Discontinuous "strip" highlights separated by transparent gaps
-            backgroundImage: `linear-gradient(165deg, transparent 15%, #06b6d4 22%, transparent 29%, transparent 40%, #ec4899 47%, transparent 54%, transparent 65%, #eab308 72%, transparent 79%)`,
+            // One continuous rainbow band, feathered to transparent only at
+            // its own leading/trailing edge — no internal gaps, so nothing
+            // flickers in and out as it wipes across.
+            backgroundImage: `linear-gradient(90deg, transparent 0%, #ef4444 8%, #f97316 16%, #eab308 24%, #22c55e 32%, #06b6d4 40%, #3b82f6 48%, #8b5cf6 56%, #ec4899 64%, transparent 72%)`,
             ...(withGrain
               ? {
                   backgroundBlendMode: 'overlay',
