@@ -11,6 +11,8 @@ import { GlowButton } from '@/components/stepwise/glow-button'
 import { ThemeToggle } from '@/components/stepwise/theme-toggle'
 import { useTheme } from '@/lib/theme'
 
+const WORDS = 'The interface is part of the product. Make it count.'.split(' ')
+
 const LIGHT_AURA = ['#ffffff', '#7dd3fc', '#bae6fd', '#e0f2fe', '#ddd6fe']
 const DARK_AURA  = ['#09090b', '#0369a1', '#075985', '#155e75', '#1e1b4b']
 const REPO_URL = 'https://github.com/Stepwise-Studio/stepwise-ui'
@@ -53,6 +55,17 @@ function PetalBurst({ burst }: { burst: number }) {
 export function HomeHero() {
   const { theme } = useTheme()
   const dark = theme === 'dark'
+
+  const headlineRef = useRef<HTMLHeadingElement>(null)
+
+  /* See the note on the last word below: motion's leftover blur filter blocks
+   * the headline's background-clip:text. Clearing it once the reveal is done
+   * costs nothing - the animation has already finished with it at blur(0px). */
+  const clearWordFilters = () => {
+    headlineRef.current?.querySelectorAll<HTMLElement>('span').forEach(el => {
+      el.style.filter = ''
+    })
+  }
 
   const [copied, setCopied] = useState(false)
   const [burst, setBurst] = useState(0)
@@ -142,22 +155,40 @@ export function HomeHero() {
       </nav>
 
       {/* ── hero ── */}
-      <section className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col items-center px-5 pb-24 pt-24 text-center md:pb-32 md:pt-36">
+      {/* `relative` without a z-index on purpose. `z-10` would make this a
+          stacking context, and the headline's mix-blend-mode only sees
+          backdrops inside its own context - it would blend against nothing and
+          the effect would silently do nothing. Positioned elements paint in DOM
+          order, and this comes after the shader, so it still sits on top. */}
+      <section className="relative mx-auto flex w-full max-w-[1200px] flex-col items-center px-5 pb-24 pt-24 text-center md:pb-32 md:pt-36">
         {/* hook - words rise in one after another */}
-        <h1 className="max-w-[22ch] text-[42px] font-semibold leading-[1.05] tracking-[-0.04em] text-zinc-900 md:max-w-none md:text-[68px] dark:text-white">
+        {/* The letters are a gradient clipped to the glyphs, then blended with
+            the shader behind them in `luminosity` - the type keeps its own
+            brightness but borrows the aura's hue, so the words sit in the
+            image rather than on top of it. The gradient has to fall to a mid
+            tone: at full white there is no room for a borrowed hue to show.
+            `pb` because background-clip:text slices descenders. */}
+        <h1 ref={headlineRef} className="hero-title max-w-[22ch] text-[42px] font-semibold leading-[1.05] tracking-[-0.04em] pb-[0.1em] md:max-w-none md:text-[68px]">
           {/* A hard break after "the" (not `text-wrap:balance`) - balance
               recomputes its split against the block's own resolved width,
               which is bigger on a bigger monitor and can land on a
               different, worse-looking break. A fixed break reads the same
               everywhere; each half still wraps normally on narrow screens
               where even that half doesn't fit on one line. */}
-          {'The interface is part of the product. Make it count.'.split(' ').map((w, i) => (
+          {WORDS.map((w, i) => (
             <Fragment key={i}>
               <motion.span
                 className="inline-block"
                 initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 transition={{ duration: 0.55, delay: 0.08 + i * 0.055, ease: [0.22, 1, 0.36, 1] }}
+                /* motion leaves `filter: blur(0px)` on the element after the
+                   reveal, and a filtered child rasterises into its own buffer -
+                   which the h1's background-clip:text cannot reach into, so the
+                   gradient letters render as nothing at all. Clearing the filter
+                   on the last word (they finish in order) hands the glyphs back
+                   to the parent's clip. */
+                onAnimationComplete={i === WORDS.length - 1 ? clearWordFilters : undefined}
               >
                 {w}
               </motion.span>

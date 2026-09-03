@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, type ReactNode } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
   Rocket01Icon, UserGroupIcon, Settings02Icon, CreditCardIcon,
@@ -331,6 +332,123 @@ function DropdownMenuLook({ trigger, items, rootId }: { trigger: string; items: 
  * gap away. Column widths are chosen to fit their widest member, and members
  * are distributed so every column bottoms out at roughly the same height.
  */
+/* ── entrance ────────────────────────────────────────────────────────────────
+ * The showcase used to be fully painted before the hero had finished writing
+ * itself, so the eye landed on a wall of components first and the headline
+ * read as an afterthought. Everything below now arrives on scroll, and the
+ * first band waits for the hero's last word.
+ *
+ * Two mechanisms: `Reveal` for the standalone rows, and a variants pair for
+ * the three multi-column bands, where `staggerChildren` walks the columns in
+ * one at a time rather than flashing the whole row at once.
+ */
+const EASE = [0.22, 1, 0.36, 1] as const
+
+/** The hero's last word lands at ~1.13s; the first band follows it. */
+const AFTER_HERO = 1.15
+
+/**
+ * True once the element has reached the reveal line - and, crucially, also true
+ * if it is already above it.
+ *
+ * `whileInView` alone was not enough: it fires on intersection, so anything the
+ * viewport *skips over* never intersects and stays invisible for good. Pressing
+ * End, following an anchor, or a browser restoring scroll position on reload
+ * all left the whole showcase blank. Comparing the element's top against the
+ * viewport treats "scrolled past" as revealed, which is what a reader expects.
+ */
+function useRevealed<T extends HTMLElement>(ref: React.RefObject<T | null>) {
+  const [shown, setShown] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    let raf = 0
+    const check = () => {
+      raf = 0
+      if (!ref.current) return
+      // negative top means it is above the fold entirely - already passed
+      if (ref.current.getBoundingClientRect().top < window.innerHeight * 0.88) {
+        setShown(true)
+        window.removeEventListener('scroll', onScroll)
+        window.removeEventListener('resize', onScroll)
+      }
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(check) }
+
+    check()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [ref])
+
+  return shown
+}
+
+function Reveal({ delay = 0, className, children }: { delay?: number; className?: string; children: ReactNode }) {
+  const reduce = useReducedMotion()
+  const ref = useRef<HTMLDivElement>(null)
+  const shown = useRevealed(ref)
+
+  if (reduce) return <div className={className}>{children}</div>
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 24 }}
+      animate={shown ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.6, delay, ease: EASE }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+/**
+ * The same trigger, wired to the bands' variant stagger.
+ *
+ * `immediate` skips the scroll gate for the first band. It sits directly under
+ * the carousel, so on load its top is still below the reveal line - which left
+ * a screen of blank space reading as "nothing here" rather than as something
+ * about to arrive. It still staggers, just counting from load instead of from
+ * a scroll that may never come.
+ */
+function useBandReveal({ immediate = false, delay = 0.05 }: { immediate?: boolean; delay?: number } = {}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const scrolledTo = useRevealed(ref)
+  const reduce = useReducedMotion()
+  const shown = immediate || scrolledTo
+  return {
+    ref,
+    custom: delay,
+    initial: reduce ? 'shown' : 'hidden',
+    animate: reduce || shown ? 'shown' : 'hidden',
+    variants: bandVariants,
+  } as const
+}
+
+/* `shown` is a function so the delay can differ per band. A plain object here
+ * would carry its own `transition`, and a variant's transition beats the
+ * component's `transition` prop - so setting the delay from the outside
+ * silently did nothing and every band started at once. `custom` is the
+ * supported way to pass a per-instance value into a variant. */
+const bandVariants = {
+  hidden: {},
+  shown: (delayChildren = 0.05) => ({
+    transition: { staggerChildren: 0.09, delayChildren },
+  }),
+}
+
+const colVariants = {
+  hidden: { opacity: 0, y: 22 },
+  shown: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
+}
+
 function Col({ w, gap = 32, children }: { w: number; gap?: number; children: ReactNode }) {
   return (
     // `width` is the desktop composition's fixed track, but several of these are
@@ -338,9 +456,9 @@ function Col({ w, gap = 32, children }: { w: number; gap?: number; children: Rea
     // and `shrink-0` meant they pushed the page wider than the viewport rather
     // than fitting inside it. maxWidth caps them at the screen; on anything
     // roomier than the widest column it never applies.
-    <div className="flex shrink-0 flex-col items-center" style={{ width: w, maxWidth: '100%', gap }}>
+    <motion.div variants={colVariants} className="flex shrink-0 flex-col items-center" style={{ width: w, maxWidth: '100%', gap }}>
       {children}
-    </div>
+    </motion.div>
   )
 }
 
@@ -384,8 +502,15 @@ const TIMELINE: TimelineCheckpoint[] = [
  * exactly that much dead space beside its neighbours.
  */
 function ControlsBand() {
+  // Follows the carousel above it, which is itself waiting on the hero - so
+  // the page fills in top-down rather than this row beating the strip it sits
+  // under. Passed as `custom`, since a `transition` prop would be ignored.
+  const band = useBandReveal({ immediate: true, delay: AFTER_HERO + 0.28 })
   return (
-    <div className="mx-auto flex w-full max-w-[840px] flex-wrap items-start justify-center gap-x-4 gap-y-14 min-[1390px]:max-w-none 2xl:gap-x-10">
+    <motion.div
+      {...band}
+      className="mx-auto flex w-full max-w-[840px] flex-wrap items-start justify-center gap-x-4 gap-y-14 min-[1390px]:max-w-none 2xl:gap-x-10"
+    >
       {/* 350 - wide enough for the Calendar AND the 6-box OTP row (304px). */}
       <Col w={350}>
         <Calendar defaultSelected={new Date(2006, 6, 26)} />
@@ -483,7 +608,7 @@ function ControlsBand() {
           </div>
         </Slot>
       </Col>
-    </div>
+    </motion.div>
   )
 }
 
@@ -491,8 +616,12 @@ function ControlsBand() {
  *  in the middle, profile card on the right. `items-center` keeps the three
  *  balanced against each other rather than top-ragged. */
 function OverlaysRowA() {
+  const band = useBandReveal()
   return (
-    <div className="mx-auto flex w-full max-w-[800px] flex-wrap items-center justify-center gap-x-4 gap-y-14 min-[1428px]:max-w-none 2xl:gap-x-10">
+    <motion.div
+      {...band}
+      className="mx-auto flex w-full max-w-[800px] flex-wrap items-center justify-center gap-x-4 gap-y-14 min-[1428px]:max-w-none 2xl:gap-x-10"
+    >
       <Col w={560} gap={40}>
         <CommandPaletteLook />
       </Col>
@@ -529,15 +658,19 @@ function OverlaysRowA() {
           ]}
         />
       </Col>
-    </div>
+    </motion.div>
   )
 }
 
 /** Row B - the dialogs the palette displaced, plus the toast deck and the
  *  conversation rail. */
 function OverlaysRowB() {
+  const band = useBandReveal()
   return (
-    <div className="mx-auto flex w-full max-w-[800px] flex-wrap items-center justify-center gap-x-4 gap-y-14 min-[1208px]:max-w-none 2xl:gap-x-10">
+    <motion.div
+      {...band}
+      className="mx-auto flex w-full max-w-[800px] flex-wrap items-center justify-center gap-x-4 gap-y-14 min-[1208px]:max-w-none 2xl:gap-x-10"
+    >
       <Col w={390} gap={40}>
         <ModalLook
           destructive
@@ -560,7 +693,7 @@ function OverlaysRowB() {
           <ConversationTimeline checkpoints={TIMELINE} activeId="3" labelWidth={170} />
         </HoverOnView>
       </Col>
-    </div>
+    </motion.div>
   )
 }
 
@@ -624,9 +757,20 @@ const FAQ_ITEMS = [
 export function HomeCanvas() {
   return (
     <section className="flex w-full flex-col items-center gap-12 px-4 py-12 md:px-6">
-      <div className="w-full">
-        <LensCarousel items={BG_LENS.map(src => ({ src, alt: '' }))} itemWidth={116} />
-      </div>
+      {/* Directly under the hero, so it waits for the headline to finish
+          rather than racing it. */}
+      <Reveal className="w-full" delay={AFTER_HERO}>
+        {/* No chevrons here - the strip drifts on its own and is draggable, so
+            the arrows were controls nobody reached for. Quicker than the
+            component's 2.4s / 0.85s default so the row keeps moving. */}
+        <LensCarousel
+          items={BG_LENS.map(src => ({ src, alt: '' }))}
+          itemWidth={116}
+          controls={false}
+          interval={1.5}
+          transition={0.7}
+        />
+      </Reveal>
 
       <ControlsBand />
 
@@ -638,7 +782,7 @@ export function HomeCanvas() {
           right by the flex row's own gap to make room for it. The negative
           bottom margin trims the gap down to the Command Palette row below
           it without touching the section's shared gap. */}
-      <div className="-mb-8 flex w-full justify-center">
+      <Reveal className="-mb-8 flex w-full justify-center">
         {/* The 366px inset lines this up under the "Get started" button on
             desktop. On a phone there is no such column to line up with, and
             nowrap made the line itself wider than the screen - so below lg it
@@ -651,22 +795,22 @@ export function HomeCanvas() {
             {' '}moment
           </span>
         </div>
-      </div>
+      </Reveal>
 
       <OverlaysRowA />
       <OverlaysRowB />
 
-      <div className="w-full">
+      <Reveal className="w-full">
         <ArcCarousel items={BG_ARC.map(src => ({ src, alt: '' }))} itemWidth={120} />
-      </div>
+      </Reveal>
 
       {/* The arc bows upward, so its box already carries a band of empty space
           along the bottom. Pulling the accordion up reclaims that instead of
           stacking the section gap on top of it - without overlapping the
           cards, which sit well above this line. */}
-      <div className="-mt-7 w-full max-w-md">
+      <Reveal className="-mt-7 w-full max-w-md">
         <Accordion items={FAQ_ITEMS} />
-      </div>
+      </Reveal>
     </section>
   )
 }

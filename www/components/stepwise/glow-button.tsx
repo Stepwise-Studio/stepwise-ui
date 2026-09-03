@@ -57,8 +57,16 @@ const edgeColor = { light: 'rgb(0 0 0 / 6%)', dark: 'rgb(255 255 255 / 14%)' }
  * read as a rainbow decal rather than light: six hues across 230px. At 4x only
  * a quarter is visible, so any frame is two or three neighbouring hues
  * blending, and the full spectrum is something you notice over the loop. */
+/* Cool half of the spectrum only - green through teal, blue, indigo, violet,
+ * purple, and back. Still a continuous sweep in hue order, just without the
+ * warm quarter: rose, orange and yellow read as a warning state next to this
+ * palette, and fought the blue mesh behind the CTA rather than sitting in it.
+ *
+ * First and last stop are identical on purpose. The flow animation shifts by
+ * exactly one image width, so a mismatched pair would show a visible seam
+ * every time the loop wraps. */
 const GLOW_GRADIENT =
-  'linear-gradient(90deg, #ff6b81, #ff9f6b, #f5d778, #6fdfa4, #56b0ef, #8f7bf0, #ff6b81)'
+  'linear-gradient(90deg, #6fdfa4, #45c9c9, #56b0ef, #6f8ff2, #8f7bf0, #a878ef, #6fdfa4)'
 const GLOW_SIZE = '400% 100%'
 
 /* A percentage background-position resolves against (element - image) width, so

@@ -243,5 +243,37 @@ body {
   background: transparent;
 }
 
+/* ─── Landing hero headline ──────────────────────────────────────────────────
+   Two effects stacked. The gradient is clipped to the glyph shapes, then
+   `luminosity` keeps the type's own brightness while borrowing hue and
+   saturation from the mesh shader behind it - the words pick up the aura's
+   blues instead of sitting on it as flat white, and because the shader
+   animates, the borrowed tint keeps drifting.
 
+   The gradient must reach a mid tone. Luminosity preserves the source's
+   luminance, so a pure-white letter has no headroom for a hue to show; the
+   colour only appears where the type darkens toward the baseline.
 
+   Both themes get the treatment, mirrored rather than copied - see the light
+   rule below. */
+.hero-title {
+  background-image: linear-gradient(178deg, #ffffff 6%, #dfe6ef 62%, #b9c6d8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  mix-blend-mode: luminosity;
+}
+
+/* Light mode is the mirror image, not a copy. Luminosity keeps the source's
+   luminance, so dark type has its headroom below rather than above and the
+   gradient runs dark-to-mid. The range is deliberately tighter than the dark
+   theme's: the first attempt ran to #3d4759 and drained the second line, since
+   a step that size is far more visible at the dark end of the scale than at
+   the bright end. Worst-case contrast over the sky region is 7.65:1. */
+:root:not(.dark) .hero-title {
+  background-image: linear-gradient(178deg, #0b0b0f 4%, #171d27 58%, #262d3a 100%);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .hero-title { mix-blend-mode: normal; }
+}
