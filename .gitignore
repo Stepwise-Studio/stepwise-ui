@@ -7,3 +7,10 @@ dist/
 www/public/registry/
 skills/
 .claude/
+# Local agent tooling - kept on disk, not published
+AGENTS.md
+CLAUDE.md
+www/AGENTS.md
+www/CLAUDE.md
+skills/
+skills-lock.json

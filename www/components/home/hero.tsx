@@ -233,7 +233,13 @@ export function HomeHero() {
                     exit={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
                     transition={{ type: 'spring', duration: 0.3, bounce: 0 }}
                   >
-                    <path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" />
+                    {/* Raised 1.25 from the obvious "M3 8.5 6.5 12 13 4.5". Centring a
+                        tick on its viewBox reads low: the shape's weight is its bottom
+                        vertex, which then lands on the text baseline while the letters
+                        beside it sit in the x-height band above. Raising it puts the
+                        vertex ~2px above the baseline and the glyph's mass inside that
+                        band, which is where the eye expects it. */}
+                    <path d="M3 7.25 6.5 10.75 13 3.25" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" />
                   </motion.svg>
                 ) : (
                   <motion.svg
