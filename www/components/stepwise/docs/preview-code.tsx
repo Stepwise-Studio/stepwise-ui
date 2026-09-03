@@ -109,6 +109,15 @@ interface PreviewCodeProps {
 // (calendar, date-picker) are honored.
 const STANDARD_MIN_HEIGHT = 440
 
+/* On a phone the desktop height is mostly empty: 440px of box under a
+ * three-line snippet fills the screen and reads as a broken panel rather than
+ * a roomy one. The height is published as a custom property so a breakpoint
+ * can override it - an inline `minHeight` wins over any class, so the value
+ * cannot live there. Below `sm` the requested height is capped at 280px - a
+ * calendar still gets its room and scrolls, a three-line snippet no longer
+ * reserves half a screen. From `sm` up the caller's height is honoured. */
+const BOX_HEIGHT = 'min-h-[min(var(--preview-h),280px)] sm:min-h-[var(--preview-h)]'
+
 export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, className, allowOverflow, overflowVisible, bleed }: PreviewCodeProps) {
   const previewPad = bleed ? '' : 'p-4 sm:p-8'
   const h               = Math.max(minHeight, STANDARD_MIN_HEIGHT)
@@ -223,9 +232,10 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
             className={cn(
               'flex items-center justify-center bg-zinc-50 dark:bg-zinc-950',
               previewPad,
+              BOX_HEIGHT,
               tab !== 'preview' && 'hidden',
             )}
-            style={{ minHeight: h }}
+            style={{ ['--preview-h' as string]: `${h}px` }}
           >
             {preview}
           </div>
@@ -233,9 +243,10 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
             className={cn(
               CODE_PANEL,
               'overflow-auto ' + CODE_SCROLLBAR,
+              BOX_HEIGHT,
               tab !== 'code' && 'hidden',
             )}
-            style={{ minHeight: h }}
+            style={{ ['--preview-h' as string]: `${h}px` }}
           >
             {code}
           </div>
@@ -244,8 +255,8 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
         <Surface
           radius={24}
           lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle, rgb(151 151 154 / 0.106))' } }}
-          className="[overflow:clip] relative"
-          style={{ minHeight: h }}
+          className={cn('[overflow:clip] relative', BOX_HEIGHT)}
+          style={{ ['--preview-h' as string]: `${h}px` }}
         >
           <div
             ref={previewRef}

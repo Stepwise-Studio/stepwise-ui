@@ -333,7 +333,12 @@ function DropdownMenuLook({ trigger, items, rootId }: { trigger: string; items: 
  */
 function Col({ w, gap = 32, children }: { w: number; gap?: number; children: ReactNode }) {
   return (
-    <div className="flex shrink-0 flex-col items-center" style={{ width: w, gap }}>
+    // `width` is the desktop composition's fixed track, but several of these are
+    // wider than a phone (560 for the command palette, 480 for the toast deck),
+    // and `shrink-0` meant they pushed the page wider than the viewport rather
+    // than fitting inside it. maxWidth caps them at the screen; on anything
+    // roomier than the widest column it never applies.
+    <div className="flex shrink-0 flex-col items-center" style={{ width: w, maxWidth: '100%', gap }}>
       {children}
     </div>
   )
@@ -634,9 +639,13 @@ export function HomeCanvas() {
           bottom margin trims the gap down to the Command Palette row below
           it without touching the section's shared gap. */}
       <div className="-mb-8 flex w-full justify-center">
-        <div className="flex w-full max-w-[1334px] items-center gap-6 pl-[366px] 2xl:max-w-[1430px] 2xl:pl-[390px]">
+        {/* The 366px inset lines this up under the "Get started" button on
+            desktop. On a phone there is no such column to line up with, and
+            nowrap made the line itself wider than the screen - so below lg it
+            centres and wraps like ordinary text. */}
+        <div className="flex w-full max-w-[1334px] flex-col items-center gap-4 lg:flex-row lg:items-center lg:gap-6 lg:pl-[366px] 2xl:max-w-[1430px] 2xl:pl-[390px]">
           <AccentAvatarCluster />
-          <span className="whitespace-nowrap text-left text-[28px] font-semibold leading-tight tracking-tight text-zinc-900 dark:text-white">
+          <span className="text-center text-[22px] font-semibold leading-tight tracking-tight text-balance text-zinc-900 sm:text-[28px] lg:whitespace-nowrap lg:text-left dark:text-white">
             Zoom in on the{' '}
             <SelectionFrame animated line="dashed" padding={4} handles="circle">main character</SelectionFrame>
             {' '}moment

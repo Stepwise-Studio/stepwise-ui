@@ -144,7 +144,12 @@ export default function IntroductionPage() {
         </Section>
 
       </div>
-      <OnThisPage items={toc} />
+      {/* Same wrapper the component pages use. Without it this renders at
+          every width, so on a phone the table of contents sat in the page
+          body instead of being suppressed. */}
+      <aside className="w-44 shrink-0 hidden xl:block">
+        <OnThisPage items={toc} />
+      </aside>
     </div>
   )
 }

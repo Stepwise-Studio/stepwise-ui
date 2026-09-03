@@ -101,7 +101,7 @@ export function HomeHero() {
       <div aria-hidden className="absolute inset-0 bg-white/35 dark:bg-zinc-950/45" />
 
       {/* ── nav ── */}
-      <nav className="relative z-10 flex h-16 w-full items-center justify-between px-10 md:px-16">
+      <nav className="relative z-10 flex h-16 w-full items-center justify-between px-6 sm:px-10 md:px-16">
         <motion.button
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,11 +133,11 @@ export function HomeHero() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View source on GitHub"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-500 transition-colors duration-150 hover:bg-zinc-900/5 hover:text-zinc-800 dark:text-zinc-400 dark:hover:bg-white/10 dark:hover:text-zinc-200"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 transition-colors duration-150 hover:bg-zinc-900/5 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-white/10 dark:hover:text-white"
           >
             <HugeiconsIcon icon={GithubIcon} size={18} strokeWidth={1.8} color="currentColor" />
           </a>
-          <ThemeToggle />
+          <ThemeToggle className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white" />
         </motion.div>
       </nav>
 

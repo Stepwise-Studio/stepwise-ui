@@ -21,11 +21,14 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
 
         {/* Main content - `MobileTopBar` is `sticky`, so (unlike the
             floating icons it replaced) it already reserves its own space
-            in flow; only the bottom needs extra padding, clearing the
-            fixed `MobileBottomNav` bar (~48px pill + 16px gap + safe-area).
+            in flow, so the top only needs a small gap under it - `pt-12`
+            stacked 48px on top of the bar's own height and pushed every page
+            title down a fifth of the screen. The bottom still needs real
+            padding to clear the fixed `MobileBottomNav` (~48px pill + 16px
+            gap + safe-area).
             Not needed at `md`, where the real sticky header reserves its
             own space and there's no bottom bar at all. */}
-        <main className="flex-1 min-w-0 px-4 pb-28 pt-12 md:px-10 md:py-12">
+        <main className="flex-1 min-w-0 px-4 pb-28 pt-5 md:px-10 md:py-12">
           {children}
         </main>
       </div>
