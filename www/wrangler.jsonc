@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+
+  // Must match the Worker name in the Cloudflare dashboard. The failed deploy
+  // happened because nothing here pinned it: wrangler found no config, ran the
+  // OpenNext migration on the builder, and generated one whose self-reference
+  // binding pointed at "www" (from package.json) while the Worker itself was
+  // "ui". With this file present, no migration runs at all.
+  "name": "ui",
+  "compatibility_date": "2026-09-03",
+
+  // Assets only - no "main", so there is no Worker script and no OpenNext
+  // server. Every route in this site prerenders to a file at build time, so
+  // there is nothing for a server to do. ("binding" is deliberately absent:
+  // it is only valid alongside "main".)
+  "assets": {
+    "directory": "./out",
+
+    // next build emits docs/quick-start.html, not docs/quick-start/index.html.
+    // auto-trailing-slash is what resolves /docs/quick-start to that file.
+    "html_handling": "auto-trailing-slash",
+
+    // Serve the exported 404 page rather than treating this as a SPA - each
+    // route is its own document, so a catch-all index would be wrong.
+    "not_found_handling": "404-page"
+  },
+
+  "observability": { "enabled": true }
+}

@@ -1,5 +1,9 @@
 import type { MetadataRoute } from 'next'
 
+// `output: 'export'` has no server to run this at request time, so it has to be
+// declared static - same as the llms.txt route.
+export const dynamic = 'force-static'
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {

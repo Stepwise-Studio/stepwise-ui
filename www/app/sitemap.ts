@@ -1,6 +1,10 @@
 import type { MetadataRoute } from 'next'
 import { docsNav } from '@/components/stepwise/docs/nav'
 
+// `output: 'export'` has no server to run this at request time, so it has to be
+// declared static - same as the llms.txt route.
+export const dynamic = 'force-static'
+
 const SITE_URL = 'https://ui.stepwise.studio'
 
 /**
