@@ -5,19 +5,21 @@ import { ThemeProvider } from '@/lib/theme'
 import './globals.css'
 
 const interDisplay = localFont({
+  /* Four weights, no italics, subset to Latin + Latin Extended.
+   *
+   * This used to load all twelve files at full glyph coverage - 1.5 MB that
+   * every visitor downloaded. Nothing on the site sets an italic or uses
+   * extrabold/black, so eight of those files were never rendering anything,
+   * and `next/font/local` does not subset: it serves whatever it is given.
+   *
+   * The files are the same ones the registry ships to users, read straight
+   * from public/fonts, so the site and an installed copy can never drift onto
+   * different versions of the typeface. */
   src: [
-    { path: './fonts/InterDisplay-Regular.woff2',         weight: '400', style: 'normal' },
-    { path: './fonts/InterDisplay-Italic.woff2',          weight: '400', style: 'italic' },
-    { path: './fonts/InterDisplay-Medium.woff2',          weight: '500', style: 'normal' },
-    { path: './fonts/InterDisplay-MediumItalic.woff2',    weight: '500', style: 'italic' },
-    { path: './fonts/InterDisplay-SemiBold.woff2',        weight: '600', style: 'normal' },
-    { path: './fonts/InterDisplay-SemiBoldItalic.woff2',  weight: '600', style: 'italic' },
-    { path: './fonts/InterDisplay-Bold.woff2',            weight: '700', style: 'normal' },
-    { path: './fonts/InterDisplay-BoldItalic.woff2',      weight: '700', style: 'italic' },
-    { path: './fonts/InterDisplay-ExtraBold.woff2',       weight: '800', style: 'normal' },
-    { path: './fonts/InterDisplay-ExtraBoldItalic.woff2', weight: '800', style: 'italic' },
-    { path: './fonts/InterDisplay-Black.woff2',           weight: '900', style: 'normal' },
-    { path: './fonts/InterDisplay-BlackItalic.woff2',     weight: '900', style: 'italic' },
+    { path: '../public/fonts/InterDisplay-Regular.woff2',  weight: '400', style: 'normal' },
+    { path: '../public/fonts/InterDisplay-Medium.woff2',   weight: '500', style: 'normal' },
+    { path: '../public/fonts/InterDisplay-SemiBold.woff2', weight: '600', style: 'normal' },
+    { path: '../public/fonts/InterDisplay-Bold.woff2',     weight: '700', style: 'normal' },
   ],
   variable: '--font-inter-display',
   display: 'swap',

@@ -13,7 +13,7 @@
   "exports": [
     "Scale"
   ],
-  "example": "import { Scale } from '@/components/stepwise/scale'\n\n// --pattern controls the line color, thickness controls the strip's height in px\n<Scale orientation=\"horizontal\" thickness={24} style={{ '--pattern': 'var(--ui-border)' }} />",
+  "example": "import { Scale } from '@/components/stepwise/scale'\n\n// thickness sets the strip's height in px. --pattern sets the line colour and\n// is optional - Scale ships a neutral grey that works on either theme.\n<Scale orientation=\"horizontal\" thickness={24} />\n\n// Or pick your own line colour\n<Scale orientation=\"horizontal\" thickness={24} style={{ '--pattern': '#d4d4d8' }} />",
   "files": [
     {
       "path": "components/stepwise/scale.tsx",

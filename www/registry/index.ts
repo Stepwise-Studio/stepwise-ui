@@ -94,7 +94,6 @@ export const registry: RegistryComponent[] = [
     registryDependencies: [],
     files: [
       { src: 'components/stepwise/button.tsx', dest: 'components/stepwise/button.tsx' },
-      { src: 'components/stepwise/social-button.tsx', dest: 'components/stepwise/social-button.tsx' },
       { src: 'lib/theme.tsx', dest: 'lib/theme.tsx' },
       { src: 'lib/utils/cn.ts', dest: 'lib/utils/cn.ts' },
     ],
@@ -657,6 +656,17 @@ export const registry: RegistryComponent[] = [
     ],
   },
   {
+    name: 'social-button',
+    description: "A sign-in button carrying the provider logo and a sensible default label.",
+    category: 'components',
+    dependencies: [],
+    peerDependencies: ['react'],
+    registryDependencies: ['button'],
+    files: [
+      { src: 'components/stepwise/social-button.tsx', dest: 'components/stepwise/social-button.tsx' },
+    ],
+  },
+  {
     name: 'spinner',
     description: "A circular spinner that resolves into a tick or a cross when it finishes.",
     category: 'components',
@@ -778,6 +788,12 @@ export const registry: RegistryComponent[] = [
     files: [
       { src: 'components/stepwise/typography.tsx', dest: 'components/stepwise/typography.tsx' },
       { src: 'lib/utils/cn.ts', dest: 'lib/utils/cn.ts' },
+      { src: 'components/stepwise/fonts.css', dest: 'components/stepwise/fonts.css' },
+      { src: 'public/fonts/LICENSE-Inter.txt', dest: 'fonts/LICENSE-Inter.txt' },
+      { src: 'public/fonts/InterDisplay-Regular.woff2', dest: 'fonts/InterDisplay-Regular.woff2' },
+      { src: 'public/fonts/InterDisplay-Medium.woff2', dest: 'fonts/InterDisplay-Medium.woff2' },
+      { src: 'public/fonts/InterDisplay-SemiBold.woff2', dest: 'fonts/InterDisplay-SemiBold.woff2' },
+      { src: 'public/fonts/InterDisplay-Bold.woff2', dest: 'fonts/InterDisplay-Bold.woff2' },
     ],
   },
   {

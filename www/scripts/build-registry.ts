@@ -85,12 +85,19 @@ const index = registry.map(c => ({
 }))
 fs.writeFileSync(path.join(outDir, 'index.json'), JSON.stringify(index, null, 2))
 
+/* Fonts and other binary assets cannot be embedded the way source files are:
+ * reading a .woff2 as utf-8 corrupts it, and base64 would put ~600 KB of
+ * padding into a manifest every consumer downloads. They are published as a
+ * URL instead, and the CLI fetches the bytes directly. */
+const BINARY = /\.(woff2?|ttf|otf|png|jpe?g|webp|avif|gif|ico|mp4|webm)$/i
+
 // [name].json - full manifest with embedded file contents
 for (const comp of registry) {
-  const files = comp.files.map(f => ({
-    path: f.dest,
-    content: fs.readFileSync(path.join(wwwRoot, f.src), 'utf-8'),
-  }))
+  const files = comp.files.map(f =>
+    BINARY.test(f.src)
+      ? { path: f.dest, url: '/' + f.src.replace(/^public\//, '') }
+      : { path: f.dest, content: fs.readFileSync(path.join(wwwRoot, f.src), 'utf-8') },
+  )
 
   const manifest = {
     name: comp.name,

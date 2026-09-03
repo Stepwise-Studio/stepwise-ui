@@ -62,6 +62,7 @@ export const componentsNav: DocsNavItem[] = [
   { href: '/docs/selection-frame',       label: 'Selection Frame' },
   { href: '/docs/separator',             label: 'Separator' },
   { href: '/docs/slider',                label: 'Slider' },
+  { href: '/docs/social-button',         label: 'Social Button' },
   { href: '/docs/loaders',               label: 'Spinner' },
   { href: '/docs/table',                 label: 'Table' },
   { href: '/docs/theme-toggle',          label: 'Theme Toggle' },

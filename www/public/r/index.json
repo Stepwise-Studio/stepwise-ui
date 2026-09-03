@@ -845,7 +845,7 @@
     "exports": [
       "Scale"
     ],
-    "example": "import { Scale } from '@/components/stepwise/scale'\n\n// --pattern controls the line color, thickness controls the strip's height in px\n<Scale orientation=\"horizontal\" thickness={24} style={{ '--pattern': 'var(--ui-border)' }} />"
+    "example": "import { Scale } from '@/components/stepwise/scale'\n\n// thickness sets the strip's height in px. --pattern sets the line colour and\n// is optional - Scale ships a neutral grey that works on either theme.\n<Scale orientation=\"horizontal\" thickness={24} />\n\n// Or pick your own line colour\n<Scale orientation=\"horizontal\" thickness={24} style={{ '--pattern': '#d4d4d8' }} />"
   },
   {
     "name": "scramble-text",
@@ -994,6 +994,22 @@
       "Slider"
     ],
     "example": "import { Slider } from '@/components/stepwise/slider'\n\nconst [width, setWidth] = useState(40)\n\n<Slider label=\"Width\" value={width} onChange={setWidth} min={0} max={100} />"
+  },
+  {
+    "name": "social-button",
+    "description": "A sign-in button carrying the provider logo and a sensible default label.",
+    "category": "components",
+    "dependencies": [],
+    "peerDependencies": [
+      "react"
+    ],
+    "registryDependencies": [
+      "button"
+    ],
+    "exports": [
+      "SocialButton"
+    ],
+    "example": "import { SocialButton } from '@/components/stepwise/social-button'\n\n<SocialButton provider=\"google\" />\n<SocialButton provider=\"github\" label=\"Sign in with GitHub\" />\n<SocialButton provider=\"apple\"  label=\"Sign up with Apple\" />"
   },
   {
     "name": "spinner",

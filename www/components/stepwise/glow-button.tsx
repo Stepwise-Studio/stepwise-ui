@@ -19,6 +19,15 @@ export interface GlowButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   /** Rolls the label up on hover to reveal a second row with the icon. */
   slideIcon?: boolean
   iconPosition?: 'left' | 'right'
+  /**
+   * Renders an `<a>` instead of a `<button>`, styled identically. This is the
+   * component most likely to be a CTA that navigates, and a link is the right
+   * element for that - middle-click and open-in-new-tab work, and it is
+   * announced as a link rather than a control.
+   */
+  href?: string
+  target?: string
+  rel?: string
 }
 
 // Matches Button's "default" and "lg" steps so a CTA next to a regular
@@ -102,6 +111,9 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
   icon,
   slideIcon = false,
   iconPosition = 'left',
+  href,
+  target,
+  rel,
   className,
   children,
   style,
@@ -111,6 +123,9 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
   const r = radius ?? s.r
   const { theme } = useTheme()
   const isDark = theme === 'dark'
+  // GlowButton has no disabled state, so href always wins when given.
+  const Tag = (href ? 'a' : 'button') as 'button'
+
   const glowRef = useRef<HTMLSpanElement>(null)
   const [hovered, setHovered] = useState(false)
   const reduceMotion = useReducedMotion()
@@ -164,8 +179,13 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
         autoEffects={false}
         middleBorder={{ width: 1, opacity: 1, color: isDark ? edgeColor.dark : edgeColor.light }}
       >
-        <button
-          ref={ref}
+        <Tag
+          ref={ref as React.Ref<HTMLButtonElement & HTMLAnchorElement>}
+          {...(href
+            // noopener by default when opening a new tab, so the opened page
+            // cannot reach back through window.opener.
+            ? { href, target, rel: rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined) }
+            : {})}
           className={cn(
             'relative isolate flex items-center justify-center whitespace-nowrap',
             // Follows the page's light/dark direction (light fill in light mode,
@@ -280,7 +300,7 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
           ) : (
             <span className="relative z-[1]">{children}</span>
           )}
-        </button>
+        </Tag>
       </SmoothCorners>
     </div>
   )

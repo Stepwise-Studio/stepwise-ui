@@ -42,3 +42,8 @@ next-env.d.ts
 
 # static export output
 out/
+
+# The full 12-weight Inter Display family. The site and the registry both read
+# the 4 subset weights in public/fonts instead; these are kept locally only as
+# the source to re-subset from. Re-downloadable at https://rsms.me/inter/
+app/fonts/

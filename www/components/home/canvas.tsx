@@ -216,7 +216,7 @@ function CommandPaletteLook() {
     <div className="w-full max-w-[560px]">
       <Surface
         radius={20}
-        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         className="overflow-hidden bg-white shadow-[0_20px_60px_-12px_rgba(0,0,0,0.28)] dark:bg-zinc-900 dark:shadow-[0_24px_70px_-12px_rgba(0,0,0,0.8)]"
       >
         <div className="flex items-center gap-3 border-b border-zinc-100 px-4 dark:border-zinc-800">
@@ -265,7 +265,7 @@ function ModalLook({
       <Surface
         radius={26}
         smoothing={0.6}
-        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         className="overflow-hidden bg-white shadow-[0_0_48px_-8px_rgba(0,0,0,0.24)] dark:bg-zinc-900 dark:shadow-[0_0_48px_-8px_rgba(0,0,0,0.6)]"
       >
         <div
@@ -310,7 +310,7 @@ function DropdownMenuLook({ trigger, items, rootId }: { trigger: string; items: 
   return (
     <div className="inline-flex flex-col items-start gap-2">
       <Button size="sm" variant="outline">{trigger}</Button>
-      <Surface radius={20} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }} className={DROPDOWN_PANEL_CLASS}>
+      <Surface radius={20} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }} className={DROPDOWN_PANEL_CLASS}>
         <DropdownMenuList menuRef={dummyRef} menuRootId={rootId} onRequestCloseAll={() => {}} items={items} />
       </Surface>
     </div>

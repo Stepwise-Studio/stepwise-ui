@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import pc from 'picocolors'
-import { fetchComponent, type ComponentManifest } from '../utils/registry.js'
+import { fetchAsset, fetchComponent, type ComponentManifest } from '../utils/registry.js'
 import {
   findProjectRoot,
   detectPackageManager,
@@ -78,9 +78,18 @@ export async function add(components: string[], opts: { yes?: boolean }) {
 
       const dest = path.join(root, file.path)
 
+      // Binary assets (fonts) carry a URL rather than inline text - reading or
+      // writing them as utf-8 would corrupt the bytes.
+      const body: string | Buffer = file.url
+        ? await fetchAsset(file.url)
+        : (file.content ?? '')
+
       if (fs.existsSync(dest)) {
-        const current = fs.readFileSync(dest, 'utf-8')
-        if (current === file.content) continue // already up to date
+        const current = fs.readFileSync(dest)
+        const same = Buffer.isBuffer(body)
+          ? current.equals(body)
+          : current.toString('utf-8') === body
+        if (same) continue // already up to date
         if (!opts.yes) {
           console.log(
             pc.yellow(`  ~ ${file.path} ${pc.dim('(differs - use --yes to overwrite)')}`),
@@ -91,7 +100,8 @@ export async function add(components: string[], opts: { yes?: boolean }) {
       }
 
       fs.mkdirSync(path.dirname(dest), { recursive: true })
-      fs.writeFileSync(dest, file.content, 'utf-8')
+      if (Buffer.isBuffer(body)) fs.writeFileSync(dest, body)
+      else fs.writeFileSync(dest, body, 'utf-8')
       console.log(`  ${pc.green('✓')} ${file.path}`)
       writeCount++
     }

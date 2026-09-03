@@ -34,11 +34,35 @@ const SLUG_TO_FILE: Record<string, string> = {
 
 /**
  * Files documented on a component's page that its entry file doesn't import,
- * so the import graph can't find them. SocialButton is the case this exists
- * for: it's documented under Button but depends on Button, not vice versa.
+ * so the import graph can't find them.
+ *
+ * Empty now that SocialButton has its own page and registry entry. It used to
+ * live here because it was documented under Button while importing Button
+ * rather than the reverse - which meant `add button` wrote a file nothing in
+ * the project imported. Prefer giving a component its own entry over listing
+ * it here; the dependency then points the right way and installs on demand.
  */
-const EXTRA_FILES: Record<string, string[]> = {
-  button: ['components/stepwise/social-button.tsx'],
+const EXTRA_FILES: Record<string, string[]> = {}
+
+/**
+ * Non-source files a component needs, with an explicit destination because the
+ * source path is a build-time location and the install path is not.
+ *
+ * The font is here rather than in a registry entry of its own because the
+ * registry is nav-driven - every entry comes from a docs page - and a typeface
+ * is not a component. Attaching it to `typography` also makes it the default:
+ * `add typography` brings the family the scale was drawn against, and the docs
+ * explain how to point the scale at a different one.
+ */
+const ASSET_FILES: Record<string, { src: string; dest: string }[]> = {
+  typography: [
+    { src: 'components/stepwise/fonts.css', dest: 'components/stepwise/fonts.css' },
+    { src: 'public/fonts/LICENSE-Inter.txt', dest: 'fonts/LICENSE-Inter.txt' },
+    { src: 'public/fonts/InterDisplay-Regular.woff2',  dest: 'fonts/InterDisplay-Regular.woff2' },
+    { src: 'public/fonts/InterDisplay-Medium.woff2',   dest: 'fonts/InterDisplay-Medium.woff2' },
+    { src: 'public/fonts/InterDisplay-SemiBold.woff2', dest: 'fonts/InterDisplay-SemiBold.woff2' },
+    { src: 'public/fonts/InterDisplay-Bold.woff2',     dest: 'fonts/InterDisplay-Bold.woff2' },
+  ],
 }
 
 // ---------------------------------------------------------------- nav parsing
@@ -272,8 +296,11 @@ const body = components
   .map(c => {
     const arr = (items: string[]) =>
       items.length === 0 ? '[]' : `[${items.map(i => `'${i}'`).join(', ')}]`
-    const files = c.files
-      .map(f => `      { src: '${f}', dest: '${f}' },`)
+    const files = [
+      ...c.files.map(f => ({ src: f, dest: f })),
+      ...(ASSET_FILES[c.name] ?? []),
+    ]
+      .map(f => `      { src: '${f.src}', dest: '${f.dest}' },`)
       .join('\n')
     return `  {
     name: '${c.name}',

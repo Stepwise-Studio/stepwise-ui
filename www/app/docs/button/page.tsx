@@ -3,13 +3,13 @@ import { CodeBlock, InlineInstall } from '@/components/stepwise/docs/code-block'
 import { PreviewCode } from '@/components/stepwise/docs/preview-code'
 import { OnThisPage } from '@/components/stepwise/docs/on-this-page'
 import { PropsTable } from '@/components/stepwise/docs/props-table'
+import { A } from '@/components/stepwise/docs/prose'
 import {
   ButtonVariantsPreview,
   ButtonIconsPreview,
   ButtonSlidePreview,
   ButtonIconOnlyPreview,
   ButtonFullWidthPreview,
-  ButtonSocialPreview,
   ButtonSizesPreview,
   ButtonDisabledPreview,
   ButtonLoadingPreview,
@@ -113,12 +113,6 @@ const loadingCode = `// with an icon - the spinner takes the icon's slot, label 
 <Button loading>Submit</Button>
 <Button loading iconOnly icon={<Add />} aria-label="Adding" />`
 
-const socialCode = `import { SocialButton } from '@/components/stepwise/social-button'
-
-<SocialButton provider="google" />
-<SocialButton provider="github" label="Sign in with GitHub" />
-<SocialButton provider="apple"  label="Sign up with Apple" />`
-
 const customFillCode = `// one colour → both gradient stops (flat fill)
 <Button className="bg-sky-500 text-white">flat sky</Button>
 
@@ -139,7 +133,6 @@ const tocItems = [
   { id: 'slide',      label: 'Slide icon',   child: false },
   { id: 'icon-only',  label: 'Icon only',    child: false },
   { id: 'full-width', label: 'Full width',   child: false },
-  { id: 'social',     label: 'Social login', child: false },
   { id: 'disabled',   label: 'Disabled',     child: false },
   { id: 'loading',    label: 'Loading',      child: false },
   { id: 'custom-fill', label: 'Custom fill', child: false },
@@ -158,7 +151,8 @@ export default async function ButtonPage() {
           <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Squircle button in three sizes and five variants. Supports left and right icons,
             a slide-in hover animation for right-side icons, icon-only mode, full-width layout,
-            social login presets, and a loading state. Works with both{' '}
+            and a loading state. For provider sign-in buttons see{' '}
+            <A href="/docs/social-button">Social Button</A>, which is built on this. Works with both{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">iconsax-react</code>{' '}and{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">@hugeicons/react</code>.
           </Text>
@@ -243,22 +237,6 @@ export default async function ButtonPage() {
           />
         </section>
 
-        {/* Social login */}
-        <section id="social" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Social login</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
-            <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">SocialButton</code> wraps{' '}
-            <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">Button</code> with the brand logo and
-            a sensible default label. Override <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">label</code> to
-            change "Continue with" to "Sign in with" or "Sign up with".
-          </Text>
-          <PreviewCode
-            minHeight={220}
-            preview={<ButtonSocialPreview />}
-            code={<CodeBlock code={socialCode} lang="tsx" className="rounded-none" flat />}
-          />
-        </section>
-
         {/* Disabled */}
         <section id="disabled" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Disabled</Text>
@@ -338,15 +316,8 @@ export default async function ButtonPage() {
             { name: 'loading',      type: 'boolean',                                                 desc: 'Spinner + aria-busy, disables the button. Label and width stay put.' },
             { name: 'disabled',     type: 'boolean',                                                 desc: '45% opacity, flattens elevation, blocks interaction.' },
             { name: 'noRipple',     type: 'boolean',                                                 desc: 'Disables the press ripple. Skipped automatically under prefers-reduced-motion.' },
+            { name: 'href',         type: 'string',                                                  desc: 'Renders an <a> instead of a <button>, styled identically. Ignored while disabled or loading. target="_blank" gets rel="noopener noreferrer" automatically.' },
             { name: 'className',    type: 'string',                                                  desc: 'Merged last via cn(). bg-* becomes both gradient stops; from-* / to-* replace the fade; text-* / h-* / px-* override the matching defaults.' },
-          ]} />
-
-          <Text variant="h4" className="text-zinc-900 dark:text-white mt-4">SocialButton props</Text>
-          <PropsTable rows={[
-            { name: 'provider',   type: '"google" | "github" | "apple"', desc: 'Brand to render - sets the logo and default label.' },
-            { name: 'label',      type: 'string',                        desc: 'Override the default "Continue with …" label.' },
-            { name: 'size',       type: 'ButtonSize',                    desc: 'Inherits Button sizes. Default: "default".' },
-            { name: 'fullWidth',  type: 'boolean',                       desc: 'Defaults to true - typical for auth forms.' },
           ]} />
         </section>
 

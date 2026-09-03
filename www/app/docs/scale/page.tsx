@@ -7,17 +7,21 @@ import { ScaleHorizontalPreview, ScaleVerticalPreview, ScaleUsagePreview } from 
 
 const horizontalCode = `import { Scale } from '@/components/stepwise/scale'
 
-// --pattern controls the line color, thickness controls the strip's height in px
-<Scale orientation="horizontal" thickness={24} style={{ '--pattern': 'var(--ui-border)' }} />`
+// thickness sets the strip's height in px. --pattern sets the line colour and
+// is optional - Scale ships a neutral grey that works on either theme.
+<Scale orientation="horizontal" thickness={24} />
+
+// Or pick your own line colour
+<Scale orientation="horizontal" thickness={24} style={{ '--pattern': '#d4d4d8' }} />`
 
 const verticalCode = `// Vertical fills its parent's height - give the parent one
 <div className="h-32">
-  <Scale orientation="vertical" style={{ '--pattern': 'var(--ui-border)' }} />
+  <Scale orientation="vertical" />
 </div>`
 
 const usageCode = `// A hairline seam between two page sections - reads better than a plain
 // border when the page above and below it are both fairly quiet
-<div style={{ '--pattern': 'var(--ui-border)' }}>
+<div style={{ '--pattern': '#d4d4d8' }}>
   <section>{/* last section before the footer */}</section>
   <Scale orientation="horizontal" thickness={30} />
   <footer>{/* footer */}</footer>

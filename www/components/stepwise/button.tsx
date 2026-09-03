@@ -37,6 +37,16 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   contentAlign? : 'center' | 'start'
   /** Disable the press ripple. Motion is skipped automatically under reduced-motion. */
   noRipple?     : boolean
+  /**
+   * Renders an `<a>` instead of a `<button>`, styled identically. A CTA that
+   * navigates should be a link: middle-click, open-in-new-tab and the status-bar
+   * preview all work, and screen readers announce it as a link. Ignored while
+   * `disabled` or `loading` - a disabled link is not a thing, so the element
+   * stays a real button that can actually be disabled.
+   */
+  href?         : string
+  target?       : string
+  rel?          : string
 }
 
 const metrics = {
@@ -258,6 +268,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   fullWidth    = false,
   contentAlign = 'center',
   noRipple     = false,
+  href,
+  target,
+  rel,
   disabled,
   children,
   className,
@@ -272,6 +285,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   const [pressed, setPressed] = useState(false)
   const [isTouch, setIsTouch] = useState(false)
   const [ripples, setRipples] = useState<Ripple[]>([])
+
+  /* A disabled link is not a thing - `disabled` does not exist on <a>, and an
+   * anchor with no href is not focusable. So `href` only wins while enabled;
+   * otherwise this stays a real <button> that can genuinely be disabled. */
+  const asLink = Boolean(href) && !disabled && !loading
+  const Tag = (asLink ? 'a' : 'button') as 'button'
 
   const innerRef  = useRef<HTMLButtonElement>(null)
   const rippleId  = useRef(0)
@@ -437,9 +456,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
           ? { middleBorder: { width: borderOverride?.width ?? 1, opacity: isDisabled ? 0.3 : 1, color: isDark ? edge.dark : edge.light } as NonNullable<SmoothCornersOwnProps['middleBorder']> }
           : {})}
       >
-        <button
-          ref={innerRef}
-          disabled={isDisabled}
+        <Tag
+          ref={innerRef as React.Ref<HTMLButtonElement & HTMLAnchorElement>}
+          {...(asLink
+            // Opening a new tab without noopener leaves the new page able to
+            // reach back through window.opener, so default it in.
+            ? { href, target, rel: rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined) }
+            : { disabled: isDisabled })}
           aria-busy={loading || undefined}
           onMouseEnter={e => { setHovered(true);  onMouseEnter?.(e) }}
           onMouseLeave={e => { setHovered(false); onMouseLeave?.(e) }}
@@ -613,7 +636,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
               )}
             </span>
           )}
-        </button>
+        </Tag>
       </SmoothCorners>
     </div>
   )

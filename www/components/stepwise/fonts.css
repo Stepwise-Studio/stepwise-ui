@@ -1,0 +1,81 @@
+/* Inter Display - the family the Stepwise type scale is drawn against.
+ *
+ * Four weights ship: 400, 500, 600, 700. The Typography scale only calls for
+ * 400/500/600; 700 is here because body copy usually wants a bold somewhere.
+ * No italics - the scale never sets one.
+ *
+ * These are subset to Latin + Latin Extended: every Western, Central and
+ * Eastern European language, plus punctuation, currency and common symbols.
+ * That is 998 of the upstream 2852 glyphs and roughly half the bytes. Every
+ * OpenType feature is kept, so the character variants still work.
+ *
+ * Greek and Cyrillic are NOT included. If you need them, download the full
+ * family from https://rsms.me/inter/ and replace the files in fonts/ - the
+ * @font-face rules below need no change.
+ *
+ * Import this once, near the top of your global stylesheet:
+ *
+ *     @import "../components/stepwise/fonts.css";
+ *
+ * Then point Tailwind's sans stack at it:
+ *
+ *     :root { --font-sans: "Inter Display", ui-sans-serif, system-ui, sans-serif; }
+ *
+ * To use a different family instead, skip both lines. Nothing in the library
+ * hard-codes a font-family - the components inherit whatever your page sets, so
+ * your own type will flow through the same scale untouched.
+ *
+ * Inter is (c) The Inter Project Authors, licensed under the SIL Open Font
+ * License 1.1. The full licence travels alongside this file as
+ * fonts/LICENSE-Inter.txt and must stay with the font files.
+ * https://github.com/rsms/inter
+ */
+
+@font-face {
+  font-family: "Inter Display";
+  src: url("../../fonts/InterDisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  /* Pins the metrics every engine uses to compute line-height:1 positioning.
+     Without these, Gecko and Blink read different internal tables from the same
+     file and place tight-leading text a few px apart - icon+label rows in a
+     button look vertically off in one engine but fine in the other. Values read
+     from the font file itself, not assumed. */
+  ascent-override: 96.875%;
+  descent-override: 24.121%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Display";
+  src: url("../../fonts/InterDisplay-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 96.875%;
+  descent-override: 24.121%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Display";
+  src: url("../../fonts/InterDisplay-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 96.875%;
+  descent-override: 24.121%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Inter Display";
+  src: url("../../fonts/InterDisplay-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 96.875%;
+  descent-override: 24.121%;
+  line-gap-override: 0%;
+}

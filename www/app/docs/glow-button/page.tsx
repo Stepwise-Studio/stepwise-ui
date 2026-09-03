@@ -56,6 +56,7 @@ export default function GlowButtonPage() {
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
             { name: 'size',     type: '"default" | "lg"', desc: 'Matches Button\'s own default/lg sizing. Default: "default".' },
+            { name: 'href',      type: 'string',           desc: 'Renders an <a> instead of a <button>, styled identically - the right element for a CTA that navigates.' },
             { name: 'className', type: 'string',           desc: 'Merged onto the inner <button>.' },
           ]} />
         </section>

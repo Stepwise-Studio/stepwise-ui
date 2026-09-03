@@ -3,7 +3,10 @@ const REGISTRY_BASE =
 
 export interface RegistryFile {
   path: string
-  content: string
+  /** Source text. Absent for binary assets, which carry `url` instead. */
+  content?: string
+  /** Site-relative path to a binary asset (fonts, images) to fetch verbatim. */
+  url?: string
 }
 
 export interface ComponentManifest {
@@ -54,4 +57,21 @@ export async function fetchIndex(): Promise<Array<{ name: string; description: s
     `${REGISTRY_BASE}/index.json`,
     'Registry index not found - is STEPWISE_REGISTRY_URL pointing at the right host?',
   )) as Array<{ name: string; description: string; category: string }>
+}
+
+/**
+ * Fetch a binary asset (a font, an image) as raw bytes.
+ *
+ * These are not embedded in the manifest the way source files are: reading a
+ * .woff2 as text corrupts it, and base64 would add hundreds of KB to a manifest
+ * every consumer downloads. The manifest carries a site-relative URL and the
+ * bytes are pulled from the same origin the registry is served from.
+ */
+export async function fetchAsset(url: string): Promise<Buffer> {
+  const origin = REGISTRY_BASE.replace(/\/r\/?$/, '')
+  const res = await fetch(`${origin}${url}`)
+  if (!res.ok) {
+    throw new Error(`Could not download ${url} (${res.status} ${res.statusText})`)
+  }
+  return Buffer.from(await res.arrayBuffer())
 }

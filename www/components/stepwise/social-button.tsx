@@ -16,6 +16,15 @@ export interface SocialButtonProps extends ButtonHTMLAttributes<HTMLButtonElemen
   label?    : string
   size?     : ButtonSize
   fullWidth?: boolean
+  /**
+   * Renders an `<a>` instead of a `<button>`. Sign-in buttons usually kick off
+   * an OAuth redirect, which is a navigation - passing the provider's authorize
+   * URL here is more honest than an onClick that sets window.location.
+   * Forwarded straight to Button, which owns the behaviour.
+   */
+  href?     : string
+  target?   : string
+  rel?      : string
 }
 
 const GoogleLogo = () => (

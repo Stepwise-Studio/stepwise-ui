@@ -1,5 +1,6 @@
 import { Text } from '@/components/stepwise/typography'
 import { CodeBlock, InlineInstall } from '@/components/stepwise/docs/code-block'
+import { A } from '@/components/stepwise/docs/prose'
 import { CssClassesTable } from '@/components/stepwise/docs/css-classes-table'
 import { OnThisPage } from '@/components/stepwise/docs/on-this-page'
 import { Surface } from '@/components/stepwise/primitives/surface'
@@ -102,6 +103,7 @@ const typeDefinitionCode = `type TypographyVariant =
 
 const onThisPage = [
   { id: 'installation',     label: 'Installation',    child: false },
+  { id: 'font',             label: 'The font',        child: false },
   { id: 'import',           label: 'Import',          child: false },
   { id: 'type-scale',       label: 'Type scale',      child: false },
   { id: 'usage',            label: 'Usage',           child: false },
@@ -144,6 +146,23 @@ function SectionHeading({ id, children }: { id: string; children: React.ReactNod
 
 /* ─── page ──────────────────────────────────────────────────────────────── */
 
+const fontSetupCode = `/* globals.css */
+@import "tailwindcss";
+@import "../components/stepwise/fonts.css";
+
+:root {
+  --font-sans: "Inter Display", ui-sans-serif, system-ui, sans-serif;
+}`
+
+const fontSwapCode = `/* Your own family - no Stepwise font needed */
+:root {
+  --font-sans: "Your Typeface", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* The scale's tracking assumes Inter Display's tight spacing.
+   On a wider face, dial it back: */
+.text-balance { letter-spacing: -0.01em; }`
+
 export default function TypographyPage() {
   return (
     <div className="flex gap-12">
@@ -163,6 +182,37 @@ export default function TypographyPage() {
         <section className="mb-12">
           <SectionHeading id="installation">Installation</SectionHeading>
           <InlineInstall command="npx stepwise-ui add typography" />
+          <p className="mt-4 text-[15px] leading-relaxed text-zinc-500 text-pretty dark:text-zinc-400">
+            This brings the typeface too. Four weights of{' '}
+            <A href="https://rsms.me/inter/">Inter Display</A> - 400, 500, 600, 700 - land in{' '}
+            <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">fonts/</code>,
+            with the <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">@font-face</code>{' '}
+            rules in{' '}
+            <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">components/stepwise/fonts.css</code>{' '}
+            and Inter&apos;s OFL licence alongside them. The scale is drawn against this
+            family - its{' '}
+            <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">-0.03em</code>{' '}
+            tracking assumes Inter Display&apos;s tight default spacing.
+          </p>
+        </section>
+
+        {/* Font */}
+        <section className="mb-12">
+          <SectionHeading id="font">The font</SectionHeading>
+          <p className="mb-4 text-[15px] leading-relaxed text-zinc-500 text-pretty dark:text-zinc-400">
+            Two lines wire it up. Import the face rules, then point Tailwind&apos;s sans
+            stack at the family:
+          </p>
+          <CodeBlock code={fontSetupCode} lang="css" />
+          <p className="mt-6 mb-4 text-[15px] leading-relaxed text-zinc-500 text-pretty dark:text-zinc-400">
+            <strong className="font-medium text-zinc-700 dark:text-zinc-200">Using a different
+            typeface instead:</strong> skip both lines and delete{' '}
+            <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">fonts/</code>.
+            Nothing in the library hard-codes a family - every component inherits whatever
+            your page sets, so your own type flows through the same scale untouched. Only the
+            tracking is tuned for Inter Display; on a wider face, relax it:
+          </p>
+          <CodeBlock code={fontSwapCode} lang="css" />
         </section>
 
         {/* Import */}
@@ -174,7 +224,7 @@ export default function TypographyPage() {
         {/* Type scale */}
         <section className="mb-12">
           <SectionHeading id="type-scale">Type scale</SectionHeading>
-          <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }} className="overflow-hidden">
+          <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }} className="overflow-hidden">
             <div className="grid grid-cols-[110px_1fr] md:grid-cols-[160px_1fr] px-4 md:px-6 py-3 bg-zinc-900 dark:bg-zinc-100">
               <Text variant="body" as="span" className="text-zinc-200 dark:text-zinc-800 font-semibold">Variant</Text>
               <Text variant="body" as="span" className="text-zinc-200 dark:text-zinc-800 font-semibold">Preview</Text>
@@ -304,7 +354,7 @@ export default function TypographyPage() {
           <Text variant="body-soft" as="p" className="text-zinc-500 mb-6">
             The HTML element each variant renders when no <Text variant="mono" as="code" className="text-[13px] text-violet-400 bg-zinc-100 dark:bg-zinc-900 px-1.5 py-0.5 rounded">as</Text> prop is provided.
           </Text>
-          <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }} className="overflow-hidden">
+          <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }} className="overflow-hidden">
             <div className="grid grid-cols-[110px_1fr] md:grid-cols-[160px_1fr] px-4 md:px-6 py-3 bg-zinc-900 dark:bg-zinc-100">
               <Text variant="body" as="span" className="text-zinc-200 dark:text-zinc-800 font-semibold">Variant</Text>
               <Text variant="body" as="span" className="text-zinc-200 dark:text-zinc-800 font-semibold">Element</Text>
@@ -333,7 +383,7 @@ export default function TypographyPage() {
 
           {/* Props table */}
           <Text variant="h5-soft" as="h3" className="text-zinc-500 dark:text-zinc-400 mb-3 mt-8">Props</Text>
-          <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }} className="overflow-x-auto">
+          <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }} className="overflow-x-auto">
             <div className="min-w-[560px]">
               <div className="grid grid-cols-[120px_1fr_100px_80px] gap-4 px-6 py-3 bg-zinc-900 dark:bg-zinc-100">
                 {['Prop', 'Type', 'Default', 'Required'].map(h => (
