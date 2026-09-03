@@ -160,7 +160,7 @@ export function PricingCard({
       <Surface
         radius={28}
         smoothing={0.6}
-        lisse={{ middleBorder: { width: 2, opacity: 1, color: 'var(--ui-border, #e4e4e7)' } }}
+        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         // An explicit pixel width, not `w-full max-w-[…]`. The squircle
         // clip-path measures the box before a relative width has resolved in
         // this flex-centred layout, so cards with different CTA labels end up
@@ -177,7 +177,7 @@ export function PricingCard({
     <Surface
       radius={28}
       smoothing={0.6}
-      lisse={{ middleBorder: { width: 2, opacity: 1, color: highlighted ? 'rgb(0 0 0 / 40%)' : 'var(--ui-border, #e4e4e7)' } }}
+      lisse={{ middleBorder: { width: 1, opacity: 1, color: highlighted ? 'rgb(0 0 0 / 40%)' : 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
       // Same explicit width as the "framed" branch above, for the same reason.
       className={cn('flex w-[280px] max-w-full flex-col gap-0 overflow-hidden', headerBg, elevation, className)}
     >

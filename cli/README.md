@@ -5,7 +5,7 @@ project so you own it outright. No runtime package, no version lock, no wrapper
 around someone else's abstraction.
 
 ```bash
-npx stepwise-ui add video-player
+npx stepwise-ui init
 ```
 
 ## Commands

@@ -179,6 +179,13 @@ html.dark {
    needed this in the first place. */
 html {
   scrollbar-gutter: stable;
+
+  /* Kills the elastic overscroll - the rubber-band stretch when you keep
+     scrolling past the top or bottom. On a page whose hero is a full-bleed
+     shader and whose footer sits flush, that bounce exposes the page
+     background behind the design and reads as a glitch rather than as
+     feedback. Also stops scroll chaining out to any parent surface. */
+  overscroll-behavior: none;
 }
 
 body {

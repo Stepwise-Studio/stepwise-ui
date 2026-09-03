@@ -14,3 +14,10 @@ www/AGENTS.md
 www/CLAUDE.md
 skills/
 skills-lock.json
+
+# npm auth - must never be committed
+.npmrc
+**/.npmrc
+
+# npm pack output
+*.tgz
