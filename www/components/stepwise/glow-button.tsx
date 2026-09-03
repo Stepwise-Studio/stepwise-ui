@@ -43,7 +43,7 @@ const metrics = {
 const edgeColor = { light: 'rgb(0 0 0 / 6%)', dark: 'rgb(255 255 255 / 14%)' }
 
 /**
- * A CTA button with a rainbow glow along the inside of its bottom edge.
+ * A CTA button with a colour glow drifting along the inside of its bottom edge.
  * Separate from Button because no other button needs this geometry.
  */
 /* ── glow ────────────────────────────────────────────────────────────────────
@@ -54,7 +54,7 @@ const edgeColor = { light: 'rgb(0 0 0 / 6%)', dark: 'rgb(255 255 255 / 14%)' }
  */
 
 /* 4x, not 2x. At 2x the button showed roughly half the spectrum at once, which
- * read as a rainbow decal rather than light: six hues across 230px. At 4x only
+ * read as a decal rather than light: too many hues across 230px. At 4x only
  * a quarter is visible, so any frame is two or three neighbouring hues
  * blending, and the full spectrum is something you notice over the loop. */
 /* Cool half of the spectrum only - green through teal, blue, indigo, violet,
@@ -215,7 +215,7 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
         >
           {/* Rainbow inner glow. Every layer's `background` points at the
               same moving gradient (stepwise-glow-color) so they're always
-              displaying the identical slice of one continuous rainbow - the
+              displaying the identical slice of one continuous ramp - the
               corners and the wash can never show clashing hues, since
               there's only ever one strip of color being read from three
               different masked windows onto it. */}

@@ -26,7 +26,7 @@ export default function GlowButtonPage() {
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Glow Button</Text>
           <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
-            A CTA button with a rainbow glow drifting along the inside of its bottom edge. The
+            A CTA button with a colour glow drifting along the inside of its bottom edge. The
             colour field sits inside the pill, never as an outside shadow, and its hues loop
             smoothly. Same two
             sizes and type scale as <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">Button</code>&apos;s

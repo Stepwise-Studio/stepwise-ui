@@ -352,7 +352,7 @@ export const registry: RegistryComponent[] = [
   },
   {
     name: 'glow-button',
-    description: "A CTA button with a rainbow glow drifting along the inside of its bottom edge.",
+    description: "A CTA button with a colour glow drifting along the inside of its bottom edge.",
     category: 'components',
     dependencies: ['@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
     peerDependencies: ['react'],

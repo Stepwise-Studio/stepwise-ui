@@ -43,8 +43,54 @@ const geistMono = Geist_Mono({
 })
 
 const SITE_URL = 'https://ui.stepwise.studio'
+const REPO_URL = 'https://github.com/Stepwise-Studio/stepwise-ui'
 const DESCRIPTION =
   'A growing collection of React components for building modern products. Each one arrives as source you can read and edit, and works with your coding agent, so what it ships looks designed rather than generated.'
+
+/* JSON-LD identity, for agents that parse rather than read.
+ *
+ * Two objects: what this is (SoftwareApplication) and who made it
+ * (Organization). Without them an agent has to infer both from prose, and
+ * "Stepwise UI" is generic enough that the inference often lands wrong.
+ *
+ * The contact point is the issue tracker rather than an email - it is the
+ * honest route for an open-source library, and it keeps a scrapeable address
+ * out of every page's source. */
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      '@id': `${SITE_URL}/#software`,
+      name: 'Stepwise UI',
+      url: SITE_URL,
+      description: DESCRIPTION,
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'Any',
+      softwareRequirements: 'React 19, Tailwind CSS v4, TypeScript',
+      // Free, and saying so explicitly is what lets an agent answer "does this
+      // cost anything" without guessing from the absence of a pricing page.
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      license: 'https://opensource.org/licenses/MIT',
+      downloadUrl: 'https://www.npmjs.com/package/stepwise-ui',
+      codeRepository: REPO_URL,
+      publisher: { '@id': `${SITE_URL}/#org` },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${SITE_URL}/#org`,
+      name: 'Stepwise Studio',
+      url: 'https://stepwise.studio',
+      logo: `${SITE_URL}/brand/logo-mark.svg`,
+      sameAs: [REPO_URL, 'https://www.npmjs.com/package/stepwise-ui'],
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'technical support',
+        url: `${REPO_URL}/issues`,
+      },
+    },
+  ],
+}
 
 export const metadata: Metadata = {
   // Required for the OG/Twitter image URLs to resolve absolutely. Without it
@@ -119,6 +165,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         {/* Must be first child - runs before paint to apply theme class */}
         <script dangerouslySetInnerHTML={{ __html: noFlashScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <ThemeProvider>
           {children}
         </ThemeProvider>
