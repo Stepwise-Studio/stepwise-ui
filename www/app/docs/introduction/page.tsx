@@ -26,10 +26,10 @@ export const Surface = forwardRef<HTMLDivElement, SurfaceProps>(({
 const overrideCode = `import { Button } from '@/components/stepwise/button'
 
 // props for the common cases
-<Button variant="primary" size="lg">Save</Button>
+<Button variant="solid" size="lg">Save</Button>
 
 // className for everything else - tailwind-merge lets these win
-<Button variant="primary" className="rounded-full px-8" />`
+<Button variant="solid" className="rounded-full px-8" />`
 
 const toc = [
   { id: 'what-it-is', label: 'What it is', child: false },

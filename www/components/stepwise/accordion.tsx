@@ -17,6 +17,12 @@ export interface AccordionProps {
   items     : AccordionItem[]
   /** Allow multiple panels open at once. Default false. */
   multiple? : boolean
+  /**
+   * Item id(s) open on first render. Uncontrolled - the component owns the
+   * state afterwards. An array is only honoured when `multiple` is set; a
+   * single id works either way.
+   */
+  defaultOpen?: string | string[]
   /** Fill tint (any CSS color). Very light at rest, darker when hovered/open. */
   color?    : string
   className?: string
@@ -24,8 +30,14 @@ export interface AccordionProps {
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-export function Accordion({ items, multiple = false, color, className }: AccordionProps) {
-  const [open, setOpen] = useState<Set<string>>(new Set())
+export function Accordion({ items, multiple = false, defaultOpen, color, className }: AccordionProps) {
+  // Lazy initialiser: the default only seeds the first render, so later prop
+  // changes do not reopen a panel the reader deliberately closed.
+  const [open, setOpen] = useState<Set<string>>(() => {
+    if (defaultOpen == null) return new Set()
+    const ids = Array.isArray(defaultOpen) ? defaultOpen : [defaultOpen]
+    return new Set(multiple ? ids : ids.slice(0, 1))
+  })
   const [hovered, setHovered] = useState<string | null>(null)
 
   const toggle = (id: string) => {

@@ -65,6 +65,7 @@ export default function AccordionPage() {
           <PropsTable rows={[
             { name: 'items',    type: 'AccordionItem[]', desc: 'Array of panel definitions.' },
             { name: 'multiple', type: 'boolean',         desc: 'Allow multiple panels open simultaneously. Default false.' },
+            { name: 'defaultOpen', type: 'string | string[]', desc: 'Item id(s) open on first render. An array is only honoured with multiple.' },
           ]} />
 
           <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">Props - AccordionItem</Text>

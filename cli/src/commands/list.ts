@@ -74,10 +74,15 @@ export async function list(opts: { all?: boolean } = {}) {
 
   const names = new Set(installedComponents(root, items.map(i => i.name)))
 
+  // Say what this command reports before saying the count is zero. "No
+  // components" on its own reads like the command failed, when an empty
+  // project is simply the expected starting state.
   if (names.size === 0) {
-    console.log(`\n${pc.dim('No Stepwise components in this project yet.')}\n`)
-    console.log(`  ${pc.cyan('npx stepwise-ui init')}       ${pc.dim('browse and pick some')}`)
-    console.log(`  ${pc.cyan('npx stepwise-ui list --all')} ${pc.dim('see everything available')}\n`)
+    console.log(`\n${pc.bold('Installed')} - none yet`)
+    console.log(pc.dim(`  This lists components already added to this project.`))
+    console.log(pc.dim(`  All ${items.length} are available to install:\n`))
+    console.log(`  ${pc.cyan('npx stepwise-ui list --all')} ${pc.dim('see everything available')}`)
+    console.log(`  ${pc.cyan('npx stepwise-ui init')}       ${pc.dim('browse and pick some')}\n`)
     return
   }
 

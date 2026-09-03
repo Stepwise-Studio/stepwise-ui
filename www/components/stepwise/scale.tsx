@@ -7,7 +7,11 @@ export interface ScaleProps {
   /** Strip thickness in px. Default 40. */
   thickness?: number
   className?: string
-  style?: CSSProperties
+  /* CSSProperties alone rejects custom properties, so the documented usage
+   * - style={{ '--pattern': '...' }} - fails to typecheck under `strict`,
+   * which Quick Start asks for. Widening it here is better than telling
+   * people to cast at every call site. */
+  style?: CSSProperties & Record<`--${string}`, string | number>
 }
 
 /**

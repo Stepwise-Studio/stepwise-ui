@@ -33,7 +33,7 @@ const aliasCode = `{
 const usageCode = `import { Button } from '@/components/stepwise/button'
 
 export default function Page() {
-  return <Button variant="primary">Ship it</Button>
+  return <Button variant="solid">Ship it</Button>
 }`
 
 const borderTokenCode = `:root {

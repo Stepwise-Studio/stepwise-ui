@@ -8,6 +8,9 @@ import {
   missingDependencies,
   installPackages,
   checkPathAlias,
+  findGlobalCss,
+  hasDarkVariant,
+  DARK_VARIANT,
 } from '../utils/project.js'
 
 /**
@@ -137,6 +140,22 @@ export async function add(components: string[], opts: { yes?: boolean }) {
     console.log(
       `\n  ${pc.yellow('!')} ${alias.message}\n` +
         pc.dim('    Stepwise components import each other via "@/…" paths.'),
+    )
+  }
+
+  /* The dark variant is the single most common way an install looks broken:
+   * without it every `dark:` class in every component silently does nothing.
+   * `init` offers to add it, but the documented path for agents and scripts is
+   * `add`, which never touches project files - so the check that matters most
+   * was missing from the flow that needs it most. Detect and report only; the
+   * user or agent applies the one-line fix. */
+  const css = findGlobalCss(root)
+  if (css && !hasDarkVariant(css)) {
+    const rel = css.slice(root.length + 1)
+    console.log(
+      `\n  ${pc.yellow('!')} ${rel} is missing the dark-mode variant.\n` +
+        pc.dim('    Every "dark:" class does nothing until you add this line:\n') +
+        pc.dim(`      ${DARK_VARIANT}`),
     )
   }
 
