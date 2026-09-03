@@ -12,7 +12,7 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'color'
   variant? : ChipVariant
   size?    : ChipSize
   icon?    : React.ReactNode
-  /** Leading status dot — great for "Live", counts, and statuses. */
+  /** Leading status dot - great for "Live", counts, and statuses. */
   dot?     : boolean
 }
 
@@ -25,7 +25,7 @@ const sizes = {
 
 type ColorDef = {
   text: string          // text for soft + outline
-  soft: string          // soft fill — dark uses the hue at low opacity, not a muddy -950
+  soft: string          // soft fill - dark uses the hue at low opacity, not a muddy -950
   softBorder: string    // hairline of the same hue
   solid: string         // saturated fill + legible text
   solidBorder: string   // subtle same-hue edge on the saturated fill
@@ -59,7 +59,7 @@ export function Chip({
   // leading icon OR dot, drop back to the base padding so heights match across variants
   const py = variant === 'soft' && !icon && !dot ? s.pyFillNoIcon : s.pyBase
 
-  // dot chips: only the dot itself is colored — body uses idle neutrals
+  // dot chips: only the dot itself is colored - body uses idle neutrals
   const dc = dot ? colors.idle : c
   const skin =
     variant === 'solid' ? cn(dc.solid, 'border', dc.solidBorder)

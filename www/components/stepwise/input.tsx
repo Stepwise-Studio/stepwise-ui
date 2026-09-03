@@ -120,15 +120,34 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((
   const resolvedLabel       = label === undefined ? DEFAULT_LABELS[variant] : label
   const resolvedPlaceholder = placeholder ?? DEFAULT_PLACEHOLDERS[variant]
 
+  /* The error shake, driven straight through the Web Animations API.
+   *
+   * It used to add a class carrying a CSS keyframe, which meant the keyframe
+   * had to exist in the consuming project's stylesheet - it never shipped, so
+   * an installed Input simply did not shake. Calling `animate()` keeps the
+   * whole behaviour inside the component. It also drops the reflow hack the
+   * class version needed to replay: each call is its own animation. */
   useLayoutEffect(() => {
     if (shakeCount === 0) return
     const el = borderRef.current
     if (!el) return
-    el.classList.remove('input-shaking')
-    void el.offsetWidth
-    el.classList.add('input-shaking')
-    const t = setTimeout(() => el.classList.remove('input-shaking'), 320)
-    return () => clearTimeout(t)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const d = 6, overshoot = 4
+    const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)'
+    const anim = el.animate(
+      // Per-keyframe `easing` matches CSS's animation-timing-function: it eases
+      // the interval starting at that keyframe, not the whole run.
+      [
+        { transform: 'translateX(0)', easing: EASE },
+        { transform: `translateX(${d}px)`, offset: 0.2857, easing: EASE },
+        { transform: `translateX(${-d}px)`, offset: 0.5714, easing: EASE },
+        { transform: `translateX(${overshoot}px)`, offset: 0.7857, easing: EASE },
+        { transform: 'translateX(0)' },
+      ],
+      { duration: 280 },
+    )
+    return () => anim.cancel()
   }, [shakeCount])
 
   const triggerShake = useCallback((msg: string) => {
@@ -216,7 +235,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((
         </label>
       )}
 
-      {/* group — drives eye visibility and icon stroke hover */}
+      {/* group - drives eye visibility and icon stroke hover */}
       <div ref={borderRef} className="group relative w-full h-11">
         <Surface
           radius={18}
@@ -262,7 +281,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((
             </div>
           )}
 
-          {/* Password toggle — z-10 so it's above the absolute input */}
+          {/* Password toggle - z-10 so it's above the absolute input */}
           {variant === 'password' && (
             <button
               type="button"
@@ -321,7 +340,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((
         </Surface>
       </div>
 
-      {/* Password hint — always shown, color based on length */}
+      {/* Password hint - always shown, color based on length */}
       {variant === 'password' && passwordHintText && (
         <p className={cn(
           'text-[12px] pl-[2px] tracking-normal leading-snug transition-colors duration-200',

@@ -23,7 +23,7 @@ const BAYER8 = [
 const TRANSITION_MS = 520
 
 // 65 mask data-URLs (steps 0–64), built once as inline SVG.
-// SVG is text-based — no async PNG decode path — so the first transition
+// SVG is text-based - no async PNG decode path - so the first transition
 // is as smooth as subsequent ones in every browser including Firefox.
 let _masks: string[] | null = null
 
@@ -39,7 +39,7 @@ function getDitherMasks(): string[] {
       }
     }
     const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><g fill='white'>${rects}</g></svg>`
-    return `data:image/svg+xml;base64,${btoa(svg)}` // raw data URL — setMask wraps in url()
+    return `data:image/svg+xml;base64,${btoa(svg)}` // raw data URL - setMask wraps in url()
   })
   return _masks
 }
@@ -70,6 +70,24 @@ function clearMask(el: HTMLElement) {
 }
 
 
+/**
+ * The code tab paints the code background on the PANEL, not on the CodeBlock,
+ * and blanks the block's own fill.
+ *
+ * Stretching the block to full height does not work: SmoothCorners wraps it in
+ * its own divs, so a `flex-1` on the panel's direct child never reaches the
+ * element that actually paints, and a short snippet left a bare strip below it.
+ * Owning the background here is independent of how many wrappers sit between.
+ */
+const CODE_PANEL = 'bg-zinc-100/80 dark:bg-zinc-900/70 [&_[data-code-block]]:bg-transparent'
+
+const CODE_SCROLLBAR =
+  '[scrollbar-width:thin] [scrollbar-color:theme(colors.zinc.300/50)_transparent] ' +
+  'dark:[scrollbar-color:theme(colors.zinc.600/40)_transparent] [&::-webkit-scrollbar]:w-[3px] ' +
+  '[&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-track]:bg-transparent ' +
+  '[&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 ' +
+  'dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700'
+
 interface PreviewCodeProps {
   preview: React.ReactNode
   code: React.ReactNode
@@ -79,14 +97,14 @@ interface PreviewCodeProps {
   /** Let preview content (glows, popovers) paint outside the box. */
   overflowVisible?: boolean
   /**
-   * Drop the preview panel's padding so the demo gets the box's full width —
+   * Drop the preview panel's padding so the demo gets the box's full width -
    * for components that measure their own container (carousels, marquees)
    * and should be shown edge to edge.
    */
   bleed?: boolean
 }
 
-// Standard preview-box height — matches the Theme Toggle showcase and gives the
+// Standard preview-box height - matches the Theme Toggle showcase and gives the
 // Code tab enough room to read. Every box is at least this tall; taller requests
 // (calendar, date-picker) are honored.
 const STANDARD_MIN_HEIGHT = 440
@@ -127,7 +145,7 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
     const tick = (now: number) => {
       if (t0 < 0) t0 = now
       const rawP = Math.min((now - t0) / TRANSITION_MS, 1)
-      const step = Math.round(rawP * 64) // linear — Bayer matrix provides natural visual dispersion
+      const step = Math.round(rawP * 64) // linear - Bayer matrix provides natural visual dispersion
       setMask(outPanel, `url(${masks[step]})`)
 
       if (rawP < 1) {
@@ -189,16 +207,16 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
         ))}
       </div>
 
-      {/* Content box — squircle Surface with a middle-border on both variants */}
+      {/* Content box - squircle Surface with a middle-border on both variants */}
       {allowOverflow ? (
         // Inline-growth variant: panels are normal flow (not absolute), so an
         // expanding select/dropdown grows the box height. overflow:clip still
-        // masks the squircle corners — nothing overflows because the box tracks
+        // masks the squircle corners - nothing overflows because the box tracks
         // its content. Tabs swap instantly (the dither cross-fade needs the
         // fixed-height absolute panels the standard variant uses).
         <Surface
           radius={24}
-          lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle)' } }}
+          lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle, rgb(151 151 154 / 0.106))' } }}
           className={overflowVisible ? 'overflow-visible' : '[overflow:clip]'}
         >
           <div
@@ -213,7 +231,8 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
           </div>
           <div
             className={cn(
-              'overflow-auto [scrollbar-width:thin] [scrollbar-color:theme(colors.zinc.300/50)_transparent] dark:[scrollbar-color:theme(colors.zinc.600/40)_transparent] [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700 bg-zinc-50 dark:bg-zinc-950',
+              CODE_PANEL,
+              'overflow-auto ' + CODE_SCROLLBAR,
               tab !== 'code' && 'hidden',
             )}
             style={{ minHeight: h }}
@@ -224,7 +243,7 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
       ) : (
         <Surface
           radius={24}
-          lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle)' } }}
+          lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle, rgb(151 151 154 / 0.106))' } }}
           className="[overflow:clip] relative"
           style={{ minHeight: h }}
         >
@@ -241,7 +260,7 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
 
           <div
             ref={codeRef}
-            className="absolute inset-0 overflow-auto [scrollbar-width:thin] [scrollbar-color:theme(colors.zinc.300/50)_transparent] dark:[scrollbar-color:theme(colors.zinc.600/40)_transparent] [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-300 dark:[&::-webkit-scrollbar-thumb]:bg-zinc-700"
+            className={cn('absolute inset-0 overflow-auto', CODE_PANEL, CODE_SCROLLBAR)}
             style={{ zIndex: 1, opacity: 0, pointerEvents: 'none' }}
           >
             {code}

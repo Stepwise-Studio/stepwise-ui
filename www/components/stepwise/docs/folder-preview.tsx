@@ -10,7 +10,7 @@ import { ColorSwatch } from '@/components/stepwise/color-swatch'
 import { Segment } from '@/components/stepwise/segment'
 import { cn } from '@/lib/utils/cn'
 
-/* ── Showcase — empty ↔ filled toggle ─────────────────────────────── */
+/* ── Showcase - empty ↔ filled toggle ─────────────────────────────── */
 export function FolderShowcasePreview() {
   const [state, setState] = useState<'empty' | 'filled'>('filled')
   return (
@@ -48,7 +48,7 @@ export function FolderFanPreview() {
     <div className="flex flex-col items-center gap-5">
       <Folder label="Case files" count="8 documents" icon={File01Icon} files={CASE_FILES} />
       <p className="max-w-[290px] text-center text-[12px] leading-relaxed text-zinc-400 dark:text-zinc-500">
-        Hover, tap, or focus the folder — the files lift out into an arc, and hovering one shows
+        Hover, tap, or focus the folder - the files lift out into an arc, and hovering one shows
         its name (and progress, if it&apos;s still uploading). The arrows always page through,
         wrapping around at either end.
       </p>
@@ -70,7 +70,7 @@ const ICONS: { icon: IconSvgElement; key: string }[] = [
 export function FolderColorPreview() {
   const [color, setColor] = useState(SWATCH[0])
   const [iconIdx, setIconIdx] = useState(0)
-  // "Neutral" is meant to be the same default look as every other preview —
+  // "Neutral" is meant to be the same default look as every other preview -
   // but its hex happens to just match --folder-body, not the pocket/icon
   // tokens too. Passing it as `color` still derives those via the OKLCH-
   // relative math (for any *other* color), producing a visibly flatter

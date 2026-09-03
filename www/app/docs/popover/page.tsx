@@ -30,8 +30,8 @@ export default function PopoverPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Popover</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A generic floating panel anchored to a trigger — put any content inside. Origin-aware
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A generic floating panel anchored to a trigger - put any content inside. Origin-aware
             open animation, closes on outside click or Escape. Controlled or uncontrolled.
           </Text>
         </div>

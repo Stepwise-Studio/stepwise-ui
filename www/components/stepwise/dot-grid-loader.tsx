@@ -29,7 +29,7 @@ const DELAY: Record<DotGridPattern, (r: number, c: number) => number> = {
     const i = ring.findIndex(([rr, cc]) => rr === r && cc === c)
     return i === -1 ? 1 : i / 8
   },
-  // deterministic scatter — stable across renders, unlike Math.random()
+  // deterministic scatter - stable across renders, unlike Math.random()
   random: (r, c) => ((r * 3 + c) * 5 % 9) / 9,
 }
 

@@ -34,13 +34,13 @@ type FooterDemo = {
 }
 
 const HEROES: HeroDemo[] = [
-  { name: 'HeroHaze', Shader: HeroHaze, title: 'Ship faster with less noise.', body: 'Cool mesh gradient — good for product and SaaS heroes.' },
-  { name: 'HeroDrift', Shader: HeroDrift, title: 'Warmth you can feel.', body: 'Grain wave in terracotta tones — editorial and lifestyle.' },
-  { name: 'HeroBloom', Shader: HeroBloom, title: 'Light from above.', body: 'Radial bloom in amber — launches and announcements.' },
-  { name: 'HeroTide', Shader: HeroTide, title: 'Calm horizontal motion.', body: 'Wave lines — fintech, wellness, anything restrained.' },
-  { name: 'HeroMist', Shader: HeroMist, title: 'Rays through the room.', body: 'God rays from the corner — photography and craft brands.' },
-  { name: 'HeroFilm', Shader: HeroFilm, title: 'Texture without noise.', body: 'Film grain corners — minimal portfolios and studios.' },
-  { name: 'HeroHazeDark', Shader: HeroHazeDark, dark: true, title: 'Built for the dark.', body: 'Violet and cyan mesh — dev tools and night-mode products.' },
+  { name: 'HeroHaze', Shader: HeroHaze, title: 'Ship faster with less noise.', body: 'Cool mesh gradient - good for product and SaaS heroes.' },
+  { name: 'HeroDrift', Shader: HeroDrift, title: 'Warmth you can feel.', body: 'Grain wave in terracotta tones - editorial and lifestyle.' },
+  { name: 'HeroBloom', Shader: HeroBloom, title: 'Light from above.', body: 'Radial bloom in amber - launches and announcements.' },
+  { name: 'HeroTide', Shader: HeroTide, title: 'Calm horizontal motion.', body: 'Wave lines - fintech, wellness, anything restrained.' },
+  { name: 'HeroMist', Shader: HeroMist, title: 'Rays through the room.', body: 'God rays from the corner - photography and craft brands.' },
+  { name: 'HeroFilm', Shader: HeroFilm, title: 'Texture without noise.', body: 'Film grain corners - minimal portfolios and studios.' },
+  { name: 'HeroHazeDark', Shader: HeroHazeDark, dark: true, title: 'Built for the dark.', body: 'Violet and cyan mesh - dev tools and night-mode products.' },
 ]
 
 const FOOTERS: FooterDemo[] = [
@@ -103,12 +103,12 @@ export default function ShadersPage() {
       </nav>
 
       <main id="content" style={{ paddingTop: '3rem' }}>
-        <p className="sh-divider">Hero sections — scroll</p>
+        <p className="sh-divider">Hero sections - scroll</p>
         {HEROES.map(d => (
           <HeroSection key={d.name} demo={d} />
         ))}
 
-        <p className="sh-divider">Footers — scroll</p>
+        <p className="sh-divider">Footers - scroll</p>
         {FOOTERS.map(d => (
           <FooterSection key={d.name} demo={d} />
         ))}

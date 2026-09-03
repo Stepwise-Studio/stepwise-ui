@@ -16,7 +16,7 @@ export function DatePickerPreview() {
   const [open,  setOpen]  = useState<OpenKey | null>(null)
 
   // Reserve inline space directly beneath the invoked input so the (allowOverflow)
-  // box grows in place and the sibling inputs merely slide down — never off-screen.
+  // box grows in place and the sibling inputs merely slide down - never off-screen.
   const Spacer = ({ k }: { k: OpenKey }) => (
     <div aria-hidden style={{ height: open === k ? CAL_H[k] + 16 : 0, transition: `height 300ms ${EASE}` }} />
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, useRef, useState, ButtonHTMLAttributes, ReactNode } from 'react'
+import { forwardRef, useEffect, useRef, useState, ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { SmoothCorners } from '@lisse/react'
 import { cn } from '@/lib/utils/cn'
@@ -16,30 +16,85 @@ export interface GlowButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   radius?: number
   /** Icon shown on hover, same `slideIcon` roll technique as Button. */
   icon?: ReactNode
-  /** Rolls the label up on hover to reveal a second row with the icon attached — instead of just showing/hiding the icon in place. */
+  /** Rolls the label up on hover to reveal a second row with the icon. */
   slideIcon?: boolean
   iconPosition?: 'left' | 'right'
 }
 
-// Same two sizes and typography as Button's own "default"/"lg" steps
-// (h-9/text-[14px]/[1.2] and h-10/text-[15px]/[1.2], both tracking-[-0.02em]
-// font-medium) — a CTA next to a regular Button should read as the same
-// type scale, not its own invented one.
+// Matches Button's "default" and "lg" steps so a CTA next to a regular
+// Button reads at the same type scale.
 const metrics = {
   default: { h: 36, px: 14, r: 18, text: 14 },
   lg:      { h: 40, px: 16, r: 20, text: 15 },
 } as const
 
-// A very low-opacity edge, same middleBorder technique Button uses for its
-// own subtle variants — just quieter, since the glow underneath already
-// carries the button's visual weight.
-const edgeColor = { light: 'rgb(0 0 0 / 6%)', dark: 'rgb(255 255 255 / 6%)' }
+// A low-opacity rim rather than a structural border, since the glow already
+// carries most of the visual weight. Dark mode needs a stronger value: the
+// fill sits against a near-black page, where 6% disappears.
+const edgeColor = { light: 'rgb(0 0 0 / 6%)', dark: 'rgb(255 255 255 / 14%)' }
 
 /**
- * A single-purpose CTA button — a rainbow glow lives inside the pill along
- * its bottom edge, not a general-purpose Button variant, since no other
- * button in the library needs this geometry.
+ * A CTA button with a rainbow glow along the inside of its bottom edge.
+ * Separate from Button because no other button needs this geometry.
  */
+/* ── glow ────────────────────────────────────────────────────────────────────
+ * All of this used to live in the site's globals.css, which meant an installed
+ * GlowButton rendered with no glow at all - the class names resolved to
+ * nothing. It is expressed as inline style and a Web Animations call instead,
+ * so the whole effect travels with the component.
+ */
+
+/* 4x, not 2x. At 2x the button showed roughly half the spectrum at once, which
+ * read as a rainbow decal rather than light: six hues across 230px. At 4x only
+ * a quarter is visible, so any frame is two or three neighbouring hues
+ * blending, and the full spectrum is something you notice over the loop. */
+const GLOW_GRADIENT =
+  'linear-gradient(90deg, #ff6b81, #ff9f6b, #f5d778, #6fdfa4, #56b0ef, #8f7bf0, #ff6b81)'
+const GLOW_SIZE = '400% 100%'
+
+/* A percentage background-position resolves against (element - image) width, so
+ * shifting by exactly one image width - the only offset that loops without a
+ * seam - is size / (1 - size). At 4x that is -133.333%, not -400%. */
+const GLOW_TRAVEL = '-133.3333% 0'
+const GLOW_DURATION_MS = 9000
+
+/** Every layer reads the same moving gradient, so they can never show clashing
+ *  hues at their shared edges - there is only one strip of colour being masked
+ *  three different ways. */
+const glowColor: CSSProperties = {
+  backgroundImage: GLOW_GRADIENT,
+  backgroundSize: GLOW_SIZE,
+}
+
+const maskStack = (...layers: string[]): CSSProperties => ({
+  maskImage: layers.join(', '),
+  WebkitMaskImage: layers.join(', '),
+  maskComposite: 'intersect',
+  WebkitMaskComposite: 'source-in',
+} as CSSProperties)
+
+/* The vertical stop list is a falloff curve, not a ramp. A single linear fade
+ * gave the wash a constant-density body with an even top edge, which read as a
+ * strip of tape across the bottom rather than light pooling inside the pill.
+ * Horizontally it reaches to 12%/88%: the corners curve away well before 20%,
+ * so wider stops ended the light in open space short of the corner. */
+const washMask = maskStack(
+  'linear-gradient(to top, #000 0%, #000 8%, rgb(0 0 0 / 45%) 34%, rgb(0 0 0 / 16%) 62%, transparent 100%)',
+  'linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%)',
+)
+
+/* The ellipse needs a wide fade band (10% -> 92%) for its curve to have room to
+ * round off; a narrow band reads as a hard edge instead of a soft pool. */
+const cornerMask = (side: '0%' | '100%') => maskStack(
+  'linear-gradient(to top, #000 0%, #000 18%, transparent 60%)',
+  `radial-gradient(ellipse 66% 92% at ${side} 100%, #000 0%, #000 10%, transparent 92%)`,
+)
+
+const glowFilter = (blur: number, saturate: number): CSSProperties => ({
+  filter: `blur(${blur}px) saturate(${saturate})`,
+  transition: 'filter 200ms ease-out',
+})
+
 export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
   size = 'default',
   fullWidth = false,
@@ -63,29 +118,34 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
   const isSliding = !!icon && slideIcon
   const iconOnLeft = iconPosition === 'left'
   const rowH = Math.round(s.text * 1.2)
-  // No fixed width/height here — sizing the box off `s.text` (the metrics
-  // table's own font-size step) broke whenever a caller overrode the font
-  // size via `style` (the hero CTA does, 18px vs the "lg" step's 15px),
-  // cramming a visually-18px icon into a 15px box. Firefox and Chromium
-  // handle that overflow differently (only one of them visibly re-centers
-  // it), which is what read as a cross-browser misalignment — it was
-  // actually a size mismatch. Sizing to content sidesteps both.
+  // Sized to its content rather than to the metrics font-size step, so a
+  // caller overriding the font size via `style` still gets a matching box.
   const iconBox = (node: ReactNode) => (
     <span aria-hidden="true" className="inline-flex shrink-0 items-center justify-center leading-none">
       {node}
     </span>
   )
 
-  // Speeds the glow up from wherever it currently sits, instead of via CSS
-  // `animation-duration` — changing a running animation's duration keeps its
-  // elapsed real time fixed and reinterprets that against the new duration,
-  // which snaps the flow to a different point in the loop (reads as
-  // restarting). `playbackRate` instead scales how fast time advances from
-  // the current position onward, so the color keeps moving continuously.
+  // Start the colour flow on each of the three layers. They are created here
+  // rather than by a CSS keyframe so nothing has to exist in the host
+  // project's stylesheet for the glow to move.
+  const glowAnims = useRef<Animation[]>([])
+  useEffect(() => {
+    if (reduceMotion) return
+    const layers = glowRef.current?.querySelectorAll<HTMLElement>('[data-glow-layer]')
+    if (!layers) return
+    glowAnims.current = [...layers].map(el => el.animate(
+      [{ backgroundPosition: '0% 0' }, { backgroundPosition: GLOW_TRAVEL }],
+      { duration: GLOW_DURATION_MS, iterations: Infinity, easing: 'linear' },
+    ))
+    return () => { glowAnims.current.forEach(a => a.cancel()); glowAnims.current = [] }
+  }, [reduceMotion])
+
+  // `playbackRate`, not duration: changing the duration of a running animation
+  // jumps it to a different point in the loop. Scaling the rate keeps the
+  // colour moving forward from wherever it currently is.
   const setGlowRate = (rate: number) => {
-    glowRef.current?.querySelectorAll('.stepwise-glow-color').forEach(el => {
-      el.getAnimations().forEach(a => { a.playbackRate = rate })
-    })
+    glowAnims.current.forEach(a => { a.playbackRate = rate })
   }
 
   return (
@@ -108,22 +168,16 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
           ref={ref}
           className={cn(
             'relative isolate flex items-center justify-center whitespace-nowrap',
-            // Same inverted-contrast convention as Button's own "solid"
-            // variant would use for a primary action — dark fill on a light
-            // page, light fill on a dark page — is deliberately NOT what this
-            // wants: a hero CTA reads as one consistent object with its own
-            // fixed identity, so instead it follows the page's own light/dark
-            // surface direction: light bg in light mode, dark bg in dark mode.
+            // Follows the page's light/dark direction (light fill in light mode,
+            // dark fill in dark mode) rather than inverting like Button's solid
+            // variant, so the CTA keeps one identity across themes.
             'font-medium tracking-[-0.02em] bg-gradient-to-b from-white to-zinc-100 text-zinc-900',
-            'dark:from-zinc-900 dark:to-black dark:text-white',
+            'dark:from-zinc-800 dark:to-zinc-950 dark:text-white',
             'cursor-pointer select-none',
-            // No hover:brightness in light mode — it composites onto the
-            // glow layers underneath (filter cascades through descendants)
-            // and read as the whole button dimming/muddying, not the hover
-            // vibrancy this wants. Dark mode's brightness bump already reads
-            // fine, so it stays; the glow's own saturate/speed hover below
-            // (`.group:hover .stepwise-glow-filter-*`) carries light mode's
-            // hover feedback instead.
+            // Dark mode only: `filter` cascades into the glow layers, and in
+            // light mode brightening them reads as the button muddying. Light
+            // mode's hover feedback comes from the glow's own saturate/speed
+            // change below instead.
             'transition-[filter] duration-150 dark:hover:brightness-110',
             fullWidth && 'w-full',
             className,
@@ -133,7 +187,7 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
         >
           {/* Rainbow inner glow. Every layer's `background` points at the
               same moving gradient (stepwise-glow-color) so they're always
-              displaying the identical slice of one continuous rainbow — the
+              displaying the identical slice of one continuous rainbow - the
               corners and the wash can never show clashing hues, since
               there's only ever one strip of color being read from three
               different masked windows onto it. */}
@@ -144,22 +198,42 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
             style={{ borderRadius: r }}
           >
             <span
-              className="stepwise-glow-corner-shape stepwise-glow-corner-shape-left stepwise-glow-color stepwise-glow-filter stepwise-glow-filter-corner mix-blend-normal opacity-[0.62] dark:mix-blend-plus-lighter dark:opacity-[0.88]"
-              style={{ '--glow-blur': `${s.h * 0.14}px` } as React.CSSProperties}
+              data-glow-layer
+              className="absolute bottom-0 left-0 mix-blend-normal opacity-[0.62] dark:mix-blend-plus-lighter dark:opacity-[0.88]"
+              style={{
+                width: '48%', height: '64%',
+                ...glowColor,
+                ...cornerMask('0%'),
+                ...glowFilter(s.h * 0.14, hovered ? 1.55 : 1.3),
+              }}
             />
             <span
-              className="stepwise-glow-corner-shape stepwise-glow-corner-shape-right stepwise-glow-color stepwise-glow-filter stepwise-glow-filter-corner mix-blend-normal opacity-[0.62] dark:mix-blend-plus-lighter dark:opacity-[0.88]"
-              style={{ '--glow-blur': `${s.h * 0.14}px` } as React.CSSProperties}
+              data-glow-layer
+              className="absolute bottom-0 right-0 mix-blend-normal opacity-[0.62] dark:mix-blend-plus-lighter dark:opacity-[0.88]"
+              style={{
+                width: '48%', height: '64%',
+                ...glowColor,
+                ...cornerMask('100%'),
+                ...glowFilter(s.h * 0.14, hovered ? 1.55 : 1.3),
+              }}
             />
             <span
-              className="stepwise-glow-wash-shape stepwise-glow-color stepwise-glow-filter stepwise-glow-filter-wash mix-blend-normal opacity-[0.72] dark:mix-blend-plus-lighter dark:opacity-[0.95]"
+              data-glow-layer
+              className="absolute mix-blend-normal opacity-[0.72] dark:mix-blend-plus-lighter dark:opacity-[0.95]"
               style={{
                 left: 0,
                 right: 0,
                 bottom: -2,
-                height: s.h * 0.24 + 2,
-                '--glow-blur': `${s.h * 0.12}px`,
-              } as React.CSSProperties}
+                // Was 0.24 of the height. A band that shallow has nowhere to
+                // fall off in, so however the mask is shaped it still reads as
+                // a bar with a visible top edge. The extra height is all
+                // falloff - the mask keeps the bright part pinned to the
+                // bottom edge, so the glow gets softer, not taller.
+                height: s.h * 0.30 + 2,
+                ...glowColor,
+                ...washMask,
+                ...glowFilter(s.h * 0.13, hovered ? 1.65 : 1.35),
+              }}
             />
           </span>
 
@@ -176,12 +250,10 @@ export const GlowButton = forwardRef<HTMLButtonElement, GlowButtonProps>(({
                 </span>
               </span>
             ) : (
-              // Text roll: both rows live in one wrapper twice the line height,
-              // clipped to a single line by the outer overflow-hidden window —
-              // same technique as Button's own slideIcon variant. The mask
-              // fades the top/bottom couple px of the clip window so the
-              // next/prev row's edge never reads as a hard, visible sliver
-              // mid-roll — softer than tightening the easing curve alone.
+              // Text roll: two rows in a wrapper twice the line height, clipped
+              // to one line by the overflow-hidden window. The mask softens the
+              // top and bottom few px so the other row never shows a hard edge
+              // mid-roll.
               <span
                 className="relative z-[1] overflow-hidden"
                 style={{

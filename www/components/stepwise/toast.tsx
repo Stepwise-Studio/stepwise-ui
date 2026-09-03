@@ -48,12 +48,8 @@ export const toast = {
   },
 }
 
-// ── per-type config ────────────────────────────────────────────────────────────
-// Only the coloured tint differs per type; the base surface comes from a
-// theme-flipping CSS var (--toast-bg) so the toast is dark-mode aware. A
-// gradient border was tried here and cut — it broke the background outright
-// once (invalid CSS shorthand) and still read as too strong even dialed back
-// afterward. A plain neutral border is what actually looked right.
+// Only the tint differs per type. The base surface comes from --toast-bg,
+// which flips with the theme.
 const typeConfig: Record<ToastType, { tint: string; icon: React.ReactNode }> = {
   success: { tint: 'rgba(74,222,128,0.22)',  icon: <Verify      variant="Bold" size={24} color="#22c55e" /> },
   warning: { tint: 'rgba(251,191,36,0.22)',  icon: <Warning2    variant="Bold" size={24} color="#f59e0b" /> },
@@ -61,8 +57,7 @@ const typeConfig: Record<ToastType, { tint: string; icon: React.ReactNode }> = {
   info:    { tint: 'rgba(56,189,248,0.22)',  icon: <InfoCircle  variant="Bold" size={24} color="#0ea5e9" /> },
 }
 
-// ── sound ──────────────────────────────────────────────────────────────────────
-// A toaster popping up: the mechanical spring "ka-chunk" (fast pitch-drop + a
+// A toaster popping up: a mechanical spring "ka-chunk" (fast pitch drop plus a
 // noise thunk) followed by the bright "ding" of the toast being ready.
 let _sndCtx: AudioContext | null = null
 function toasterCtx(): AudioContext | null {
@@ -81,7 +76,7 @@ function playToasterSound() {
   if (!c) return
   const t = c.currentTime
 
-  // spring release — pitch drops fast, like the lever letting go
+  // spring release - pitch drops fast, like the lever letting go
   const spring = c.createOscillator()
   spring.type = 'triangle'
   spring.frequency.setValueAtTime(520, t)
@@ -103,7 +98,7 @@ function playToasterSound() {
   noise.connect(nf).connect(ng).connect(c.destination)
   noise.start(t)
 
-  // the "ding" — two bell partials, a beat after the pop
+  // the "ding" - two bell partials, a beat after the pop
   const bt = t + 0.07
   ;[1760, 2640].forEach((f, i) => {
     const o = c.createOscillator(); o.type = 'sine'; o.frequency.value = f
@@ -151,7 +146,7 @@ function ToastItem({
     if (cardRef.current) onHeight(data.id, cardRef.current.offsetHeight)
   }, [data.id, onHeight])
 
-  // Auto-dismiss — paused while the deck is hovered/expanded, and never for
+  // Auto-dismiss - paused while the deck is hovered/expanded, and never for
   // toasts carrying an action (the user needs time to read and act on it).
   useEffect(() => {
     if (paused || data.action) return
@@ -173,7 +168,7 @@ function ToastItem({
         role="status"
         aria-live="polite"
         tabIndex={-1}
-        className="flex items-center justify-between gap-3 p-4 rounded-[20px] overflow-hidden border border-zinc-200/70 dark:border-zinc-700/60 [--toast-bg:#f4f4f5] dark:[--toast-bg:#1c1c1f]"
+        className="flex items-center justify-between gap-3 p-4 rounded-[20px] overflow-hidden border border-zinc-200/70 dark:border-zinc-700/60 [--toast-bg:#fafafa] dark:[--toast-bg:#1c1c1f]"
         style={{
           // 135deg = top-left → bottom-right, so the tint reads as bleeding
           // in from the corner rather than sweeping across from the side.
@@ -185,11 +180,11 @@ function ToastItem({
         <div className="flex items-center gap-2.5 min-w-0">
           <span className="shrink-0">{c.icon}</span>
           <div className="flex flex-col min-w-0 gap-1.5">
-            <p className="text-[14px] font-semibold text-zinc-800 dark:text-zinc-100 truncate leading-none tracking-[-0.36px]">
+            <p className="text-[14px] font-semibold text-zinc-800 dark:text-zinc-100 truncate leading-[1.3] tracking-[-0.36px]">
               {data.title}
             </p>
             {data.description && (
-              <p className="text-[14px] font-normal text-zinc-500 dark:text-zinc-400 leading-none tracking-[-0.36px] truncate">
+              <p className="text-[14px] font-normal text-zinc-500 dark:text-zinc-400 leading-[1.3] tracking-[-0.36px] truncate">
                 {data.description}
               </p>
             )}
@@ -224,9 +219,8 @@ function ToastItem({
 // ── Toaster ───────────────────────────────────────────────────────────────────
 export interface ToasterProps {
   /**
-   * Portal target. Defaults to `document.body`. Point it at an element that
-   * establishes a containing block to dock the stack inside that box instead
-   * of the viewport.
+   * Portal target. Defaults to `document.body`. Point it at an element with a
+   * containing block to dock the stack inside that box instead of the viewport.
    */
   container?: HTMLElement | null
 }

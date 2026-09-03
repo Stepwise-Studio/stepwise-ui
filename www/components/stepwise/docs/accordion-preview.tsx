@@ -2,26 +2,35 @@
 
 import { Accordion } from '@/components/stepwise/accordion'
 
+/**
+ * Accordion is usually the first component anyone opens, so the demo content
+ * is the honest story of building this rather than a generic FAQ. Nobody
+ * remembers "What are the peer dependencies?".
+ */
 const FAQ_ITEMS = [
   {
-    id: 'what',
-    title: 'What is Stepwise UI?',
-    content: 'Stepwise UI is a collection of production-ready components built with React, TypeScript, and Tailwind v4. Each component is designed with smooth corners, fluid motion, and a dark/light mode-aware design system.',
+    id: 'why',
+    title: 'Why does this exist?',
+    content:
+      'Because the alternative was building another accordion from scratch, and you are currently reading the last one we intend to write.',
   },
   {
-    id: 'install',
-    title: 'How do I install a component?',
-    content: 'Run npx stepwise-ui add <component-name> from your project root. This copies the component source and any peer dependencies directly into your codebase — no runtime package lock-in.',
+    id: 'long',
+    title: 'What took the longest?',
+    content:
+      'Deciding. The code was mostly fine. Choosing between two shades of grey took a weekend, twice.',
   },
   {
-    id: 'deps',
-    title: 'What are the peer dependencies?',
-    content: 'The core components require React 18+, motion/react for animations, and @lisse/react for squircle surfaces. Tailwind v4 is used for styling.',
+    id: 'ai',
+    title: 'How much of this is AI?',
+    content:
+      'More than we planned. At one point it wrote a modal that opened twice and closed once. We kept the opening.',
   },
   {
-    id: 'dark',
-    title: 'Does it support dark mode?',
-    content: 'Yes. All components are designed for both light and dark themes. The design system uses Tailwind\'s class-based dark mode with a ThemeProvider and view transition circular expand animation.',
+    id: 'redo',
+    title: 'Anything you would redo?',
+    content:
+      'The corner maths. It works now and nobody is allowed to touch it.',
   },
 ]
 

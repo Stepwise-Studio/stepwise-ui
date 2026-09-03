@@ -76,7 +76,7 @@ export default function CheckboxPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Checkbox</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Squircle checkbox in three sizes. Supports checked, indeterminate, and disabled states.
             Works controlled or uncontrolled. Use{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">indeterminate</code>{' '}
@@ -109,7 +109,7 @@ export default function CheckboxPage() {
 
         <section id="group" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Group</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Manage a set of checkboxes with a{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">Set</code>{' '}
             in local state. Each checkbox is a controlled component.
@@ -123,10 +123,10 @@ export default function CheckboxPage() {
 
         <section id="indeterminate" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Indeterminate</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">indeterminate</code>{' '}
-            to show the dash state — useful for a "select all" checkbox when some items are selected.
+            to show the dash state - useful for a "select all" checkbox when some items are selected.
             The{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">indeterminate</code>{' '}
             prop overrides the visual even if{' '}
@@ -158,7 +158,7 @@ export default function CheckboxPage() {
             { name: 'defaultChecked', type: 'boolean',                 desc: 'Initial state when uncontrolled.' },
             { name: 'indeterminate',  type: 'boolean',                 desc: 'Shows dash. Overrides the visual regardless of checked.' },
             { name: 'disabled',       type: 'boolean',                 desc: '40% opacity, blocks interaction.' },
-            { name: 'onChange',       type: '(e: ChangeEvent) => void', desc: 'Change handler — receives the native event.' },
+            { name: 'onChange',       type: '(e: ChangeEvent) => void', desc: 'Change handler - receives the native event.' },
           ]} />
         </section>
 

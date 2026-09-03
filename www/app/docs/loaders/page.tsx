@@ -7,7 +7,7 @@ import { SpinnerPreview, SpinnerDotsPreview, SpinnerStatusPreview } from '@/comp
 
 const spinnerCode = `import { Spinner } from '@/components/stepwise/spinner'
 
-// "arc" is the default — a general-purpose spinner for any surface
+// "arc" is the default - a general-purpose spinner for any surface
 <Spinner size="sm" />
 <Spinner size="default" />
 <Spinner size="lg" />`
@@ -16,7 +16,7 @@ const dotsCode = `<Spinner variant="dots" size="sm" />
 <Spinner variant="dots" size="default" />
 <Spinner variant="dots" size="lg" />`
 
-const statusCode = `// Drive it straight from your async state — the ring resolves and the
+const statusCode = `// Drive it straight from your async state - the ring resolves and the
 // tick draws itself on, so the resolve reads as one gesture.
 <Spinner status={saving ? 'loading' : saved ? 'success' : 'error'} />`
 
@@ -34,8 +34,8 @@ export default function LoadersPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Spinner</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            An honest circular spinner that resolves into its own answer. Two variants — a sweeping
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A circular spinner that resolves into a tick or a cross when it finishes. Two variants - a sweeping
             arc for general use, and a dotted activity-indicator style for a lighter touch. Looking for the{' '}
             <a href="/docs/dot-grid-loader" className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-700 dark:hover:text-zinc-200">dot grid</a>{' '}
             loader? It has its own page now.
@@ -49,14 +49,14 @@ export default function LoadersPage() {
 
         <section id="spinner" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Spinner</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Three sizes —{' '}
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Three sizes -{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">sm</code>{' '}
             (16px),{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">default</code>{' '}
             (24px), and{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">lg</code>{' '}
-            (32px) — or pass an exact pixel diameter.
+            (32px) - or pass an exact pixel diameter.
           </Text>
           <PreviewCode
             preview={<SpinnerPreview />}
@@ -66,8 +66,8 @@ export default function LoadersPage() {
 
         <section id="dots" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Dots</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Eight fading dots sweep around the center — the same activity-indicator language as
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Eight fading dots sweep around the center - the same activity-indicator language as
             iOS/macOS. Pass{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">variant=&quot;dots&quot;</code>.
           </Text>
@@ -79,11 +79,11 @@ export default function LoadersPage() {
 
         <section id="status" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Status</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             One component for the whole lifecycle. Pass a{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">status</code>{' '}
             and the ring closes into a filled disc, then the tick (or cross) draws on with a
-            spring — the end state grows out of the spinner instead of replacing it.
+            spring - the end state grows out of the spinner instead of replacing it.
           </Text>
           <PreviewCode
             preview={<SpinnerStatusPreview />}

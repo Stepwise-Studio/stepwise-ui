@@ -13,7 +13,7 @@ const basicCode = `import { Toggle } from '@/components/stepwise/toggle'
 
 const [on, setOn] = useState(true)
 
-// no visible label — needs ariaLabel so screen readers know what it does
+// no visible label - needs ariaLabel so screen readers know what it does
 <Toggle checked={on} onChange={setOn} ariaLabel="Toggle" />`
 
 const sizesCode = `<Toggle size="sm" defaultChecked ariaLabel="Small toggle" />
@@ -41,8 +41,8 @@ export default function TogglePage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Toggle</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A switch with some weight to it — the knob stretches along its direction of travel and
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A switch with some weight to it. The knob stretches along its direction of travel and
             settles on a spring, so the flip feels thrown rather than snapped. Controlled or
             uncontrolled, three sizes, with an optional label and hint.
           </Text>
@@ -73,7 +73,7 @@ export default function TogglePage() {
 
         <section id="label" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">With label</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             The label and hint are wired to the switch, so clicking either flips it.
           </Text>
           <PreviewCode

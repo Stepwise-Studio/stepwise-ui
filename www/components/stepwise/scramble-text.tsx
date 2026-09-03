@@ -39,7 +39,7 @@ export interface ScrambleTextProps {
   /** Baseline frame budget per character. Default 72. Higher = longer resolve. */
   speed?     : number
   /**
-   * How chaotic the scramble feels — 0 is a subtle letter decode, 1 is a full
+   * How chaotic the scramble feels - 0 is a subtle letter decode, 1 is a full
    * symbol storm. Default 0.45.
    */
   intensity? : number
@@ -49,10 +49,10 @@ export interface ScrambleTextProps {
 }
 
 /**
- * Text scramble reveal — every character scrambles together, then letters lock
- * left-to-right one at a time while the rest keep churning until the last one
- * settles. Each character is painted into a pre-measured slot so glyph width
- * changes never shove their neighbours. Reduced motion renders immediately.
+ * A scramble reveal. Every character churns together, then locks in from left
+ * to right while the rest keep going. Each character sits in a pre-measured
+ * slot so changing glyph widths never shift their neighbours. Reduced motion
+ * renders the text immediately.
  */
 export function ScrambleText({
   children,
@@ -102,8 +102,8 @@ export function ScrambleText({
     const chars = children.split('')
     lastGlyphs.current = chars.map(() => '')
 
-    // Phase 1 — everyone scrambles together. Phase 2 — letters lock one-by-one
-    // left-to-right; unlocked characters keep churning until their turn.
+    // Phase 1: everything scrambles together. Phase 2: characters lock in from
+    // the left while the rest keep churning until their turn.
     const leadFrames = Math.round(speed * lerp(0.42, 0.28, intensity))
     const gapFrames = speed * lerp(0.3, 0.17, intensity)
     let letterIndex = 0
@@ -186,7 +186,7 @@ export function ScrambleText({
     <span ref={rootRef} className={cn('relative inline-block align-baseline', className)}>
       <span className="sr-only" aria-live="polite" aria-atomic="true">{liveText}</span>
 
-      {/* Inherits font metrics from the root (user className) — only structural
+      {/* Inherits font metrics from the root (user className) - only structural
           classes here so measurement matches what the user actually styled. */}
       <span
         ref={measureRef}

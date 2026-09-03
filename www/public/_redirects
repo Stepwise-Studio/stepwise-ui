@@ -1,0 +1,8 @@
+# Cloudflare reads this from the deployed asset directory (Workers static
+# assets and Pages both support it). Next copies public/ across verbatim, so
+# the file lands wherever the site is deployed from.
+#
+# /docs/ai was renamed to /docs/agents before launch. 301 rather than 302:
+# the old path is never coming back, and anything that indexed it should
+# update rather than keep asking.
+/docs/ai   /docs/agents   301

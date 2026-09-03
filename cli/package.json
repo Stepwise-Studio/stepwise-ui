@@ -13,9 +13,11 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "bash test/cli.test.sh && python3 test/init.test.py"
   },
   "dependencies": {
+    "@clack/prompts": "^1.7.0",
     "commander": "^12.1.0",
     "picocolors": "^1.1.1"
   },

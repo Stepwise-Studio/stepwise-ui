@@ -74,7 +74,7 @@ export function SelectionFrameAnimatedPreview() {
 }
 
 // A hero-style hook line with the one word the frame is meant to sell
-// wrapped in it — this is what the component is *for*, shown at the scale
+// wrapped in it - this is what the component is *for*, shown at the scale
 // it's actually used at, instead of a cluttered grab-bag of unrelated demos.
 export function SelectionFrameUsagePreview() {
   return (

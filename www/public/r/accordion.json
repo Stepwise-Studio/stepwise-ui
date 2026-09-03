@@ -16,6 +16,10 @@
   "registryDependencies": [
     "typography"
   ],
+  "exports": [
+    "Accordion"
+  ],
+  "example": "import { Accordion } from '@/components/stepwise/accordion'\n\nconst items = [\n  { id: 'q1', title: 'Why does this exist?', content: 'Because we rebuilt the same…' },\n  { id: 'q2', title: 'How long did this take?', content: 'Longer than planned…' },\n]\n\n<Accordion items={items} />",
   "files": [
     {
       "path": "components/stepwise/accordion.tsx",
@@ -23,11 +27,11 @@
     },
     {
       "path": "components/stepwise/primitives/chevron.tsx",
-      "content": "import { HugeiconsIcon } from '@hugeicons/react'\nimport { ChevronDownIcon } from '@hugeicons/core-free-icons'\n\n// Shared down-caret — rotate 180° for the \"up\" state.\nexport function Chevron({ size = 16, open = false, className }: { size?: number; open?: boolean; className?: string }) {\n  return (\n    <HugeiconsIcon\n      icon={ChevronDownIcon}\n      size={size}\n      strokeWidth={3}\n      color=\"currentColor\"\n      className={className}\n      style={{ transform: open ? 'rotate(180deg)' : undefined }}\n    />\n  )\n}\n"
+      "content": "import { HugeiconsIcon } from '@hugeicons/react'\nimport { ChevronDownIcon } from '@hugeicons/core-free-icons'\n\n// Shared down-caret - rotate 180° for the \"up\" state.\nexport function Chevron({ size = 16, open = false, className }: { size?: number; open?: boolean; className?: string }) {\n  return (\n    <HugeiconsIcon\n      icon={ChevronDownIcon}\n      size={size}\n      strokeWidth={3}\n      color=\"currentColor\"\n      className={className}\n      style={{ transform: open ? 'rotate(180deg)' : undefined }}\n    />\n  )\n}\n"
     },
     {
       "path": "components/stepwise/primitives/surface.tsx",
-      "content": "'use client'\n\nimport { forwardRef } from 'react'\nimport { SmoothCorners, type SmoothCornersOwnProps, type SmoothCornerOptions } from '@lisse/react'\nimport { cn } from '@/lib/utils/cn'\n\ninterface SurfaceProps extends React.HTMLAttributes<HTMLDivElement> {\n  radius?: number\n  smoothing?: number\n  /** Override for per-corner config — takes precedence over radius/smoothing. */\n  corners?: SmoothCornerOptions\n  // `className` isn't part of SmoothCornersOwnProps — it comes from the\n  // polymorphic element props (ComponentPropsWithoutRef<E>) instead — but\n  // it's a legitimate, commonly-needed passthrough (e.g. forcing `h-full`\n  // through the SmoothCorners wrapper), so it's added back explicitly here.\n  lisse?: Omit<SmoothCornersOwnProps, 'corners'> & { className?: string }\n}\n\nexport const Surface = forwardRef<HTMLDivElement, SurfaceProps>(({\n  radius = 12,\n  smoothing = 0.6,\n  corners,\n  className,\n  children,\n  lisse,\n  ...rest\n}, ref) => {\n  return (\n    <SmoothCorners corners={corners ?? { radius, smoothing }} {...lisse}>\n      <div ref={ref} className={cn(className)} {...rest}>\n        {children}\n      </div>\n    </SmoothCorners>\n  )\n})\n\nSurface.displayName = 'Surface'\n"
+      "content": "'use client'\n\nimport { forwardRef } from 'react'\nimport { SmoothCorners, type SmoothCornersOwnProps, type SmoothCornerOptions } from '@lisse/react'\nimport { cn } from '@/lib/utils/cn'\n\ninterface SurfaceProps extends React.HTMLAttributes<HTMLDivElement> {\n  radius?: number\n  smoothing?: number\n  /** Override for per-corner config - takes precedence over radius/smoothing. */\n  corners?: SmoothCornerOptions\n  // `className` isn't part of SmoothCornersOwnProps - it comes from the\n  // polymorphic element props (ComponentPropsWithoutRef<E>) instead - but\n  // it's a legitimate, commonly-needed passthrough (e.g. forcing `h-full`\n  // through the SmoothCorners wrapper), so it's added back explicitly here.\n  lisse?: Omit<SmoothCornersOwnProps, 'corners'> & { className?: string }\n}\n\nexport const Surface = forwardRef<HTMLDivElement, SurfaceProps>(({\n  radius = 12,\n  smoothing = 0.6,\n  corners,\n  className,\n  children,\n  lisse,\n  ...rest\n}, ref) => {\n  return (\n    <SmoothCorners corners={corners ?? { radius, smoothing }} {...lisse}>\n      <div ref={ref} className={cn(className)} {...rest}>\n        {children}\n      </div>\n    </SmoothCorners>\n  )\n})\n\nSurface.displayName = 'Surface'\n"
     },
     {
       "path": "lib/utils/cn.ts",

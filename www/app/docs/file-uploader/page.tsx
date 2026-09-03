@@ -19,10 +19,10 @@ const onFiles = (incoming: File[]) => {
   ])
 }
 
-// default variant — a real Folder as the drop target. Drag files onto it
+// default variant - a real Folder as the drop target. Drag files onto it
 // or click "Select" to browse; it tilts open on hover and shows progress
 // both on the pocket and on each file's own card as it peeks out. Hovering
-// a card shows its name — click the × on one to remove it (confirmed via
+// a card shows its name - click the × on one to remove it (confirmed via
 // the Modal component before it's actually gone).
 <FileUploader
   files={files}
@@ -51,8 +51,8 @@ export default function FileUploaderPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">File Uploader</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Two variants for picking and displaying files. The component is purely presentational —
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A file picker with drag-and-drop, in a dropzone variant and a compact one. The component is purely presentational -
             you own progress tracking and the upload logic, passing file entries back in via{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">files</code>.
           </Text>
@@ -65,14 +65,14 @@ export default function FileUploaderPage() {
 
         <section id="dropzone" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Dropzone</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            One drop target, not two widgets glued together — the dashed box{' '}
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            One drop target, not two widgets glued together - the dashed box{' '}
             <em>is</em> the{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">Folder</code>&apos;s
-            own hit area. Hover, tap, or focus it to see what&apos;s inside — each card shows its
+            own hit area. Hover, tap, or focus it to see what&apos;s inside - each card shows its
             name on hover, and its own remove button, confirmed through the{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">Modal</code>{' '}
-            component before anything&apos;s actually gone. Try it — drag one of the files below
+            component before anything&apos;s actually gone. Try it - drag one of the files below
             onto it.
           </Text>
           <PreviewCode
@@ -84,11 +84,11 @@ export default function FileUploaderPage() {
 
         <section id="compact" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Compact</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             The same{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">Button</code>{' '}
             with <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">slideIcon</code>{' '}
-            you&apos;ll find everywhere else — it&apos;s also its own drop target. Drag a file over
+            you&apos;ll find everywhere else - it&apos;s also its own drop target. Drag a file over
             it and the icon swaps to an incoming arrow; the label answers with the file count once
             something&apos;s selected.
           </Text>
@@ -103,7 +103,7 @@ export default function FileUploaderPage() {
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
             { name: 'variant',   type: '"dropzone" | "compact"',            desc: 'Visual layout. Default "dropzone".' },
-            { name: 'color',     type: 'string',                            desc: '"dropzone" variant only — folder body color. Default: amber (#f5d98b).' },
+            { name: 'color',     type: 'string',                            desc: '"dropzone" variant only - folder body color. Default: amber (#f5d98b).' },
             { name: 'files',     type: 'FileEntry[]',                       desc: 'Controlled file list with optional progress.' },
             { name: 'onFiles',   type: '(files: File[]) => void',           desc: 'Called with accepted File objects. Caller tracks progress.' },
             { name: 'onRemove',  type: '(id: string) => void',              desc: 'Called after the remove is confirmed in the Modal.' },

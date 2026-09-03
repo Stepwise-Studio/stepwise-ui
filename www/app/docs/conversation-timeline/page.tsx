@@ -13,7 +13,7 @@ const basicCode = `import { ConversationTimeline } from '@/components/stepwise/c
 const checkpoints = [
   { id: '1', role: 'system',    label: 'System prompt' },
   { id: '2', role: 'user',      label: 'Can you help me set up auth?' },
-  { id: '3', role: 'assistant', label: 'Of course — let me walk you through it' },
+  { id: '3', role: 'assistant', label: 'Of course - let me walk you through it' },
 ]
 
 const [activeId, setActiveId] = useState('2')
@@ -44,10 +44,10 @@ export default function ConversationTimelinePage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Conversation Timeline</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            At rest, a dense rail of thin marks — one per message, tightly packed. Hover or
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A dense rail of thin marks, one per message, that expands into a labelled list on hover. Hover or
             keyboard-focus the rail and it expands: every row grows and its label fades in. The row
-            under the cursor gets extra emphasis on top — its mark brightens, its label bolds and
+            under the cursor gets extra emphasis on top - its mark brightens, its label bolds and
             nudges out. Click any mark to select it.
           </Text>
         </div>
@@ -59,7 +59,7 @@ export default function ConversationTimelinePage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Hover the rail (or Tab into it) to expand every row at once. Then hover a specific row
             for its extra emphasis.
           </Text>
@@ -72,7 +72,7 @@ export default function ConversationTimelinePage() {
 
         <section id="left" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Left side</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Flip the labels to the left of the marks and recolour the active line with{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">accent</code>.
           </Text>
@@ -101,7 +101,7 @@ export default function ConversationTimelinePage() {
           <PropsTable rows={[
             { name: 'id',       type: 'string',                          desc: 'Unique identifier.' },
             { name: 'label',    type: 'string',                          desc: 'The chat label revealed on hover.' },
-            { name: 'sublabel', type: 'string',                          desc: 'Optional — reserved for richer labels.' },
+            { name: 'sublabel', type: 'string',                          desc: 'Optional - reserved for richer labels.' },
             { name: 'role',     type: '"user" | "assistant" | "system"', desc: 'Optional role tag for your own styling.' },
           ]} />
         </section>

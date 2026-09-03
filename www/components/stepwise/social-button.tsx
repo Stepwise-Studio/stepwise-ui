@@ -9,9 +9,8 @@ export interface SocialButtonProps extends ButtonHTMLAttributes<HTMLButtonElemen
   /** One of the built-in providers, or any other string for a custom provider. */
   provider  : SocialProvider | (string & {})
   /**
-   * Required when `provider` isn't one of the three built-in ones — swap in
-   * any other company's mark. `label` is also required then, since there's
-   * no built-in name to build "Continue with {name}" from.
+   * Required when `provider` is not one of the built-in ones. `label` is also
+   * required then, since there is no built-in name to phrase the button with.
    */
   icon?     : React.ReactNode
   label?    : string
@@ -66,11 +65,11 @@ export function SocialButton({
 }: SocialButtonProps) {
   const builtIn = isBuiltIn(provider)
 
-  // globalThis, not `process` directly — a bare `process` reference needs
-  // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
+  // globalThis rather than a bare `process`, which would need @types/node to
+  // typecheck in projects that don't already have it.
   const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV
   if (nodeEnv !== 'production' && !builtIn && (!icon || !label)) {
-    console.warn(`[Stepwise SocialButton] provider="${provider}" isn't built in — pass both \`icon\` and \`label\` explicitly.`)
+    console.warn(`[Stepwise SocialButton] provider="${provider}" isn't built in - pass both \`icon\` and \`label\` explicitly.`)
   }
 
   return (

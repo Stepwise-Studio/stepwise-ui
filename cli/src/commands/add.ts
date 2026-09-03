@@ -80,7 +80,7 @@ export async function add(components: string[], opts: { yes?: boolean }) {
         if (current === file.content) continue // already up to date
         if (!opts.yes) {
           console.log(
-            pc.yellow(`  ~ ${file.path} ${pc.dim('(differs — use --yes to overwrite)')}`),
+            pc.yellow(`  ~ ${file.path} ${pc.dim('(differs - use --yes to overwrite)')}`),
           )
           skipCount++
           continue
@@ -95,7 +95,7 @@ export async function add(components: string[], opts: { yes?: boolean }) {
   }
 
   // ---- install dependencies ---------------------------------------------
-  // One install for the whole run — installing per component would re-run the
+  // One install for the whole run - installing per component would re-run the
   // package manager dozens of times on a multi-component add.
   const required = [...new Set([...manifests.values()].flatMap(m => m.dependencies))]
   const missing = missingDependencies(required, root)
@@ -114,7 +114,7 @@ export async function add(components: string[], opts: { yes?: boolean }) {
     }
   }
 
-  // Peers are frameworks (next, react) — installing one into a project that
+  // Peers are frameworks (next, react) - installing one into a project that
   // chose a different stack would be worse than the error, so only report it.
   const peers = new Set<string>()
   for (const [name, manifest] of manifests) {
@@ -126,7 +126,7 @@ export async function add(components: string[], opts: { yes?: boolean }) {
     console.log(
       `\n  ${pc.yellow('!')} Requires packages this project doesn't have: ` +
         `${[...peers].sort().join(', ')}\n` +
-        pc.dim('    Install them yourself — they are framework-level choices.'),
+        pc.dim('    Install them yourself - they are framework-level choices.'),
     )
   }
 
@@ -140,7 +140,7 @@ export async function add(components: string[], opts: { yes?: boolean }) {
     )
   }
 
-  // Report what actually happened — a run where every file was skipped has
+  // Report what actually happened - a run where every file was skipped has
   // added nothing, and saying otherwise hides the skip the user needs to see.
   if (writeCount === 0 && skipCount === 0) {
     console.log(pc.dim('\n  Everything already up to date.'))

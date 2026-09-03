@@ -46,9 +46,9 @@ export default function ProfileCardPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Profile Card</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            An agent or user profile card. The default variant includes a scenic banner header;
-            the compact variant keeps only the avatar row — useful in sidebars or lists.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A profile card for a person or an agent, in a full banner variant and a compact row. The default variant includes a scenic banner header;
+            the compact variant keeps only the avatar row - useful in sidebars or lists.
             Both show work-experience stats and a full-width CTA button.
           </Text>
         </div>

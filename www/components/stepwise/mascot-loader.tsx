@@ -19,7 +19,7 @@ const BODY = 34
 
 /**
  * A mascot that actually does the work. It walks the track at your real
- * `progress`, leaning into it and straining as it goes — then plants, hops, and
+ * `progress`, leaning into it and straining as it goes - then plants, hops, and
  * grins when the number lands on 100. Nothing here is on a timer: the position,
  * the effort, and the celebration are all read from `progress`, so it can never
  * lie about how far along you are.
@@ -36,7 +36,7 @@ export function MascotLoader({
   const done = p >= 100
   const moving = p > 0 && !done
 
-  // effort ramps up as it climbs — leans further, works harder
+  // effort ramps up as it climbs - leans further, works harder
   const effort = p / 100
   const lean = moving ? 4 + effort * 5 : 0
 
@@ -96,7 +96,7 @@ export function MascotLoader({
                   <>
                     <circle cx="13" cy="17" r="2.4" className="fill-white dark:fill-zinc-900" />
                     <circle cx="22" cy="17" r="2.4" className="fill-white dark:fill-zinc-900" />
-                    {/* pupils drift forward — it's watching where it's going */}
+                    {/* pupils drift forward - it's watching where it's going */}
                     <circle cx={13.9} cy="17.6" r="1" className="fill-zinc-900 dark:fill-white" />
                     <circle cx={22.9} cy="17.6" r="1" className="fill-zinc-900 dark:fill-white" />
                   </>

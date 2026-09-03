@@ -25,7 +25,7 @@ export interface DrawerProps {
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-// Typed via ['exit'] rather than ['initial']/['animate'] — none of these
+// Typed via ['exit'] rather than ['initial']/['animate'] - none of these
 // values are ever the literal `false` those wider prop types also allow, and
 // the narrower type is what both the `initial` and `exit` props below need.
 const INITIAL: Record<DrawerSide, MotionProps['exit']> = {
@@ -71,18 +71,13 @@ export function Drawer({
     return () => { document.body.style.overflow = '' }
   }, [open])
 
-  // Everything outside the drawer's own portal root becomes inert while
-  // open, so Tab can't wander into content behind the backdrop. Only
-  // un-inert the siblings this instance itself made inert — never touch
-  // ones that were already inert (e.g. a parent modal further up the tree).
+  // Everything outside the drawer's portal root goes inert while open so Tab
+  // cannot reach content behind the backdrop. Only siblings this instance made
+  // inert are restored, never ones that were already inert.
   //
-  // Declared BEFORE the focus-restore effect below on purpose: React runs
-  // cleanups for effects sharing a dependency in declaration order, so this
-  // one's cleanup (removing `inert`) must fire first. Otherwise the trigger
-  // button is still `inert` — and therefore unfocusable — at the exact
-  // moment the focus-restore effect tries to call .focus() on it, which
-  // fails silently and leaves focus to fall back to <body> once the panel's
-  // DOM is removed after its exit animation.
+  // Declared before the focus-restore effect on purpose: React runs cleanups in
+  // declaration order, so `inert` must be removed before focus is returned to
+  // the trigger, which is unfocusable while still inert.
   useEffect(() => {
     if (!open) return
     const root = rootRef.current
@@ -97,8 +92,7 @@ export function Drawer({
     return () => { touched.forEach(el => el.removeAttribute('inert')) }
   }, [open])
 
-  // Focus in on open, restore to the trigger on close — a keyboard user
-  // should never have to hunt for where focus went either direction.
+  // Focus moves in on open and returns to the trigger on close.
   useEffect(() => {
     if (!open) return
     triggerRef.current = document.activeElement as HTMLElement | null
@@ -114,7 +108,7 @@ export function Drawer({
 
   const isBottom = side === 'bottom'
 
-  // Every variant floats as a fully separated card — a uniform 20px margin
+  // Every variant floats as a fully separated card - a uniform 20px margin
   // (== the panel's own corner radius, the standard floating-card ratio) on
   // every screen edge it's near. A right drawer keeps its own width free
   // (that's not a screen edge, so no margin needed there) but gets margin on
@@ -152,7 +146,7 @@ export function Drawer({
           {/* Panel */}
           <motion.div
             // [&>div]:h-full pushes full height through SmoothCorners' unclassed
-            // wrapper divs — without it the side panel collapses to content height
+            // wrapper divs - without it the side panel collapses to content height
             className={cn('z-50 pointer-events-auto', panelPositionClass, !isBottom && '[&>div]:h-full')}
             initial={panelInitial}
             animate={panelAnimate}
@@ -169,12 +163,12 @@ export function Drawer({
               aria-labelledby={title ? titleId : undefined}
               aria-label={!title ? ariaLabel : undefined}
               tabIndex={-1}
-              // className here lands on the SmoothCorners wrapper — without h-full
+              // className here lands on the SmoothCorners wrapper - without h-full
               // on it, the side panel collapses to content height instead of
               // spanning the screen.
               lisse={{
                 className: isBottom ? undefined : 'h-full block',
-                middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' },
+                middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' },
               }}
               className={cn(
                 'h-full flex flex-col bg-white dark:bg-zinc-900',
@@ -184,7 +178,7 @@ export function Drawer({
                 className,
               )}
             >
-              {/* Drag handle — bottom drawer only */}
+              {/* Drag handle - bottom drawer only */}
               {isBottom && (
                 <div className="flex justify-center pt-3 pb-1 shrink-0">
                   <div className="w-8 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700" />
@@ -200,7 +194,7 @@ export function Drawer({
                   <button
                     onClick={onClose}
                     className={cn(
-                      'relative stepwise-btn-hit flex items-center justify-center w-7 h-7 rounded-full shrink-0 cursor-pointer',
+                      'relative pointer-coarse:after:content-[""] pointer-coarse:after:absolute pointer-coarse:after:inset-x-0 pointer-coarse:after:top-1/2 pointer-coarse:after:[translate:0_-50%] pointer-coarse:after:h-[max(100%,44px)] flex items-center justify-center w-7 h-7 rounded-full shrink-0 cursor-pointer',
                       'text-zinc-400 hover:text-rose-500 dark:hover:text-rose-400',
                       'hover:bg-rose-50 dark:hover:bg-rose-500/10',
                       'focus-visible:outline-2 focus-visible:outline-offset-2',

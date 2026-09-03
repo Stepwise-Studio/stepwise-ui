@@ -1,17 +1,23 @@
 {
   "name": "shimmer-text",
-  "description": "The loading shimmer every AI-native app reaches for.",
+  "description": "A CSS-only shimmer for thinking and loading states.",
   "category": "components",
   "dependencies": [
     "clsx",
     "tailwind-merge"
   ],
-  "peerDependencies": [],
+  "peerDependencies": [
+    "react"
+  ],
   "registryDependencies": [],
+  "exports": [
+    "ShimmerText"
+  ],
+  "example": "import { ShimmerText } from '@/components/stepwise/shimmer-text'\n\n// The AI \"thinking / generating\" label - a highlight band\n// sweeps across muted text on an infinite loop. Pure CSS.\n<ShimmerText>Generating response…</ShimmerText>\n\n// Tune the sweep speed (seconds)\n<ShimmerText duration={1.4}>Summarizing sources</ShimmerText>",
   "files": [
     {
       "path": "components/stepwise/shimmer-text.tsx",
-      "content": "'use client'\n\nimport { cn } from '@/lib/utils/cn'\n\nexport interface ShimmerTextProps {\n  /** Text to shimmer. Must be a plain string — it is mirrored into data-text. */\n  children  : string\n  /** Sweep duration in seconds. Default 2. */\n  duration? : number\n  /** Width of the highlight band as a % of the text width. Default 300. */\n  band?     : number\n  className?: string\n}\n\n/**\n * Pure-CSS shimmer — the \"AI is thinking / generating\" label. A highlight band\n * sweeps across muted text on an infinite loop. Colors adapt to light/dark via\n * the --shimmer-base / --shimmer-highlight tokens in globals.css. No JS runs.\n */\nexport function ShimmerText({ children, duration, band, className }: ShimmerTextProps) {\n  return (\n    <span\n      className={cn('t-shimmer', className)}\n      data-text={children}\n      style={{\n        ...(duration ? { ['--shimmer-dur' as string]: `${duration}s` } : {}),\n        ...(band ? { ['--shimmer-band' as string]: `${band}%` } : {}),\n      }}\n    >\n      {children}\n    </span>\n  )\n}\n"
+      "content": "'use client'\n\nimport { useEffect, useRef } from 'react'\nimport { cn } from '@/lib/utils/cn'\n\nexport interface ShimmerTextProps {\n  /** Text to shimmer. Must be a plain string - it is rendered twice. */\n  children  : string\n  /** Sweep duration in seconds. Default 2. */\n  duration? : number\n  /** Width of the highlight band as a % of the text width. Default 300. */\n  band?     : number\n  className?: string\n}\n\n/* The highlight band, as one gradient per theme. Written out in full rather\n * than built from a token because Tailwind only emits CSS for class names it\n * can read as literal text - and a token in a stylesheet is exactly the kind\n * of thing that does not travel with an installed component. */\nconst BAND =\n  'bg-[linear-gradient(90deg,transparent_0%,transparent_40%,#18181b_50%,transparent_60%,transparent_100%)] ' +\n  'dark:bg-[linear-gradient(90deg,transparent_0%,transparent_40%,#fafafa_50%,transparent_60%,transparent_100%)]'\n\n/**\n * A highlight band sweeping across muted text, on a loop - the \"thinking\" or\n * \"generating\" label.\n *\n * The text is rendered twice: once as the muted base, and once in an\n * aria-hidden overlay whose own glyphs are transparent and clip the moving\n * gradient (`background-clip: text`). The overlay is a real element rather\n * than a `::before`, because the sweep is animated through the Web Animations\n * API and JavaScript cannot reach a pseudo-element reliably - and driving it\n * from a CSS keyframe would leave the animation behind in a stylesheet the\n * component does not ship with.\n */\nexport function ShimmerText({ children, duration = 2, band = 300, className }: ShimmerTextProps) {\n  const overlay = useRef<HTMLSpanElement>(null)\n\n  useEffect(() => {\n    const el = overlay.current\n    if (!el) return\n    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return\n\n    const anim = el.animate(\n      [{ backgroundPosition: '100% 0' }, { backgroundPosition: '0% 0' }],\n      { duration: duration * 1000, iterations: Infinity, easing: 'linear' },\n    )\n    return () => anim.cancel()\n  }, [duration])\n\n  return (\n    <span className={cn('relative inline-block text-zinc-400 dark:text-zinc-500', className)}>\n      {children}\n      <span\n        ref={overlay}\n        aria-hidden=\"true\"\n        className={cn('pointer-events-none absolute inset-0 bg-no-repeat bg-clip-text text-transparent', BAND)}\n        style={{ backgroundSize: `${band}% 100%` }}\n      >\n        {children}\n      </span>\n    </span>\n  )\n}\n"
     },
     {
       "path": "lib/utils/cn.ts",

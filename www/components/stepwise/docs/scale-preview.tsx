@@ -4,7 +4,7 @@ import type { CSSProperties } from 'react'
 import { Scale } from '@/components/stepwise/scale'
 import { Frame } from '@/components/stepwise/frame'
 
-const pattern = { '--pattern': 'var(--ui-border)' } as CSSProperties
+const pattern = { '--pattern': 'var(--ui-border, rgb(138 138 141 / 0.23))' } as CSSProperties
 
 export function ScaleHorizontalPreview() {
   return (
@@ -30,7 +30,7 @@ export function ScaleUsagePreview() {
   return (
     <div className="grid w-full grid-cols-1">
       <Frame radius={16} className="flex flex-col overflow-hidden" style={pattern}>
-        {/* Last section before the footer — CTA skeleton */}
+        {/* Last section before the footer - CTA skeleton */}
         <div aria-hidden className="flex flex-col items-center gap-3 px-6 py-14 sm:px-10">
           <div className="h-3 w-40 rounded-full bg-zinc-200 dark:bg-zinc-800" />
           <div className="h-2 w-56 rounded-full bg-zinc-100 dark:bg-zinc-900" />

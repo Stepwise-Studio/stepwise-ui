@@ -14,7 +14,7 @@ export interface ToggleProps {
   label?         : string
   /** Helper line under the label. */
   hint?          : string
-  /** Accessible name for the switch. Required when used without `label` —
+  /** Accessible name for the switch. Required when used without `label` -
    *  there's nothing else to derive a name from. */
   ariaLabel?     : string
   disabled?      : boolean
@@ -49,11 +49,11 @@ export function Toggle({
   const reduce = useReducedMotion()
 
   useEffect(() => {
-    // globalThis, not `process` directly — a bare `process` reference needs
+    // globalThis, not `process` directly - a bare `process` reference needs
     // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
     if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV === 'production') return
     if (!label && !ariaLabel) {
-      console.warn('[Stepwise Toggle] Needs a `label` or `ariaLabel` — the switch has no accessible name.')
+      console.warn('[Stepwise Toggle] Needs a `label` or `ariaLabel` - the switch has no accessible name.')
     }
   }, [label, ariaLabel])
 
@@ -62,12 +62,9 @@ export function Toggle({
   const travel = s.w - knob - 2 * s.gap
   const [internal, setInternal] = useState(defaultChecked)
   const on = checked ?? internal
-  // The squash-and-settle is feedback for an actual flip, not a page-load
-  // effect. `scaleX`'s target is a 3-value keyframe array — even with
-  // initial={false}, Motion runs a keyframes array as a timed sequence on
-  // mount rather than snapping straight to its resting value. Gating it
-  // behind "has this actually been toggled" keeps the knob a true circle
-  // on first paint.
+  // The squash is feedback for a real flip, not a page-load effect. Motion runs
+  // a keyframes array as a timed sequence on mount even with initial={false},
+  // so gating it on "has been toggled" keeps the knob circular on first paint.
   const [everToggled, setEverToggled] = useState(false)
 
   const toggle = () => {
@@ -90,10 +87,9 @@ export function Toggle({
         'relative box-border shrink-0 rounded-full border-0 p-0 outline-none',
         'transition-colors duration-200',
         'focus-visible:ring-[3px] focus-visible:ring-sky-400/40',
-        // sky-500/zinc-200 measured only 2.71:1 / 1.27:1 against the white
-        // knob — both under WCAG 1.4.11's 3:1 floor for a UI component's own
-        // state indicator. sky-600/zinc-500 clear 4.10:1 / 4.83:1. Dark
-        // mode's off state (zinc-700, 10.44:1) was already fine.
+        // Against the white knob, sky-500 and zinc-200 measure 2.71:1 and
+        // 1.27:1, under WCAG 1.4.11's 3:1 floor for a state indicator. sky-600
+        // and zinc-500 reach 4.10:1 and 4.83:1. Dark mode already passes.
         on ? 'bg-sky-500' : 'bg-zinc-200/80 dark:bg-zinc-700/70',
         disabled && 'opacity-40 cursor-not-allowed',
       )}
@@ -111,8 +107,8 @@ export function Toggle({
         initial={false}
         animate={{
           x: on ? travel : 0,
-          // squash along travel from the centre so end padding never collapses —
-          // only after a real flip (keyframes would run on mount otherwise).
+          // Squash along the travel axis from the centre, so the end padding
+          // never collapses. Only after a real flip, never on mount.
           scaleX: reduce || !everToggled ? 1 : [1, 1.12, 1],
         }}
         transition={{

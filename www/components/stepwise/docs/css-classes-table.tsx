@@ -13,7 +13,7 @@ export function CssClassesTable({ rows }: { rows: Row[] }) {
   return (
     <Surface
       radius={24}
-      lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+      lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
       className="overflow-x-auto"
     >
       <div className="min-w-[520px]">

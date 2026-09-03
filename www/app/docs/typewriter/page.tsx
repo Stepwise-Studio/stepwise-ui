@@ -26,9 +26,9 @@ export default function TypewriterPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Typewriter</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Types a string on character by character with a blinking caret. Pass an array to
-            cycle words — type, hold, backspace, next. A single string types once and holds.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Types a string out character by character with a blinking caret. Pass an array to
+            cycle words - type, hold, backspace, next. A single string types once and holds.
           </Text>
         </div>
 

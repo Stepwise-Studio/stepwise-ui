@@ -11,13 +11,13 @@ import { cn } from '@/lib/utils/cn'
 
 export interface DropdownMenuItem {
   label: string
-  /** Omit for a text-only row — the icon gutter simply isn't reserved. */
+  /** Omit for a text-only row - the icon gutter simply isn't reserved. */
   icon?: ReactNode
   shortcut?: string
   onSelect?: () => void
   destructive?: boolean
   disabled?: boolean
-  /** Nested items. Presence alone turns this row into a submenu trigger — it
+  /** Nested items. Presence alone turns this row into a submenu trigger - it
    *  renders a trailing chevron instead of a shortcut, opens on hover/click/
    *  ArrowRight, and its own `onSelect` (if any) is ignored. */
   items?: DropdownEntry[]
@@ -34,7 +34,7 @@ export interface DropdownMenuProps {
   items: DropdownEntry[]
   /** Horizontal edge to anchor the panel to. Default 'start'. */
   align?: 'start' | 'end'
-  /** Render the menu already open — for showcases and screenshots. Default false. */
+  /** Render the menu already open - for showcases and screenshots. Default false. */
   defaultOpen?: boolean
   className?: string
 }
@@ -44,7 +44,7 @@ export const DROPDOWN_PANEL_CLASS = 'min-w-[190px] bg-white p-1.5 shadow-[0_4px_
 const PANEL_CLASS = DROPDOWN_PANEL_CLASS
 const ITEM_CLASS = 'flex w-full items-center gap-1.5 rounded-[12px] px-2.5 py-2 text-left text-[13px] font-medium tracking-[-0.01em] transition-colors duration-100 disabled:opacity-40 disabled:pointer-events-none'
 
-/** A level's own menuitems only — excludes anything inside a nested open
+/** A level's own menuitems only - excludes anything inside a nested open
  *  submenu, whose items live under a different `role="menu"` ancestor. */
 function levelFocusables(menuRef: React.RefObject<HTMLDivElement | null>) {
   if (!menuRef.current) return []
@@ -53,11 +53,9 @@ function levelFocusables(menuRef: React.RefObject<HTMLDivElement | null>) {
 }
 
 /** Shared ArrowUp/Down/Home/End roving-focus handler for one menu level.
- *  Every menuitem stays at tabIndex={-1} (see ITEM_CLASS usages) — arrow
- *  keys are the only way to move focus within the menu, matching the ARIA
- *  APG menu pattern. Tab is deliberately left un-prevented here so its
- *  native behavior still moves focus onward; `onTabOut` just closes the
- *  menu first so it doesn't linger open once focus has left it. */
+ *  Items stay at tabIndex={-1}, so arrows are the only way to move focus
+ *  within the menu, per the ARIA menu pattern. Tab is left alone so it still
+ *  moves focus onward; `onTabOut` just closes the menu behind it. */
 function rovingKeyDown(menuRef: React.RefObject<HTMLDivElement | null>, onTabOut: () => void) {
   return (e: React.KeyboardEvent) => {
     if (e.key === 'Tab') {
@@ -89,14 +87,14 @@ function focusFirstItem(menuRef: React.RefObject<HTMLDivElement | null>) {
   })
 }
 
-/** Renders one level's entries — separators, headings, plain items, and
+/** Renders one level's entries - separators, headings, plain items, and
  *  submenu triggers. Used for both the root panel and every nested submenu,
  *  each with its own `subOpenIndex` so only one child submenu is open at a
  *  time within that level. */
 export function DropdownMenuList({ items, menuRef, menuRootId, onRequestCloseAll }: {
   items: DropdownEntry[]
   menuRef: React.RefObject<HTMLDivElement | null>
-  /** Shared with the root's outside-click check — every portaled submenu
+  /** Shared with the root's outside-click check - every portaled submenu
    *  panel carries this as `data-menu-root` so a click inside one isn't
    *  mistaken for a click outside the whole widget. */
   menuRootId: string
@@ -168,14 +166,11 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
   const rowRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const subMenuRef = useRef<HTMLDivElement>(null)
-  // Fixed-position coordinates, computed from the row's own rect — this panel
-  // is portaled to <body> (see below), not positioned relative to the row in
-  // the DOM, because it lives inside the parent Surface's squircle clip-path:
-  // anything a clipped ancestor's descendant renders outside that ancestor's
-  // own box gets silently cut off, the same class of bug the Button
-  // component's hero-glow layer hit earlier.
+  // Fixed coordinates computed from the row's rect. The panel is portaled to
+  // <body> rather than positioned in the DOM, because the parent Surface's
+  // squircle clip-path would cut off anything rendered outside its box.
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null)
-  // Which edge of the panel the row sits against — the goo seed blob (below)
+  // Which edge of the panel the row sits against - the goo seed blob (below)
   // renders on that edge, same idea as the root panel's own originSide.
   const [side, setSide] = useState<'right' | 'left'>('right')
   const reduceMotion = useReducedMotion()
@@ -190,10 +185,9 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
     setSide('right')
   }, [open])
 
-  // Pass 2: flip to the row's left edge if the panel would overflow — mirrors
-  // the root panel's own resolvedAlign flip, one measure-then-correct frame
-  // before paint so there's no visible jump. Clamped afterward for the
-  // narrow-viewport case where neither side has room for the full width.
+  // Pass 2: flip to the row's left edge if the panel would overflow, measured
+  // and corrected before paint so there is no visible jump. Clamped afterwards
+  // for viewports too narrow for either side.
   useLayoutEffect(() => {
     if (!open || !pos) return
     const p = panelRef.current?.getBoundingClientRect()
@@ -210,11 +204,9 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, pos?.left])
 
-  // The panel is `position: fixed` in viewport coordinates, computed once
-  // from the row's rect — unlike the root panel (plain `position: absolute`
-  // in normal flow, which scrolls for free), it never re-measures on its
-  // own, so it visually detaches from its row the moment the page scrolls.
-  // Keep the side already chosen above; just re-track the row's position.
+  // The panel is fixed in viewport coordinates and computed once, so unlike
+  // the absolutely-positioned root panel it does not follow the page as it
+  // scrolls. Re-track the row's position, keeping the side already chosen.
   useEffect(() => {
     if (!open) return
     const reposition = () => {
@@ -266,7 +258,7 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
 
       {typeof document !== 'undefined' && document.body && createPortal(
         <>
-          {/* Same goo trick as the root panel (see its own comment) — a
+          {/* Same goo trick as the root panel (see its own comment) - a
               separate filter per submenu since each is portaled independently. */}
           {!reduceMotion && (
             <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
@@ -319,7 +311,7 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
                   <Surface
                     ref={subMenuRef}
                     radius={18}
-                    lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+                    lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
                     className={PANEL_CLASS}
                     role="menu"
                   >
@@ -339,7 +331,7 @@ function SubmenuItem({ entry, open, onOpen, onClose, menuRootId, onRequestCloseA
 export function DropdownMenu({ trigger, items, align = 'start', defaultOpen = false, className }: DropdownMenuProps) {
   const [open, setOpen] = useState(defaultOpen)
   // The requested alignment can flip at runtime if the panel would overflow
-  // the viewport at that edge — see the layout effect below.
+  // the viewport at that edge - see the layout effect below.
   const [resolvedAlign, setResolvedAlign] = useState(align)
   const rootRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -353,10 +345,8 @@ export function DropdownMenu({ trigger, items, align = 'start', defaultOpen = fa
     if (!open) return
     const onDown = (e: MouseEvent) => {
       const target = e.target as HTMLElement
-      // Submenu panels are portaled to <body> (they'd get clipped by the
-      // parent Surface's squircle otherwise) — a click inside one is a DOM
-      // descendant of <body>, not of rootRef, so it'd read as "outside"
-      // without this check.
+      // Submenu panels are portaled to <body>, so a click inside one is not a
+      // descendant of rootRef and would otherwise count as an outside click.
       if (rootRef.current && !rootRef.current.contains(target) && !target.closest?.(`[data-menu-root="${menuId}"]`)) {
         setOpen(false)
       }
@@ -411,7 +401,7 @@ export function DropdownMenu({ trigger, items, align = 'start', defaultOpen = fa
           blob into the panel itself while it's still small, then the
           contrast matrix snaps the soft blurred edges back into one smooth
           silhouette (the classic "gooey blob merge" trick). The filter is a
-          keyframe array that snaps to `none` partway through — by then the
+          keyframe array that snaps to `none` partway through - by then the
           panel is most of the way to full size, so content resolves crisp
           instead of staying blurred once it's readable. */}
       {!reduceMotion && (
@@ -434,7 +424,7 @@ export function DropdownMenu({ trigger, items, align = 'start', defaultOpen = fa
             animate={{ opacity: 1, transition: { duration: 0.18 } }}
             exit={{ opacity: 0, transition: { duration: 0.14 } }}
           >
-            {/* This is the wrapper that actually grows — the goo filter rides
+            {/* This is the wrapper that actually grows - the goo filter rides
                 on the SAME element as the real panel, so what you see melting
                 into shape is the real content, not a decoy layer hidden behind it. */}
             <motion.div
@@ -447,7 +437,7 @@ export function DropdownMenu({ trigger, items, align = 'start', defaultOpen = fa
               exit={{ scale: 0.97, y: -2, filter: 'none', transition: { duration: 0.14, ease: EASE } }}
             >
               {!reduceMotion && (
-                // trigger-origin seed blob — merges into the panel's own
+                // trigger-origin seed blob - merges into the panel's own
                 // growing edge via the shared goo filter, then dissolves.
                 // Open-only: the close transition stays a plain fast fade.
                 <motion.span
@@ -463,7 +453,7 @@ export function DropdownMenu({ trigger, items, align = 'start', defaultOpen = fa
               <Surface
                 ref={menuRef}
                 radius={20}
-                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
                 className={PANEL_CLASS}
                 role="menu"
               >

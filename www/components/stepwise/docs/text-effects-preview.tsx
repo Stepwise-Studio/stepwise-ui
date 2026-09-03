@@ -11,7 +11,7 @@ import { SquigglyUnderline } from '@/components/stepwise/squiggly-underline'
 import { CircleAnnotation } from '@/components/stepwise/circle-annotation'
 import { useTheme } from '@/lib/theme'
 
-// Per-theme accent pairs — verified >=4.5:1 against the actual rendered
+// Per-theme accent pairs - verified >=4.5:1 against the actual rendered
 // background in both appearances (light bg ~white, dark bg ~black):
 // rose-600/rose-500 = 4.70 / 5.72, sky-700/sky-500 = 5.93 / 7.58.
 const ROSE = { light: '#e11d48', dark: '#f43f5e' }
@@ -132,7 +132,7 @@ export function CirclePreview() {
       <p key={k} className="text-[26px] font-medium tracking-tight text-zinc-800 dark:text-zinc-100 text-center leading-[1.7]">
         Every detail is{' '}
         <CircleAnnotation color={dark ? ROSE.dark : ROSE.light}>intentional</CircleAnnotation>{' '}
-        — nothing here is an accident.
+        - nothing here is an accident.
       </p>
       <Replay onClick={() => setK(k + 1)} />
     </div>

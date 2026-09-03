@@ -22,7 +22,7 @@ const [to,   setTo]   = useState<Date | null>(null)
   onRangeChange={(f, t) => { setFrom(f); setTo(t) }}
 />
 
-// Typed date (DD/MM/YYYY) — also has a calendar icon to open the picker
+// Typed date (DD/MM/YYYY) - also has a calendar icon to open the picker
 const [dob, setDob] = useState<Date | null>(null)
 <DatePicker variant="text" label="Date of birth" value={dob} onChange={setDob} />`
 
@@ -40,7 +40,7 @@ export default async function DatePickerPage() {
         {/* Header */}
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Date Picker</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Input-triggered date picker with three variants: click-to-pick, date range, and
             a typed DD/MM/YYYY field. The calendar drops below the input (or above if space is tight),
             animated with a blurred slide. For the standalone calendar component, see{' '}
@@ -70,7 +70,7 @@ export default async function DatePickerPage() {
           <PropsTable rows={[
             { name: 'date',  type: 'variant', desc: 'Click the input to open a calendar. Selecting a date fills the input and closes the picker.' },
             { name: 'range', type: 'variant', desc: 'Opens a range calendar. First click sets start, second sets end. Hover previews the range.' },
-            { name: 'text',  type: 'variant', desc: 'Type a date as DD/MM/YYYY. The calendar icon also opens the visual picker — both update the same value.' },
+            { name: 'text',  type: 'variant', desc: 'Type a date as DD/MM/YYYY. The calendar icon also opens the visual picker - both update the same value.' },
           ]} />
         </section>
 

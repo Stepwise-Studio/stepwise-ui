@@ -9,14 +9,13 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { GithubIcon, ArrowRight02Icon } from '@hugeicons/core-free-icons'
 import { GlowButton } from '@/components/stepwise/glow-button'
 import { ThemeToggle } from '@/components/stepwise/theme-toggle'
-import { Surface } from '@/components/stepwise/primitives/surface'
 import { useTheme } from '@/lib/theme'
 
 const LIGHT_AURA = ['#ffffff', '#7dd3fc', '#bae6fd', '#e0f2fe', '#ddd6fe']
 const DARK_AURA  = ['#09090b', '#0369a1', '#075985', '#155e75', '#1e1b4b']
 const REPO_URL = 'https://github.com/Stepwise-Studio/stepwise-ui'
 
-// ── petal burst — fires when the logo is clicked 5× fast ─────────────────────
+// ── petal burst - fires when the logo is clicked 5× fast ─────────────────────
 function PetalBurst({ burst }: { burst: number }) {
   if (!burst) return null
   return (
@@ -56,8 +55,6 @@ export function HomeHero() {
   const dark = theme === 'dark'
 
   const [copied, setCopied] = useState(false)
-  const [cmdHovered, setCmdHovered] = useState(false)
-  const cmdRowH = Math.round(17 * 1.2) // same rowH formula as Button's slideIcon (fontSize * 1.2)
   const [burst, setBurst] = useState(0)
   const clicks = useRef<number[]>([])
 
@@ -145,10 +142,10 @@ export function HomeHero() {
       </nav>
 
       {/* ── hero ── */}
-      <section className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col items-center px-5 pb-24 pt-20 text-center md:pb-32 md:pt-28">
-        {/* hook — words rise in one after another */}
+      <section className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col items-center px-5 pb-24 pt-24 text-center md:pb-32 md:pt-36">
+        {/* hook - words rise in one after another */}
         <h1 className="max-w-[22ch] text-[42px] font-semibold leading-[1.05] tracking-[-0.04em] text-zinc-900 md:max-w-none md:text-[68px] dark:text-white">
-          {/* A hard break after "the" (not `text-wrap:balance`) — balance
+          {/* A hard break after "the" (not `text-wrap:balance`) - balance
               recomputes its split against the block's own resolved width,
               which is bigger on a bigger monitor and can land on a
               different, worse-looking break. A fixed break reads the same
@@ -173,110 +170,88 @@ export function HomeHero() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-[52ch] text-[16px] leading-relaxed text-zinc-600 [text-wrap:pretty] md:text-[18px] dark:text-zinc-400"
+          className="mt-6 max-w-[52ch] text-[16px] leading-relaxed text-zinc-600 text-pretty md:text-[18px] dark:text-zinc-400"
         >
           A growing collection of UI components for building modern products without
-          starting from a blank screen — flexible by default, and easy to make your own.
+          starting from a blank screen - flexible by default, and easy to make your own.
         </motion.p>
 
-        {/* CTAs */}
+        {/* CTA + install line */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-9 flex flex-col items-center gap-3 sm:flex-row"
+          className="mt-9 flex flex-col items-center gap-4"
         >
-          <Link href="/docs/button">
+          <Link href="/docs/introduction">
             <GlowButton
               size="lg"
               radius={100}
               slideIcon
               iconPosition="right"
-              icon={<HugeiconsIcon icon={ArrowRight02Icon} size={18} strokeWidth={2.25} color="currentColor" />}
-              className="font-semibold"
-              style={{ height: 60, padding: '0 32px', fontSize: 18, lineHeight: 1 }}
+              icon={<HugeiconsIcon icon={ArrowRight02Icon} size={17} strokeWidth={2.25} color="currentColor" />}
+              /* Frosted, not opaque. GlowButton's own fill is a solid
+                 zinc gradient, which sat on the mesh shader like a sticker.
+                 These override its `from-`/`to-` stops through the same
+                 tailwind-merge `cn` the component already runs, so the fill
+                 becomes a translucent wash and `backdrop-blur` pulls the
+                 shader's colour up through it. The rainbow glow is unaffected:
+                 it paints as a negative-z child *above* the button's own
+                 background, not behind it. */
+              className="font-semibold backdrop-blur-xl from-white/75 to-white/50 dark:from-white/[0.14] dark:to-white/[0.05]"
+              style={{ height: 54, padding: '0 28px', fontSize: 17, lineHeight: 1 }}
             >
               Browse components
             </GlowButton>
           </Link>
 
-          {/* copyable install command — same Surface + middleBorder squircle
-              technique as Segment's pill, not a plain CSS ring. The inline
-              `borderRadius` is a plain-CSS fallback alongside the squircle's
-              own `clip-path` (same belt-and-suspenders GlowButton already
-              does) — if the clip-path mis-computes on first paint before
-              the monospace command text has finished loading, the box
-              still reads as a rounded pill instead of a square one. */}
-          <Surface
-            radius={100}
-            lisse={{ middleBorder: { width: 1, opacity: 0.625, color: 'var(--ui-border)' } }}
-            className="bg-gradient-to-b from-zinc-800 to-zinc-900 shadow-[inset_0_1px_0_0_rgb(255_255_255_/_8%)] dark:bg-black/60 dark:backdrop-blur-md"
-            style={{ borderRadius: 100 }}
-          >
+          {/* The install command used to be a second pill beside the CTA. Two
+              solid pills of the same height and near-identical width read as a
+              segmented control rather than a primary and a secondary, and in
+              dark mode the light one was the brightest thing on the screen -
+              louder than the headline and than the action it sat next to. As a
+              quiet mono line it still gets copied by the people who came for
+              it, without taking the first look away from the CTA.
+
+              The two-row hover roll went with it: its only job was revealing
+              the copy icon, and at this scale the icon can just stay visible. */}
           <button
             onClick={copy}
-            onMouseEnter={() => setCmdHovered(true)}
-            onMouseLeave={() => setCmdHovered(false)}
-            className="flex h-[60px] cursor-pointer items-center pl-6 pr-5 font-mono text-[17px] text-zinc-100 transition-transform duration-150 active:scale-[0.98]"
+            aria-label="Copy install command"
+            className="group flex cursor-pointer items-center gap-2 font-mono text-[14px] text-zinc-600 transition-colors duration-150 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white"
           >
-            {/* Text roll — same technique as the slideIcon Button variant:
-                row 1 is the plain label with no icon and no reserved space,
-                row 2 (icon + label) only exists visually once it scrolls
-                into the clipped window on hover. The mask fades the clip
-                window's top/bottom edge so the other row never peeks
-                through as a hard sliver mid-roll. */}
-            <span
-              className="relative overflow-hidden"
-              style={{
-                height: cmdRowH,
-                maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
-                WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
-              }}
-            >
-              <motion.span
-                initial={false}
-                className="flex flex-col items-center"
-                animate={{ y: cmdHovered ? '-50%' : '0%' }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <span className="flex items-center justify-center leading-none" style={{ height: cmdRowH }}>npx stepwise-ui init</span>
-                <span className="flex items-center justify-center gap-2 leading-none" style={{ height: cmdRowH }}>
-                  npx stepwise-ui init
-                  <span className="relative h-4 w-4 shrink-0 text-zinc-400">
-                    <AnimatePresence mode="wait" initial={false}>
-                      {copied ? (
-                        <motion.svg
-                          key="tick"
-                          viewBox="0 0 16 16" fill="none"
-                          className="absolute inset-0 text-green-500"
-                          initial={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
-                          animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-                          exit={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
-                          transition={{ type: 'spring', duration: 0.3, bounce: 0 }}
-                        >
-                          <path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" />
-                        </motion.svg>
-                      ) : (
-                        <motion.svg
-                          key="copy"
-                          viewBox="0 0 16 16" fill="none"
-                          className="absolute inset-0"
-                          initial={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
-                          animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-                          exit={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
-                          transition={{ type: 'spring', duration: 0.3, bounce: 0 }}
-                        >
-                          <rect x="5.5" y="5.5" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.8" />
-                          <path d="M10.5 5.5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1.5" stroke="currentColor" strokeWidth="1.8" />
-                        </motion.svg>
-                      )}
-                    </AnimatePresence>
-                  </span>
-                </span>
-              </motion.span>
+            npx stepwise-ui init
+            <span className="relative h-3.5 w-3.5 shrink-0 opacity-70 transition-opacity duration-150 group-hover:opacity-100">
+              <AnimatePresence mode="wait" initial={false}>
+                {copied ? (
+                  <motion.svg
+                    key="tick"
+                    viewBox="0 0 16 16" fill="none"
+                    className="absolute inset-0 text-green-500"
+                    initial={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
+                    animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
+                    exit={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
+                    transition={{ type: 'spring', duration: 0.3, bounce: 0 }}
+                  >
+                    <path d="M3 8.5 6.5 12 13 4.5" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round" />
+                  </motion.svg>
+                ) : (
+                  <motion.svg
+                    key="copy"
+                    viewBox="0 0 16 16" fill="none"
+                    className="absolute inset-0"
+                    initial={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
+                    animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
+                    exit={{ scale: 0.25, opacity: 0, filter: 'blur(4px)' }}
+                    transition={{ type: 'spring', duration: 0.3, bounce: 0 }}
+                  >
+                    <rect x="5.5" y="5.5" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.8" />
+                    <path d="M10.5 5.5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4.5a2 2 0 0 0 2 2h1.5" stroke="currentColor" strokeWidth="1.8" />
+                  </motion.svg>
+                )}
+              </AnimatePresence>
             </span>
           </button>
-          </Surface>
         </motion.div>
       </section>
     </div>

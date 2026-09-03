@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils/cn'
 
 export interface CircleAnnotationProps {
   children      : React.ReactNode
-  /** Stroke color — also applied to the text when set. Default currentColor. */
+  /** Stroke color - also applied to the text when set. Default currentColor. */
   color?        : string
   /** Stroke width in px. Scales from font size when omitted. */
   thickness?    : number
@@ -53,9 +53,9 @@ function measurePath(d: string) {
 const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)'
 
 /**
- * A hand-drawn circle scribbled around the text, drawn on when scrolled into
- * view. Uses rough.js for an authentic sketchy ellipse, then reveals each
- * stroke from zero length with a CSS dashoffset transition.
+ * A hand-drawn circle around the text, drawn on when scrolled into view.
+ * rough.js generates the sketchy ellipse and each stroke is then revealed from
+ * zero length with a dashoffset transition.
  */
 export function CircleAnnotation({
   children,

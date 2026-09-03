@@ -20,7 +20,7 @@ const FADE: Record<NonNullable<ShaderBackdropProps['fade']>, string> = {
   none: 'none',
 }
 
-/** Full-bleed shader layer. No white wash — shader stays visible. */
+/** Full-bleed shader layer. No white wash - shader stays visible. */
 export function ShaderBackdrop({
   fade = 'bottom',
   tone = 'light',

@@ -11,7 +11,7 @@ import {
 
 const liveCode = `import { Progress } from '@/components/stepwise/progress'
 
-// animates the fill on value change — pass aria-label (or label) when
+// animates the fill on value change - pass aria-label (or label) when
 // nothing else on the page already says what's loading
 <Progress value={progress} aria-label="Loading" />`
 
@@ -20,7 +20,7 @@ const indeterminateCode = `// omit value for a looping loader bar
 
 const labelCode = `<Progress label="Uploading" showValue value={progress} />
 
-// color isn't fixed — derive it from the value for a storage-warning look
+// color isn't fixed - derive it from the value for a storage-warning look
 const color = pct >= 90 ? 'danger' : pct >= 70 ? 'warning' : 'success'
 <Progress label="Storage used" showValue value={pct} color={color}
           formatValue={n => \`\${n}%\`} />`
@@ -39,7 +39,7 @@ export default function ProgressPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Progress</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A linear progress bar. Pass a{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">value</code>{' '}
             0–100 for determinate progress, or omit it for an indeterminate loading loop. An
@@ -65,11 +65,11 @@ export default function ProgressPage() {
 
         <section id="label" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Label &amp; value</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">label</code> and{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">showValue</code>{' '}
             add a caption row above the track, matching Slider's own label row. Color isn't stuck
-            to one prop value either — the storage bar below derives its own color from how full it
+            to one prop value either - the storage bar below derives its own color from how full it
             is, the classic "turns yellow, then red" warning.
           </Text>
           <PreviewCode minHeight={140} preview={<ProgressLabelPreview />} code={<CodeBlock code={labelCode} lang="tsx" className="rounded-none" flat />} />

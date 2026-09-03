@@ -31,12 +31,12 @@ export default function ColorPickerPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Color Picker</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A big saturation/value swatch up front, a plain hue rail underneath — drag either
-            to dial in a colour, or sample one straight off the screen with the eyedropper.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A saturation and value field over a hue rail, with an eyedropper for sampling colours
+            already on the page. Drag either surface to dial a colour in.
             Hex (with alpha as 8-digit) is always one glance away, and quick-pick presets are
             available via <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">showPresets</code>.
-            Never clipped — the panel renders in a portal.
+            Never clipped - the panel renders in a portal.
           </Text>
         </div>
 
@@ -56,7 +56,7 @@ export default function ColorPickerPage() {
 
         <section id="sizes" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Sizes</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">size</code>{' '}
             takes <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">"sm" | "md" | "lg"</code>.
             Default is "md".
@@ -70,8 +70,8 @@ export default function ColorPickerPage() {
 
         <section id="presets" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Presets</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Off by default — pass{' '}
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Off by default - pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">showPresets</code>{' '}
             to add a row of quick-pick swatches below the hex field.
           </Text>

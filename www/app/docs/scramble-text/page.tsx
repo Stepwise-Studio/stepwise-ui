@@ -7,7 +7,7 @@ import { ScramblePreview } from '@/components/stepwise/docs/text-effects-preview
 
 const usageCode = `import { ScrambleText } from '@/components/stepwise/scramble-text'
 
-// Default — a softer letter decode (intensity 0.45)
+// Default - a softer letter decode (intensity 0.45)
 <ScrambleText>Stepwise Interface Kit</ScrambleText>
 
 // Dial up the chaos, or slow the resolve
@@ -32,9 +32,9 @@ export default function ScrambleTextPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Scramble Text</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Each character scrambles together first, then letters lock in one-by-one
-            from left to right while the rest keep churning until the last one settles.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A scramble reveal: every character churns at once, then locks in from left to right
+            while the rest keep going until the last one settles.
             Fires when it scrolls into view.
           </Text>
         </div>
@@ -59,7 +59,7 @@ export default function ScrambleTextPage() {
             { name: 'speed',        type: 'number',  desc: 'Baseline frame budget per character. Default 72. Higher = longer resolve.' },
             { name: 'intensity',    type: 'number',  desc: 'Chaos level, 0–1. 0 = subtle letter decode, 1 = aggressive symbol storm. Default 0.45.' },
             { name: 'replayInView', type: 'boolean', desc: 'Replay every time it re-enters the viewport. Default false (once).' },
-            { name: 'className',    type: 'string',  desc: 'Extra classes on the root — font size, weight, color, tracking, etc. Inherited by the scramble layer.' },
+            { name: 'className',    type: 'string',  desc: 'Extra classes on the root - font size, weight, color, tracking, etc. Inherited by the scramble layer.' },
           ]} />
         </section>
 

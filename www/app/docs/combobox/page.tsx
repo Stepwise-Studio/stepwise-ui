@@ -24,7 +24,7 @@ const options = [
   placeholder="Search frameworks…"
 />`
 
-const plainCode = `// Descriptions are optional — omit them for a compact list
+const plainCode = `// Descriptions are optional - omit them for a compact list
 const countries = [
   { value: 'in', label: 'India' },
   { value: 'us', label: 'United States' },
@@ -52,7 +52,7 @@ export default function ComboboxPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Combobox</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A dropdown you can type into. Filters as you type, highlights the matched text, and is
             fully keyboard-driven. The field matches the Input's squircle and border treatment, so
             it sits naturally in a form.
@@ -66,10 +66,10 @@ export default function ComboboxPage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Each option can carry an optional{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">description</code>{' '}
-            — it's searched alongside the label.
+            - it's searched alongside the label.
           </Text>
           <PreviewCode
             minHeight={600}
@@ -99,9 +99,9 @@ export default function ComboboxPage() {
         <section id="keyboard" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Keyboard</Text>
           <ul className="flex flex-col gap-2 text-[15px] text-zinc-600 dark:text-zinc-300 list-disc pl-5">
-            <li><b>↓ / ↑</b> — move through the filtered options (wraps around).</li>
-            <li><b>Enter</b> — select the highlighted option.</li>
-            <li><b>Esc</b> — close the list and clear the query.</li>
+            <li><b>↓ / ↑</b> - move through the filtered options (wraps around).</li>
+            <li><b>Enter</b> - select the highlighted option.</li>
+            <li><b>Esc</b> - close the list and clear the query.</li>
             <li>Typing filters instantly; the matched substring is emphasised in each row.</li>
           </ul>
         </section>

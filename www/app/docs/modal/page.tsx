@@ -53,7 +53,7 @@ export default function ModalPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Modal</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A confirmation dialog that blocks the page until the user makes a choice.
             Scales up from center on open (250ms) and closes faster (150ms), with content
             staggering in after the panel lands. Renders in a portal, traps focus, and
@@ -77,7 +77,7 @@ export default function ModalPage() {
 
         <section id="left-align" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Left aligned</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">align="left"</code>{' '}
             to left-align the icon, title, and description, and move the actions to the trailing edge as
@@ -92,7 +92,7 @@ export default function ModalPage() {
 
         <section id="destructive" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Destructive</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Red accent bar and confirm button. Pass{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">loading</code>{' '}
             to show a spinner while the action processes.

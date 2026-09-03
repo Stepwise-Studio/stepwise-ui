@@ -10,7 +10,7 @@ const usageCode = `import { FadeText } from '@/components/stepwise/fade-text'
 // Fades in word by word on mount (blurred rise, staggered)
 <FadeText>Ship delightful interfaces faster</FadeText>
 
-// Toggle \`show\` to fade out — the exit is softer than the enter
+// Toggle \`show\` to fade out - the exit is softer than the enter
 <FadeText show={visible} by="char">
   Character by character
 </FadeText>`
@@ -27,10 +27,9 @@ export default function FadeTextPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Fade Text</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Splits into words (or characters) and staggers each chunk with a blurred rise on
-            enter and a softer, smaller exit — following the split-and-stagger and subtle-exit
-            principles. Toggle <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">show</code> to play it either way.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Fades text in and out, word by word or character by character. Each chunk rises in
+            with a blur and leaves on a softer, smaller exit. Toggle <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">show</code> to play it either way.
           </Text>
         </div>
 

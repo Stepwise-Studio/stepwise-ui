@@ -8,8 +8,8 @@ import { AccordionBasicPreview, AccordionMultiplePreview } from '@/components/st
 const basicCode = `import { Accordion } from '@/components/stepwise/accordion'
 
 const items = [
-  { id: 'q1', title: 'What is Stepwise UI?', content: 'A collection of…' },
-  { id: 'q2', title: 'How do I install?', content: 'Run npx stepwise-ui add…' },
+  { id: 'q1', title: 'Why does this exist?', content: 'Because we rebuilt the same…' },
+  { id: 'q2', title: 'How long did this take?', content: 'Longer than planned…' },
 ]
 
 <Accordion items={items} />`
@@ -29,7 +29,7 @@ export default function AccordionPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Accordion</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Collapsible panels with spring-eased height animation and a rotating chevron.
             Single-open by default; pass{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">multiple</code>{' '}
@@ -61,13 +61,13 @@ export default function AccordionPage() {
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Props — Accordion</Text>
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Props - Accordion</Text>
           <PropsTable rows={[
             { name: 'items',    type: 'AccordionItem[]', desc: 'Array of panel definitions.' },
             { name: 'multiple', type: 'boolean',         desc: 'Allow multiple panels open simultaneously. Default false.' },
           ]} />
 
-          <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">Props — AccordionItem</Text>
+          <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">Props - AccordionItem</Text>
           <PropsTable rows={[
             { name: 'id',      type: 'string',    desc: 'Unique key for this panel.' },
             { name: 'title',   type: 'string',    desc: 'Header text.' },

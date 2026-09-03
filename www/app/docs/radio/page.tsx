@@ -54,7 +54,7 @@ export default function RadioPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Radio</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Squircle radio button in three sizes. Works controlled or uncontrolled.
             For groups, manage state externally and pass the same{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">name</code>{' '}
@@ -87,7 +87,7 @@ export default function RadioPage() {
 
         <section id="group" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Group</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Track selected value in{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">useState</code>{' '}
             and pass{' '}
@@ -118,8 +118,8 @@ export default function RadioPage() {
             { name: 'checked',        type: 'boolean',                 desc: 'Controlled checked state.' },
             { name: 'defaultChecked', type: 'boolean',                 desc: 'Initial state when uncontrolled.' },
             { name: 'disabled',       type: 'boolean',                 desc: '40% opacity, blocks interaction.' },
-            { name: 'name',           type: 'string',                  desc: 'Input name — groups radios in native forms.' },
-            { name: 'onChange',       type: '(e: ChangeEvent) => void', desc: 'Change handler — receives the native event.' },
+            { name: 'name',           type: 'string',                  desc: 'Input name - groups radios in native forms.' },
+            { name: 'onChange',       type: '(e: ChangeEvent) => void', desc: 'Change handler - receives the native event.' },
           ]} />
         </section>
 

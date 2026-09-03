@@ -10,17 +10,15 @@ import { Button } from '@/components/stepwise/button'
 
 export interface ModalProps {
   /**
-   * Portal target. Defaults to `document.body`. Point it at an element that
-   * establishes a containing block (one with a `transform`/`filter`/`contain`)
-   * to scope the modal's `fixed` backdrop to that box instead of the viewport —
-   * how the landing page shows a modal open inside a showcase tile.
+   * Portal target. Defaults to `document.body`. Point it at an element with a
+   * `transform`, `filter` or `contain` to scope the fixed backdrop to that box
+   * instead of the viewport, e.g. to show a modal inside a preview tile.
    */
   container?  : HTMLElement | null
   /**
-   * Presentational mode: render the dialog in place without locking page
-   * scroll, marking the rest of the page `inert`, or pulling focus. For
-   * showing a modal open inside a preview tile — never for a real dialog,
-   * which needs every one of those behaviours.
+   * Presentational mode: renders in place without locking scroll, marking the
+   * page inert, or pulling focus. For previews only. A real dialog needs all
+   * three of those behaviours.
    */
   inline?     : boolean
   open        : boolean
@@ -33,9 +31,8 @@ export interface ModalProps {
   cancelLabel?: string
   /** 'default' | 'destructive'. Default 'default'. */
   variant?    : 'default' | 'destructive'
-  /** 'center' (default) or 'left' — icon/title/description left-align and the
-   *  actions move to the trailing edge as auto-width buttons instead of a
-   *  centered, evenly-split row. */
+  /** 'center' (default) or 'left'. Left-aligns the icon, title and text, and
+   *  moves the actions to the trailing edge as auto-width buttons. */
   align?      : 'center' | 'left'
   onConfirm?  : () => void
   /** If true, confirm button shows a loading spinner. */
@@ -82,7 +79,7 @@ export function Modal({
   const [needsClamp, setNeedsClamp] = useState(false)
 
   // Long descriptions clamp to 4 lines with a "View more" toggle instead of
-  // forcing the whole panel to scroll — keeps Cancel/Confirm visible without
+  // forcing the whole panel to scroll - keeps Cancel/Confirm visible without
   // interaction for the common case. Re-measured whenever the modal (re)opens
   // or the description text changes; only shown when it's actually clamped.
   useLayoutEffect(() => {
@@ -182,13 +179,10 @@ export function Modal({
 
           <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
             <motion.div
-              // Panel content (a long description, or the open-ended `children`
-              // slot) can exceed the viewport height. The panel itself has no
-              // fixed height, so without this the outer wrapper — which can't
-              // scroll, it's pointer-events-none so backdrop clicks pass
-              // through it — would just let the excess render off-screen with
-              // no way to reach it. Scrolling here, on the pointer-events-auto
-              // panel wrapper, keeps that backdrop-click behavior intact.
+              // Panel content can exceed the viewport. The outer wrapper is
+              // pointer-events-none so backdrop clicks pass through, which means
+              // it cannot scroll; scrolling here keeps overflow reachable
+              // without breaking that.
               className="pointer-events-auto w-full max-w-[400px] max-h-full overflow-y-auto"
               variants={panelMotion}
               initial="hidden"
@@ -205,7 +199,7 @@ export function Modal({
                 aria-describedby={description ? descId : undefined}
                 tabIndex={-1}
                 lisse={{
-                  middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' },
+                  middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' },
                 }}
                 className={cn(
                   'relative overflow-hidden bg-white focus:outline-none',
@@ -261,7 +255,7 @@ export function Modal({
                         ref={descRef}
                         id={descId}
                         className={cn(
-                          'text-[14px] leading-relaxed text-zinc-500 [text-wrap:pretty] dark:text-zinc-400',
+                          'text-[14px] leading-relaxed text-zinc-500 text-pretty dark:text-zinc-400',
                           left ? 'text-left' : 'text-center',
                           !expanded && 'line-clamp-4',
                         )}

@@ -35,7 +35,7 @@ export function QtyInput({
   const [internal, setInternal] = useState(defaultValue)
   const qty = value ?? internal
   const reduce = useReducedMotion()
-  // +1 when incrementing, -1 when decrementing — drives the slide direction
+  // +1 when incrementing, -1 when decrementing - drives the slide direction
   const dir = useRef(1)
 
   const set = (next: number) => {
@@ -48,13 +48,10 @@ export function QtyInput({
   const atMin = qty <= min
   const atMax = qty >= max
 
-  // One place-slot per digit, keyed by position-from-right (units=0, tens=1, …)
-  // — not by array index — so a place's identity survives the digit count
-  // changing. 12 → 13 only remounts the units slot (key 0); the tens slot
-  // (key 1, still "1") keeps its React identity and never re-renders its
-  // animation. Scales to any digit count: crossing 9 → 10 mounts a brand new
-  // place (key 1) with its own enter, and 10 → 9 unmounts it with an exit —
-  // the untouched units slot is unaffected either way.
+  // One slot per digit, keyed by position from the right (units=0, tens=1)
+  // rather than by array index, so a place keeps its identity as the digit
+  // count changes. 12 to 13 only remounts the units slot; 9 to 10 mounts a new
+  // tens slot and leaves the units alone.
   const negative = qty < 0
   const digitsStr = String(Math.abs(qty))
   const places = digitsStr.split('').map((digit, idx) => ({
@@ -72,8 +69,8 @@ export function QtyInput({
       : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300',
   )
 
-  // Zero-duration transitions under reduced motion: the digit spans still
-  // mount/unmount (so layout stays correct), they just don't spring/blur/slide.
+  // Under reduced motion the digits still mount and unmount so layout stays
+  // correct, they just do it instantly.
   const flipTransition = reduce ? { duration: 0 } : { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const }
 
   return (
@@ -81,7 +78,7 @@ export function QtyInput({
       radius={14}
       role="group"
       aria-label={ariaLabel}
-      lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+      lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
       className={cn(
         'inline-flex items-center gap-1 p-1',
         'bg-white dark:bg-zinc-900',
@@ -101,7 +98,7 @@ export function QtyInput({
 
       {/* directional per-digit swap: + slides each changed digit up in (old up
           out), − slides it down in (old down out), with a fade + blur either
-          way. Only the place(s) whose digit actually changed animate — see
+          way. Only the place(s) whose digit actually changed animate - see
           the `places` comment above for how identity is kept stable. The
           decorative digits are aria-hidden; the sr-only span below is the
           single source screen readers actually read, so a fast run of clicks
@@ -145,7 +142,7 @@ export function QtyInput({
           ))}
         </AnimatePresence>
       </span>
-      {/* stable live region, updated in place — screen readers announce the
+      {/* stable live region, updated in place - screen readers announce the
           new count as one clean number on every change */}
       <span className="sr-only" aria-live="polite" aria-atomic="true">{qty}</span>
 

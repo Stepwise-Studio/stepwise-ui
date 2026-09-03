@@ -11,7 +11,7 @@ const [otp, setOtp] = useState('')
 
 <OtpInput length={6} value={otp} onChange={setOtp} />`
 
-const securityCode = `// letters + digits, auto-uppercased — a security / redemption code
+const securityCode = `// letters + digits, auto-uppercased - a security / redemption code
 <OtpInput type="alphanumeric" length={6} value={code} onChange={setCode} />`
 
 const lengthsCode = `<OtpInput length={4} />                        // 4-digit PIN
@@ -34,7 +34,7 @@ export default function OtpInputPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">OTP Input</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A row of individual digit boxes for one-time codes. Auto-advances on entry,
             steps back on Backspace, handles paste, and navigates with arrow keys.
             Best used inside a bottom{' '}
@@ -58,8 +58,8 @@ export default function OtpInputPage() {
 
         <section id="security" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Security code</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Set <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">type=&quot;alphanumeric&quot;</code> to accept letters and digits (auto-uppercased) — for security or redemption codes like <span className="font-mono">7F3K9Q</span>.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Set <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">type=&quot;alphanumeric&quot;</code> to accept letters and digits (auto-uppercased) - for security or redemption codes like <span className="font-mono">7F3K9Q</span>.
           </Text>
           <PreviewCode
             minHeight={200}
@@ -70,8 +70,8 @@ export default function OtpInputPage() {
 
         <section id="lengths" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Lengths</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Any length via <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">length</code> — a 4-digit PIN, an 8-character code, whatever you need.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Any length via <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">length</code> - a 4-digit PIN, an 8-character code, whatever you need.
           </Text>
           <PreviewCode
             minHeight={260}
@@ -92,7 +92,7 @@ export default function OtpInputPage() {
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
-            { name: 'length',    type: 'number',                desc: 'Number of boxes. Default 6 — any length.' },
+            { name: 'length',    type: 'number',                desc: 'Number of boxes. Default 6 - any length.' },
             { name: 'type',      type: '"numeric" | "alphanumeric"', desc: 'Digits only (default), or letters + digits.' },
             { name: 'value',     type: 'string',                desc: 'Controlled value.' },
             { name: 'onChange',  type: '(value: string) => void', desc: 'Fires with the full digit string on every change.' },

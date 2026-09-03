@@ -7,10 +7,10 @@ import { cn } from '@/lib/utils/cn'
 interface SurfaceProps extends React.HTMLAttributes<HTMLDivElement> {
   radius?: number
   smoothing?: number
-  /** Override for per-corner config — takes precedence over radius/smoothing. */
+  /** Override for per-corner config - takes precedence over radius/smoothing. */
   corners?: SmoothCornerOptions
-  // `className` isn't part of SmoothCornersOwnProps — it comes from the
-  // polymorphic element props (ComponentPropsWithoutRef<E>) instead — but
+  // `className` isn't part of SmoothCornersOwnProps - it comes from the
+  // polymorphic element props (ComponentPropsWithoutRef<E>) instead - but
   // it's a legitimate, commonly-needed passthrough (e.g. forcing `h-full`
   // through the SmoothCorners wrapper), so it's added back explicitly here.
   lisse?: Omit<SmoothCornersOwnProps, 'corners'> & { className?: string }

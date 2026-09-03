@@ -46,11 +46,11 @@ export default function TablePage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Table</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A typed, column-driven data table with alternating rows, a dark header, and
             horizontal scroll on overflow. Columns accept a{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">render</code>{' '}
-            function for custom cell content — badges, avatars, actions, anything.
+            function for custom cell content - badges, avatars, actions, anything.
           </Text>
         </div>
 
@@ -70,7 +70,7 @@ export default function TablePage() {
 
         <section id="pagination" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Pagination</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Set{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">pageSize</code>{' '}
             and the table pages itself: rows cross-fade between pages, and a footer appears with
@@ -87,7 +87,7 @@ export default function TablePage() {
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Props — Table</Text>
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Props - Table</Text>
           <PropsTable rows={[
             { name: 'columns',      type: 'TableColumn<T>[]',                 desc: 'Column definitions.' },
             { name: 'rows',         type: 'T[]',                              desc: 'Data rows.' },
@@ -100,7 +100,7 @@ export default function TablePage() {
             { name: 'minWidth',     type: 'string',                           desc: 'Min width before horizontal scroll. Default "480px".' },
           ]} />
 
-          <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">Props — TableColumn</Text>
+          <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">Props - TableColumn</Text>
           <PropsTable rows={[
             { name: 'key',       type: 'keyof T | string',                 desc: 'Row object key to read.' },
             { name: 'header',    type: 'string',                           desc: 'Column heading.' },

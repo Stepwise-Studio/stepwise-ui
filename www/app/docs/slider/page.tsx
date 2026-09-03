@@ -31,7 +31,7 @@ const showcaseCode = `<Slider label="Opacity" value={a} onChange={setA} formatVa
 <Slider variant="dots" label="Weight" value={b} onChange={setB} min={0} max={6} dotCount={7} />
 <Slider variant="range" label="Price" value={c} onChange={setC} formatValue={n => \`$\${n}\`} />`
 
-const classicalCode = `// classical is orthogonal to variant — dots/range still apply on top of it.
+const classicalCode = `// classical is orthogonal to variant - dots/range still apply on top of it.
 // Label/value move above the track instead of overlaying it.
 <Slider classical label="Volume" value={v} onChange={setV} formatValue={n => \`\${n}%\`} />
 <Slider classical variant="dots" label="Rating" value={r} onChange={setR} min={0} max={8} dotCount={9} />
@@ -53,9 +53,9 @@ export default function SliderPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Slider</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            An inline field slider — a labelled, squircle row with a thin handle and the live value,
-            matching the Input field's corner radius and smoothing. Drag, click, or use the arrow
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            An inline field slider: a labelled squircle row with a thin handle and the live value,
+            matching Input's corner radius and smoothing. Drag, click, or use the arrow
             keys. Comes in plain, dotted, and dual-handle range variants, plus a{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">classical</code>{' '}
             capsule-and-knob layout for when the field style isn't the fit; responsive and theme-aware.
@@ -77,9 +77,9 @@ export default function SliderPage() {
 
         <section id="dots" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Dots</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Tick marks split the track into steps. Each dot fades out as the fill passes it, so the
-            handle reads its position at a glance — good for discrete, low-count settings.
+            handle reads its position at a glance - good for discrete, low-count settings.
           </Text>
           <PreviewCode
             preview={<SliderDotsPreview />}
@@ -89,7 +89,7 @@ export default function SliderPage() {
 
         <section id="range" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Range</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Two handles select a span; the fill sits between them and the handles can't cross.
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded mx-1">onChange</code>
             returns a <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">[start, end]</code> tuple.
@@ -102,15 +102,15 @@ export default function SliderPage() {
 
         <section id="classical" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Classical</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Compact pill track, solid zinc fill, white knob inset equally on all four
-            sides with a light shadow — no ring, no gradient.{' '}
+            sides with a light shadow - no ring, no gradient.{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">classical</code>{' '}
             is orthogonal to <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">variant</code>:
             plain is continuous, <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">dots</code> adds
             fixed-interval ticks, <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">range</code> adds
             a second handle. Label and value sit above the track. Dots swap color instead of fading
-            here — the capsule track is too compact for the fade to read.
+            here - the capsule track is too compact for the fade to read.
           </Text>
           <PreviewCode
             preview={<SliderClassicalPreview />}
@@ -120,7 +120,7 @@ export default function SliderPage() {
 
         <section id="showcase" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Showcase</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Custom value formatting via{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">formatValue</code>.
           </Text>

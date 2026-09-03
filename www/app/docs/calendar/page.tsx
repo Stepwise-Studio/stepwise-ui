@@ -7,14 +7,14 @@ import { PropsTable } from '@/components/stepwise/docs/props-table'
 
 const usageCode = `import { Calendar, CalendarRange } from '@/components/stepwise/calendar'
 
-// Single date — uncontrolled
+// Single date - uncontrolled
 <Calendar defaultSelected={new Date()} />
 
-// Single date — controlled
+// Single date - controlled
 const [date, setDate] = useState<Date | null>(null)
 <Calendar selected={date} onSelect={setDate} />
 
-// Date range — controlled
+// Date range - controlled
 const [from, setFrom] = useState<Date | null>(null)
 const [to,   setTo]   = useState<Date | null>(null)
 <CalendarRange
@@ -38,7 +38,7 @@ export default async function CalendarPage() {
         {/* Header */}
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Calendar</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Standalone month-view calendar components. Includes single-date and date-range
             variants, each with animated month transitions, a spring-animated selection pill,
             and a scrollable month/year picker. For an input-triggered picker, see{' '}
@@ -65,7 +65,7 @@ export default async function CalendarPage() {
         {/* CalendarRange preview */}
         <section id="range" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">CalendarRange</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             First click sets the start, second click sets the end. Hovering previews
             the would-be range. Clicking an already-selected start clears the selection.
           </Text>

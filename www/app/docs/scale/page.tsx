@@ -10,12 +10,12 @@ const horizontalCode = `import { Scale } from '@/components/stepwise/scale'
 // --pattern controls the line color, thickness controls the strip's height in px
 <Scale orientation="horizontal" thickness={24} style={{ '--pattern': 'var(--ui-border)' }} />`
 
-const verticalCode = `// Vertical fills its parent's height — give the parent one
+const verticalCode = `// Vertical fills its parent's height - give the parent one
 <div className="h-32">
   <Scale orientation="vertical" style={{ '--pattern': 'var(--ui-border)' }} />
 </div>`
 
-const usageCode = `// A hairline seam between two page sections — reads better than a plain
+const usageCode = `// A hairline seam between two page sections - reads better than a plain
 // border when the page above and below it are both fairly quiet
 <div style={{ '--pattern': 'var(--ui-border)' }}>
   <section>{/* last section before the footer */}</section>
@@ -37,8 +37,8 @@ export default function ScalePage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Scale</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A ruler-tick strip — diagonal hairlines at a fixed pitch. One component, two
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A ruler-tick strip - diagonal hairlines at a fixed pitch. One component, two
             orientations. Reads its line color from a{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">--pattern</code>{' '}
             CSS variable set by the consumer.
@@ -68,8 +68,8 @@ export default function ScalePage() {
 
         <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A hairline separator between two page sections — here, the last section before
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A hairline separator between two page sections - here, the last section before
             a footer. Reads as an intentional seam rather than a plain divider.
           </Text>
           <PreviewCode
@@ -85,7 +85,7 @@ export default function ScalePage() {
             { name: 'orientation', type: "'horizontal' | 'vertical'", desc: "Strip direction. Default 'horizontal'." },
             { name: 'thickness',   type: 'number', desc: 'Strip thickness in px. Default 40.' },
             { name: 'className',   type: 'string', desc: 'Merged onto the root.' },
-            { name: 'style',       type: 'CSSProperties', desc: "Merged onto the root — set --pattern here to control the line color." },
+            { name: 'style',       type: 'CSSProperties', desc: "Merged onto the root - set --pattern here to control the line color." },
           ]} />
         </section>
 

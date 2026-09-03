@@ -64,7 +64,7 @@ export default function DropdownMenuPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Dropdown Menu</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             An anchored action menu that grows from its trigger. Supports icons, keyboard
             shortcuts, group headings, separators, destructive items, and nested submenus.
             Full roving-focus keyboard navigation. Closes on outside click or Escape.
@@ -83,18 +83,18 @@ export default function DropdownMenuPage() {
 
         <section id="text-only" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Text only</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Omit <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">icon</code> on
-            every item — no icon gutter is reserved, labels start flush at the leading edge.
+            every item - no icon gutter is reserved, labels start flush at the leading edge.
           </Text>
           <PreviewCode minHeight={220} allowOverflow preview={<DropdownTextOnlyPreview />} code={<CodeBlock code={textOnlyCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="nested" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Nested</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Give an item its own <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">items</code> array
-            and it becomes a submenu trigger — a trailing chevron replaces the shortcut slot, and it
+            and it becomes a submenu trigger - a trailing chevron replaces the shortcut slot, and it
             opens on hover, click, or <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">→</code>.
             Flips to the left edge automatically if it would overflow the viewport.
           </Text>
@@ -114,7 +114,7 @@ export default function DropdownMenuPage() {
             { name: 'align',   type: "'start' | 'end'", desc: 'Edge to anchor to. Default start.' },
             { name: 'className', type: 'string', desc: 'Merged onto the wrapper.' },
           ]} />
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mt-2">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mt-2 text-pretty">
             Each item accepts <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">label</code>,{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">icon</code>,{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">shortcut</code>,{' '}
@@ -123,7 +123,7 @@ export default function DropdownMenuPage() {
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">disabled</code>, and{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">items</code>{' '}
             (nested <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">DropdownEntry[]</code>{' '}
-            — presence turns the row into a submenu trigger and its own{' '}
+            - presence turns the row into a submenu trigger and its own{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">onSelect</code> is ignored).
           </Text>
         </section>

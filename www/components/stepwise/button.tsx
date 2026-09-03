@@ -16,10 +16,10 @@ export type ButtonVariant = 'solid' | 'outline' | 'ghost' | 'soft' | 'destructiv
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?         : ButtonSize
   variant?      : ButtonVariant
-  /** Icon element — iconsax-react or @hugeicons/react */
+  /** Icon element - iconsax-react or @hugeicons/react */
   icon?         : React.ReactNode
   iconPosition? : 'left' | 'right'
-  /** Square icon-only button — omit children, always add aria-label */
+  /** Square icon-only button - omit children, always add aria-label */
   iconOnly?     : boolean
   /**
    * Icon hides on desktop, slides in on hover, from whichever side
@@ -30,10 +30,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Stretches button to 100% of its parent's width */
   fullWidth?    : boolean
   /**
-   * Icon+label alignment within the button. "start" pins the icon at a fixed
-   * inset from the leading edge — use it when stacking fullWidth buttons with
-   * varying label lengths (e.g. a social-login list) so the icons line up in
-   * a column instead of each shifting with its own label's width. Default "center".
+   * Icon and label alignment. "start" pins the icon a fixed distance from the
+   * leading edge, so a stack of fullWidth buttons with different label lengths
+   * keeps its icons in a column. Default "center".
    */
   contentAlign? : 'center' | 'start'
   /** Disable the press ripple. Motion is skipped automatically under reduced-motion. */
@@ -47,27 +46,26 @@ const metrics = {
 } as const
 
 /*
- * Button surface stack (@lisse/react SmoothCorners)
- * ─────────────────────────────────────────────────
- * Lisse clips the <button> with clip-path — fill, wash, and ripple all inherit
- * the squircle. CSS border / inset box-shadow on that node get sliced.
+ * Surface stack
  *
- * 1. Fill      — Tailwind bg-gradient on <button>
- * 2. Edge      — middleBorder: 1px stroke centred on the squircle path
- * 3. Elevation — box-shadow on the outer wrapper (outside clip-path)
- * 4. Wash      — absolute overlay on <button> for hover / press
+ * Lisse clips the <button> with clip-path, so the fill, wash and ripple all
+ * inherit the squircle. A CSS border or inset box-shadow on that node gets
+ * sliced, which is why the edge and elevation live elsewhere:
  *
- * No innerShadow / inset highlight — it traces the same curve as the hairline.
+ *   1. Fill      Tailwind bg-gradient on <button>
+ *   2. Edge      middleBorder, a 1px stroke centred on the squircle path
+ *   3. Elevation box-shadow on the outer wrapper, outside the clip-path
+ *   4. Wash      absolute overlay on <button> for hover and press
  */
 
 type ThemePair<T> = { light: T; dark: T }
 
 /**
  * One centred hairline on the squircle path. Ghost has no stroke.
- * `middleBorder.color` is a prop @lisse/react reads directly, not a
- * className — Tailwind utilities don't apply here. Written as `rgb(... / alpha)`
- * so it still maps 1:1 onto Tailwind's own color/opacity syntax: swap the rgb
- * triplet for another Tailwind color's value, tweak the trailing `/ N%` for opacity.
+ *
+ * `middleBorder.color` is read directly by @lisse/react, so Tailwind classes
+ * do not apply. Values use `rgb(... / alpha)` to stay swappable with Tailwind
+ * colours: paste another palette value, adjust the trailing `/ N%`.
  */
 const edgeColor: Record<ButtonVariant, ThemePair<string> | undefined> = {
   solid:       { light: 'rgb(0 0 0 / 50%)',        dark: 'rgb(0 0 0 / 12%)' },      // black/50   · black/12
@@ -82,10 +80,9 @@ const buttonVariants = cva(
     'relative isolate items-center justify-center',
     'select-none cursor-pointer whitespace-nowrap py-0',
     'disabled:opacity-45 disabled:pointer-events-none',
-    // No focus-visible outline here — this element sits inside SmoothCorners'
-    // clip-path wrapper, sized exactly to the button's own box, so any
-    // outline drawn on it gets clipped away with zero room to render. The
-    // focus ring is drawn on the unclipped outer wrapper instead (below).
+    // No focus outline here: this element is inside the clip-path wrapper and
+    // sized to the button's own box, so an outline has no room to render. The
+    // ring is drawn on the unclipped outer wrapper instead.
   ].join(' '),
   {
     variants: {
@@ -173,15 +170,11 @@ function ensureGradientDirection(className?: string) {
 
 /*
  * Flat fill override
- * ───────────────────
- * A flat `bg-*` colour used to get promoted into synthetic `from-*`/`to-*`
- * class names (e.g. `bg-sky-500` → `from-sky-500 to-sky-500`) so it'd still
- * beat the variant's own gradient. That never actually worked: Tailwind only
- * generates CSS for class names it can see as literal text in source files —
- * never ones built by string concatenation at runtime — so the synthesized
- * classes had no matching CSS and silently did nothing. Same fix as the
- * border override: resolve the real color via a hidden probe and apply it
- * as an inline style instead of inventing class names Tailwind never sees.
+ *
+ * A caller's flat `bg-*` has to beat the variant's own gradient. Class names
+ * cannot be synthesized at runtime for this, because Tailwind only generates
+ * CSS for class names it can read as literal text in source. So the colour is
+ * resolved through a hidden probe element and applied as an inline style.
  */
 function splitFlatFillTokens(className?: string) {
   if (!className) return { rest: className, bgClasses: '' }
@@ -219,14 +212,11 @@ function hasFillOverride(className?: string) {
 
 /*
  * Border override
- * ────────────────
- * A plain CSS `border` on the <button> gets sliced unevenly by the squircle's
- * clip-path (see the file-level comment above) — it can't render as a clean
- * stroke on its own. So any `border*` utility the caller passes is pulled out
- * of the className before it reaches the DOM, resolved to a real color via a
- * hidden probe element (works for any Tailwind color/opacity/dark: variant,
- * not just a hardcoded palette), and fed into `middleBorder` instead — the
- * one mechanism that actually draws a clean stroke on the clipped path.
+ *
+ * A plain CSS `border` is sliced by the clip-path, so any `border*` utility a
+ * caller passes is pulled out of the className, resolved to a real colour via
+ * a hidden probe (which works for any Tailwind colour, opacity or dark:
+ * variant), and handed to `middleBorder` instead.
  */
 const BORDER_TOKEN = /^(?:[\w-]+:)*border(?:-|$)/
 
@@ -299,22 +289,19 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   }, [])
 
   useEffect(() => {
-    // globalThis, not `process` directly — a bare `process` reference needs
-    // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
+    // globalThis rather than a bare `process`, which would need @types/node to
+    // typecheck in projects that don't already have it.
     if ((globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV === 'production') return
     if (iconOnly && !props['aria-label'] && !props['aria-labelledby']) {
-      console.warn('[Stepwise Button] `iconOnly` needs an `aria-label` — the control has no accessible name.')
+      console.warn('[Stepwise Button] `iconOnly` needs an `aria-label` - the control has no accessible name.')
     }
   }, [iconOnly, props])
 
   const { theme } = useTheme()
   const s = metrics[size]
-  // Whole pixels only: the slide roll below moves this by a CSS `-50%`
-  // transform, so a fractional row height (s.text * 1.2 lands on 14.4 /
-  // 16.8 / 18 depending on size) makes the browser round the transformed
-  // text row to a different sub-pixel than the untransformed icon SVG sitting
-  // next to it — a hairline drift that's invisible on the static icon-only
-  // layout (no transform there at all) but visible here.
+  // Whole pixels only. The slide roll moves this by a `-50%` transform, and a
+  // fractional row height rounds the transformed text to a different sub-pixel
+  // than the untransformed icon beside it.
   const rowH = Math.round(s.text * 1.2)
   const wash = washClass[variant]
   const isDark = theme === 'dark'
@@ -333,9 +320,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     setFillOverride(resolveFlatFillColor(bgClasses))
   }, [bgClasses, isDark])
 
-  // A custom fill with no explicit border override shouldn't fall back to the
-  // variant's own edge color (e.g. plain black) — that reads as a mismatched
-  // ring around an arbitrary custom color. Draw no edge unless one was asked for.
+  // A custom fill with no border override draws no edge at all, rather than
+  // falling back to the variant's colour and ringing it with a mismatched tone.
   const edge = borderOverride
     ? { light: borderOverride.color, dark: borderOverride.color }
     : customFill ? undefined : edgeColor[variant]
@@ -383,15 +369,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     }
   }, [pressed])
 
-  // `height: '100%'` here, not a second independently-rounded `s.iconPx` —
-  // the slideIcon row height (`rowH` below) is its own rounded pixel value
-  // that doesn't always divide evenly against `s.iconPx` (default size:
-  // rowH=17 vs iconPx=16, a 1px remainder). Two separately-rounded integers
-  // that are supposed to represent the same "center of this row" is exactly
-  // the kind of thing Chromium and Firefox are free to split asymmetrically
-  // — spec-compliant either way, but it reads as a visible cross-browser
-  // misalignment. Matching the parent's real height by percentage instead
-  // of a second rounded constant removes the remainder entirely.
+  // `height: '100%'` rather than a second rounded `s.iconPx`. Two separately
+  // rounded integers meaning the same row centre (rowH=17 vs iconPx=16 at the
+  // default size) leave a 1px remainder that browsers may split differently.
   const iconBox = (node: React.ReactNode) => (
     <span
       aria-hidden="true"
@@ -422,8 +402,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         'transition-[box-shadow,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]',
         'data-[pressed=true]:scale-[0.96] data-[pressed=true]:duration-90',
         'motion-reduce:transition-shadow motion-reduce:data-[pressed=true]:scale-100',
-        // Focus ring lives here, not on the clipped <button> — this wrapper
-        // has no clip-path, so the ring actually has room to render.
+        // Focus ring lives on this wrapper, which has no clip-path to cut it off.
         'has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2 has-[:focus-visible]:ring-offset-transparent',
         'has-[:focus-visible]:ring-sky-600 dark:has-[:focus-visible]:ring-sky-400',
         isElevated && (variant === 'destructive' ? [
@@ -443,7 +422,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     >
       <SmoothCorners
         // The border resolves async (a probe measures the real color a beat
-        // after mount) — SmoothCorners only computes its stroke once, so a
+        // after mount) - SmoothCorners only computes its stroke once, so a
         // prop change after that doesn't redraw it. Keying on the resolved
         // color forces a clean remount instead, which always redraws correctly.
         key={edge ? `${isDark ? edge.dark : edge.light}-${borderOverride?.width ?? 1}-${isDisabled}` : 'none'}
@@ -452,7 +431,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         autoEffects={false}
         {...(edge
           // middleBorder is drawn by SmoothCorners as a sibling of <button>, not
-          // a descendant — the button's own `disabled:opacity-45` never reaches
+          // a descendant - the button's own `disabled:opacity-45` never reaches
           // it, so the edge stayed fully opaque while the fill/text faded out
           // from under it. Fade it to the same 45% by hand to match.
           ? { middleBorder: { width: borderOverride?.width ?? 1, opacity: isDisabled ? 0.3 : 1, color: isDark ? edge.dark : edge.light } as NonNullable<SmoothCornersOwnProps['middleBorder']> }
@@ -475,7 +454,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
           }}
           className={cn(
             buttonVariants({ variant, size, iconOnly, fullWidth }),
-            'stepwise-btn-hit',
+            'pointer-coarse:after:content-[""] pointer-coarse:after:absolute pointer-coarse:after:inset-x-0 pointer-coarse:after:top-1/2 pointer-coarse:after:[translate:0_-50%] pointer-coarse:after:h-[max(100%,44px)]',
             ensureGradientDirection(classNameNoFill),
           )}
           style={fillOverride ? { ...style, backgroundImage: 'none', backgroundColor: fillOverride } : style}
@@ -492,13 +471,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
             )}
           />
 
+          {/* Driven by motion rather than a CSS keyframe so the whole ripple
+              travels with the component - a keyframe would have to live in the
+              consuming project's stylesheet, and would silently do nothing if
+              it did not. `spawnRipple` already bails under reduced motion, so
+              there is nothing to suppress here. */}
           {ripples.map(r => (
-            <span
+            <motion.span
               key={r.id}
               aria-hidden="true"
-              className="stepwise-btn-ripple -z-10 bg-black/8 dark:bg-white/12"
+              className="absolute -z-10 rounded-full pointer-events-none bg-black/8 dark:bg-white/12"
               style={{ left: r.x - r.d / 2, top: r.y - r.d / 2, width: r.d, height: r.d }}
-              onAnimationEnd={() => endRipple(r.id)}
+              initial={{ scale: 0, opacity: 0.6 }}
+              animate={{ scale: 1, opacity: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              onAnimationComplete={() => endRipple(r.id)}
             />
           ))}
 
@@ -506,7 +493,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
             <span className="relative z-[1]">{iconBox(loading ? spinner : icon)}</span>
           )}
 
-          {/* contentAlign="start" — icon pinned in its own fixed-width column so it
+          {/* contentAlign="start" - icon pinned in its own fixed-width column so it
               lands at the same x on every button in a stacked set regardless of
               label length; the label centers within the remaining column instead
               of the whole group hugging the icon (see SocialButton). */}
@@ -518,7 +505,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
               <span className="flex items-center justify-start">{iconBox(iconSlot)}</span>
               <span className="flex items-center justify-center">
                 <span
-                  className="stepwise-btn-label transition-opacity duration-150 ease-out"
+                  className="overflow-hidden text-ellipsis whitespace-nowrap min-w-0 max-w-full supports-[-moz-appearance:none]:-translate-y-px transition-opacity duration-150 ease-out"
                   style={{ opacity: overlaySpinner ? 0 : 1 }}
                 >
                   {children}
@@ -545,7 +532,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                   // Reduced motion: no scroll, plain opacity crossfade.
                   <span className="relative grid items-center justify-center overflow-hidden">
                     <span
-                      className="[grid-area:1/1] flex items-center justify-center stepwise-btn-label transition-opacity duration-150 ease-out"
+                      className="[grid-area:1/1] flex items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap min-w-0 max-w-full supports-[-moz-appearance:none]:-translate-y-px transition-opacity duration-150 ease-out"
                       style={{ opacity: showSlide ? 0 : (overlaySpinner ? 0 : 1) }}
                     >
                       {children}
@@ -559,7 +546,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                           {iconBox(loading ? spinner : icon)}
                         </span>
                       )}
-                      <span className="stepwise-btn-label">{children}</span>
+                      <span className="overflow-hidden text-ellipsis whitespace-nowrap min-w-0 max-w-full supports-[-moz-appearance:none]:-translate-y-px">{children}</span>
                       {!slideIconOnLeft && (
                         <span className="flex shrink-0" style={{ marginLeft: s.gap }}>
                           {iconBox(loading ? spinner : icon)}
@@ -573,7 +560,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                   // hidden window. The wrapper scrolls as ONE rigid unit
                   // (0 → -50%, i.e. exactly one line) so the plain label
                   // scrolls up and out while the icon-attached label scrolls
-                  // up into view from directly below it — a real, continuous
+                  // up into view from directly below it - a real, continuous
                   // roll, not two layers independently guessing a common exit.
                   <span
                     className="relative overflow-hidden"
@@ -585,7 +572,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                       animate={{ y: showSlide ? '-50%' : '0%' }}
                       transition={{ duration: 0.35, ease: [0.65, 0, 0.35, 1] }}
                     >
-                      <span className="flex items-center justify-center stepwise-btn-label" style={{ height: rowH }}>
+                      <span className="flex items-center justify-center overflow-hidden text-ellipsis whitespace-nowrap min-w-0 max-w-full supports-[-moz-appearance:none]:-translate-y-px" style={{ height: rowH }}>
                         {children}
                       </span>
                       <span className="flex items-center justify-center" style={{ height: rowH }}>
@@ -594,7 +581,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                             {iconBox(loading ? spinner : icon)}
                           </span>
                         )}
-                        <span className="stepwise-btn-label">{children}</span>
+                        <span className="overflow-hidden text-ellipsis whitespace-nowrap min-w-0 max-w-full supports-[-moz-appearance:none]:-translate-y-px">{children}</span>
                         {!slideIconOnLeft && (
                           <span className="flex shrink-0" style={{ marginLeft: s.gap }}>
                             {iconBox(loading ? spinner : icon)}
@@ -606,7 +593,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                 )
               ) : (
                 <span
-                  className="stepwise-btn-label transition-opacity duration-150 ease-out"
+                  className="overflow-hidden text-ellipsis whitespace-nowrap min-w-0 max-w-full supports-[-moz-appearance:none]:-translate-y-px transition-opacity duration-150 ease-out"
                   style={{ opacity: overlaySpinner ? 0 : 1 }}
                 >
                   {children}

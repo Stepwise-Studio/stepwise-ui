@@ -15,15 +15,15 @@ export interface FrameProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * The base content surface — the building block for tiles, list items, and
- * every other card in the library. Composes with Frame.Header / Title /
- * Description / Content / Footer. Squircle via Surface, border via
- * middleBorder, a quiet theme-aware resting shadow out of the box.
+ * The base content surface, and the building block every other card is made
+ * from. Composes with Frame.Header, Title, Description, Content and Footer.
+ * Squircle corners via Surface, border via middleBorder, and a quiet
+ * theme-aware resting shadow.
  */
 export const Frame = forwardRef<HTMLDivElement, FrameProps>(({
   radius = 20,
   borderWidth = 1,
-  borderColor = 'var(--ui-border)',
+  borderColor = 'var(--ui-border, rgb(138 138 141 / 0.23))',
   borderOpacity = 0.7,
   className,
   children,
@@ -68,7 +68,7 @@ export const FrameDescription = forwardRef<HTMLParagraphElement, HTMLAttributes<
   ({ className, ...props }, ref) => (
     <p
       ref={ref}
-      className={cn('text-[13.5px] leading-relaxed text-zinc-500 dark:text-zinc-400 [text-wrap:pretty]', className)}
+      className={cn('text-[13.5px] leading-relaxed text-zinc-500 dark:text-zinc-400 text-pretty', className)}
       {...props}
     />
   ),

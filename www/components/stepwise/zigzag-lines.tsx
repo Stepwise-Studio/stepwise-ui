@@ -13,9 +13,8 @@ export interface ZigzagLinesProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * A zig-zag line pattern for section backgrounds. Absolutely positioned to
- * fill its nearest positioned ancestor — give the parent `relative` and a
- * height.
+ * A zig-zag line pattern for section backgrounds. Fills its nearest positioned
+ * ancestor, so give the parent `relative` and a height.
  */
 export const ZigzagLines = React.forwardRef<HTMLDivElement, ZigzagLinesProps>(
   ({ className, style, variant = 'horizontal', size = 24, faded = true, ...props }, ref) => {

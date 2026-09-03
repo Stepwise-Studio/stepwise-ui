@@ -22,9 +22,12 @@ export function AppleSelectAccentsPreview() {
   const [accent, setAccent] = useState<string>(APPLE_ACCENTS.purple)
   return (
     <div className="flex flex-col items-center gap-8 px-4 py-6">
+      {/* Ends on the final period so the closing handle has empty space to sit
+          in. The handle's dot is centred on the selection edge (as on iOS), so
+          a range ending mid-sentence puts it on top of the next word. */}
       <AppleSelect
-        text="A fixed highlight the author sets — the band and both handles follow the accent."
-        selection={[2, 22]}
+        text="A fixed highlight the author sets - the band and both handles follow the accent."
+        selection={[62, 80]}
         accent={accent}
       />
       <ColorSwatch colors={ACCENT_LIST} value={accent} onChange={setAccent} labels={ACCENT_LABELS} />

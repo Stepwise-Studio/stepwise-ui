@@ -22,9 +22,9 @@ export interface LensCarouselProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   itemWidth?: number
   /** Card height ÷ width. Default 1.5. */
   ratio?: number
-  /** Scale at the centre of the row — the pinch. Default 0.6. */
+  /** Scale at the centre of the row - the pinch. Default 0.6. */
   minScale?: number
-  /** Scale at either rim — the largest cards get on screen. Default 1. */
+  /** Scale at either rim - the largest cards get on screen. Default 1. */
   maxScale?: number
   /** Space between cards, px. Default 12. */
   gap?: number
@@ -42,39 +42,33 @@ export interface LensCarouselProps extends Omit<HTMLAttributes<HTMLDivElement>, 
 
 /** Resolution of the position -> strip-coordinate integration table. */
 const GRID = 400
-/** easeInOutCubic — calm to start, calm to land. */
+/** easeInOutCubic - calm to start, calm to land. */
 const ease = (p: number) => (p < 0.5 ? 4 * p * p * p : 1 - (-2 * p + 2) ** 3 / 2)
 /** Drag past this many pixels and the pointer-up is a swipe, not a click. */
 const DRAG_SLOP = 4
 
 /**
- * Photographs pinched by a lens laid across the row — full size at either
- * rim, shrinking toward the middle, so the strip's top and bottom edges each
- * trace an ellipse arc. (A diverging lens is exactly that shape: thick at the
- * edges, thin through the middle — hence the name.)
+ * Photographs pinched by a lens across the row: full size at either rim,
+ * shrinking toward the middle, so the strip's edges trace an ellipse arc.
  *
- * The taper is literally an ellipse subtracted from the card size:
- * `scale(x) = A − B·√(1 − (x/a)²)`. The √ term is the ellipse's own vertical
- * extent, so what gets removed from each card IS an ellipse, clipped flat
- * once it passes the rim. The curve is anchored to the measured width, so the
- * pinch sits at the centre of the box and full size lands at the rims at any
+ * The taper is an ellipse subtracted from the card size,
+ * `scale(x) = A − B·√(1 − (x/a)²)`. The curve is anchored to the measured
+ * width, so the pinch stays centred and full size lands at the rims at any
  * container size.
  *
- * Spacing is the subtle part. Cards cannot be evenly spaced in pixels — a
- * constant pitch would crush the big rim cards together while the small
- * centre ones drift apart. Instead each card advances by its own local
- * PITCH — `scale(x)·itemWidth + gap`, the room that card actually needs —
- * accumulated into a strip coordinate σ where `dx = pitch(x)·dσ`. Cards sit
- * one σ apart, which lands a constant `gap` of clear space between every
- * neighbouring pair no matter how deep into the pinch they are. σ has no
- * closed form, so it is integrated once into a table and inverted by binary
+ * Spacing is the subtle part. A constant pixel pitch would crowd the large rim
+ * cards while the small centre ones drift apart, so each card advances by its
+ * own local pitch (`scale(x)·itemWidth + gap`) accumulated into a strip
+ * coordinate σ where `dx = pitch(x)·dσ`. Placing cards one σ apart gives a
+ * constant `gap` between every pair regardless of depth into the pinch. σ has
+ * no closed form, so it is integrated into a table once and inverted by binary
  * search, then reused for both layout and drag.
  *
  * Motion is driven from a single `pos` (the strip offset, in card units)
  * rather than a CSS animation: chevrons, dragging and the auto-advance are
  * three inputs to the same value, which is the only way they can interrupt
  * and hand off to each other cleanly. That costs one rAF loop writing a
- * transform per card — the transforms themselves still composite on the GPU.
+ * transform per card - the transforms themselves still composite on the GPU.
  */
 export function LensCarousel({
   items,
@@ -105,7 +99,7 @@ export function LensCarousel({
   // useId carries colons, which are not valid in a CSS identifier.
   const uid = `axlns${useId().replace(/[^a-zA-Z0-9]/g, '')}`
 
-  // Layout effect, not effect — the width lands before the browser paints, so
+  // Layout effect, not effect - the width lands before the browser paints, so
   // the strip is never seen stacked at the origin waiting to be measured.
   useLayoutEffect(() => {
     const el = rootRef.current
@@ -175,7 +169,7 @@ export function LensCarousel({
 
   // Writes every card's transform for a given strip offset. Each card wraps
   // into [-count/2, count/2), so the one that falls off the left end
-  // reappears at the right — always beyond the rim, never on screen.
+  // reappears at the right - always beyond the rim, never on screen.
   const apply = (pos: number) => {
     for (let i = 0; i < count; i++) {
       const el = cardRefs.current[i]
@@ -255,7 +249,7 @@ export function LensCarousel({
 
   // Drag: the pointer's own position decides the conversion, so the card
   // under the finger tracks it 1:1 even though the pixel pitch changes across
-  // the pinch — σ is the integral of that pitch, which is exactly the
+  // the pinch - σ is the integral of that pitch, which is exactly the
   // quantity that makes the two ends agree.
   const drag = useRef<{ id: number; x0: number; pos0: number; anchor: number; moved: boolean } | null>(null)
 
@@ -291,7 +285,7 @@ export function LensCarousel({
     glide(Math.round(posRef.current))
   }
 
-  // Trackpad swipes arrive as horizontal wheel deltas, not pointer events —
+  // Trackpad swipes arrive as horizontal wheel deltas, not pointer events -
   // without this, a two-finger swipe does nothing and only the chevrons work.
   // Same σ-anchored math as onMove, just accumulated from a running total
   // instead of a pointer's absolute position.

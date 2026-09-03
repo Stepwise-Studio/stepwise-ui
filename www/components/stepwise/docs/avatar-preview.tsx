@@ -14,10 +14,10 @@ const TEAM = [
 
 const SKY = 'text-sky-600 dark:text-sky-400'
 
-// The 5 illustrated avatars this docs site ships in /public/avatars — used
+// The 5 illustrated avatars this docs site ships in /public/avatars - used
 // here as the "bring your own picture" example. They're a docs asset, not
 // part of the installed component, so copy the SVGs into your own project
-// (or just point `src` at any image of yours — see the Image section).
+// (or just point `src` at any image of yours - see the Image section).
 const CHARACTERS = [
   { name: 'Mira',    src: '/avatars/avatar1.svg' },
   { name: 'Kai',     src: '/avatars/avatar2.svg' },

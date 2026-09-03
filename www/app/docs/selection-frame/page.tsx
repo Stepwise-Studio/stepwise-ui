@@ -54,8 +54,8 @@ export default function SelectionFramePage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Selection Frame</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            That box Figma draws around a selected frame — corner handles and a crisp accent
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            That box Figma draws around a selected frame - corner handles and a crisp accent
             stroke. Wrap it around a text span or any div to call it out. Square or circle
             handles, solid, dashed, or long-dashed lines, static or marching-ants animated.
             It measures its child, so it always fits.
@@ -85,7 +85,7 @@ export default function SelectionFramePage() {
 
         <section id="lines" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Lines</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">dashed</code>{' '}
             and <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">long</code>{' '}
             are tuned dash presets; pass <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">dash</code>{' '}
@@ -99,7 +99,7 @@ export default function SelectionFramePage() {
 
         <section id="animated" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Animated</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Dashed and long lines march; a solid line has no dash pattern to march, so{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">animated</code>{' '}
             only affects the corner handles' entrance for it. Leave{' '}
@@ -114,8 +114,8 @@ export default function SelectionFramePage() {
 
         <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Inline by default, so it drops straight into a headline or a sentence — the classic
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Inline by default, so it drops straight into a headline or a sentence - the classic
             "circle the one word that matters" move. Pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">inline={'{false}'}</code>{' '}
             to wrap a block-level element like a card or an image instead.
@@ -130,7 +130,7 @@ export default function SelectionFramePage() {
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
-            { name: 'children', type: 'React.ReactNode',            desc: 'The content to frame — it is measured live.' },
+            { name: 'children', type: 'React.ReactNode',            desc: 'The content to frame - it is measured live.' },
             { name: 'handles',  type: '"square" | "circle"',        desc: 'Corner handle shape. Default "square".' },
             { name: 'line',     type: '"solid" | "dashed" | "long"', desc: 'Stroke style. Default "solid".' },
             { name: 'dash',     type: '[number, number]',           desc: 'Overrides the [dash, gap] px pair "dashed"/"long" resolve to.' },

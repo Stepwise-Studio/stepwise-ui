@@ -54,35 +54,35 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(({
   const active = visual || !!indeterminate
 
   return (
-    <label
-      htmlFor={id}
-      className={cn('inline-flex items-center gap-1 cursor-pointer select-none', disabled && 'opacity-40 pointer-events-none', className)}
-    >
-      <input
-        id={id} ref={ref} type="checkbox" className="sr-only" checked={visual}
-        onChange={e => { if (!isControlled) setLocal(e.target.checked); onChange?.(e) }}
-        disabled={disabled} {...props}
-      />
-      <span
-        className={cn(
-          'shrink-0 inline-flex items-center justify-center transition-colors duration-150',
-          active
-            ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900'
-            : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border)]',
-        )}
-        style={{ width: s.sq, height: s.sq, borderRadius: s.r }}
-      >
-        {indeterminate ? <Dash sq={s.sq} /> : visual ? <Checkmark sq={s.sq} /> : null}
-      </span>
-      {label && (
-        <span className={cn(
-          s.label, 'font-medium leading-none transition-colors duration-200',
-          active ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-zinc-400',
-        )}>
-          {label}
-        </span>
+  <label
+    htmlFor={id}
+    className={cn('inline-flex items-center gap-1 cursor-pointer select-none', disabled && 'opacity-40 pointer-events-none', className)}
+  >
+    <input
+      id={id} ref={ref} type="checkbox" className="sr-only" checked={visual}
+      onChange={e => { if (!isControlled) setLocal(e.target.checked); onChange?.(e) }}
+      disabled={disabled} {...props}
+    />
+    <span
+      className={cn(
+        'shrink-0 inline-flex items-center justify-center transition-colors duration-150',
+        active
+          ? 'bg-zinc-900 dark:bg-white text-white dark:text-zinc-900'
+          : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border,rgb(138_138_141_/_0.23))]',
       )}
-    </label>
+      style={{ width: s.sq, height: s.sq, borderRadius: s.r }}
+    >
+      {indeterminate ? <Dash sq={s.sq} /> : visual ? <Checkmark sq={s.sq} /> : null}
+    </span>
+    {label && (
+      <span className={cn(
+        s.label, 'font-medium leading-none transition-colors duration-200',
+        active ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-zinc-400',
+      )}>
+        {label}
+      </span>
+    )}
+  </label>
   )
 })
 Checkbox.displayName = 'Checkbox'

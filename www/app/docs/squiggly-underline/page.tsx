@@ -7,7 +7,7 @@ import { SquigglyPreview } from '@/components/stepwise/docs/text-effects-preview
 
 const usageCode = `import { SquigglyUnderline } from '@/components/stepwise/squiggly-underline'
 
-// Draws a wavy underline on when it scrolls into view — color tints text + stroke
+// Draws a wavy underline on when it scrolls into view - color tints text + stroke
 The <SquigglyUnderline color="#e11d48">most important</SquigglyUnderline> detail.
 
 // Tune the wave + draw speed (wave metrics scale from font size by default)
@@ -27,7 +27,7 @@ export default function SquigglyUnderlinePage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Squiggly Underline</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A hand-drawn, wavy underline that draws itself on when scrolled into view. The wave
             scales with the inherited font size, mirrors for RTL, and tints both text and stroke
             when a color is set so emphasis never relies on the underline alone.

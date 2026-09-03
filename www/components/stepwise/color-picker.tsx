@@ -63,14 +63,12 @@ const HUE_TRACK = 'linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f,
 const POP_W  = 248
 const POP_H  = 400
 const PAD    = 14
-const SQUARE = POP_W - PAD * 2   // big SV field — the dominant preview, like the reference
+const SQUARE = POP_W - PAD * 2   // big SV field - the dominant preview, like the reference
 
-// The SV field clips to a squircle (overflow-hidden), so a thumb centered at
-// a literal 0%/100% edge — worst at the corners, where the squircle curves
-// inward the most — gets half cut off. Inset the thumb's rendered position
-// by its own radius so it's always fully visible; applySv still stores the
-// true, unclamped 0–1 value, so dragging to the actual edge still selects
-// the true edge color, only the drawn dot stays inside the visible curve.
+// The SV field clips to a squircle, so a thumb centred on a literal edge is
+// half cut off, worst at the corners. The drawn position is inset by the
+// thumb's radius; applySv still stores the true 0-1 value, so dragging to the
+// edge selects the real edge colour.
 const THUMB_SIZE = 16
 const THUMB_INSET_PCT = ((THUMB_SIZE / 2) / SQUARE) * 100
 const THUMB_MIN = THUMB_INSET_PCT
@@ -78,10 +76,9 @@ const THUMB_RANGE = 100 - THUMB_INSET_PCT * 2
 
 // ─── component ───────────────────────────────────────────────────────────────
 
-// Trigger box/badge scale together — sizes computed inline via style (not
-// template-literal Tailwind classes) since Tailwind can't statically pick up
-// a dynamically-built class name at build time. No radius here — the
-// trigger is a plain circle (rounded-full), not a squircle.
+// Sizes are applied inline rather than as Tailwind classes, since Tailwind
+// cannot see class names built at runtime. No radius: the trigger is a plain
+// circle, not a squircle.
 const SIZES = {
   sm: { box: 40, badge: 20, badgeIcon: 9,  offset: -4 },
   md: { box: 56, badge: 28, badgeIcon: 12, offset: -6 },
@@ -111,7 +108,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
   const [open, setOpen] = useState(defaultOpen)
   const [hexInput, setHexInput] = useState(value.toUpperCase())
   const [eyedropperSupported, setEyedropperSupported] = useState(false)
-  // Page-sampling fallback state — no browser feature-detection needed, this
+  // Page-sampling fallback state - no browser feature-detection needed, this
   // just reads DOM pixels the page already rendered, so it works everywhere.
   const [pageSampling, setPageSampling] = useState(false)
   const [previewColor, setPreviewColor] = useState<string | null>(null)
@@ -145,7 +142,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     setPos({ left, top, origin: below ? 'top center' : 'bottom center' })
   }, [])
 
-  // `defaultOpen` is a showcase/screenshot mode — the popover stays anchored
+  // `defaultOpen` is a showcase/screenshot mode - the popover stays anchored
   // to the trigger in normal flow instead of a viewport-fixed, scroll-tracked
   // overlay, so it scrolls away with the page like any other open dropdown
   // instead of pinning itself to the same screen position forever.
@@ -164,7 +161,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     onChange?.(out)
   }, [onChange])
 
-  // close on outside click, or Escape — and return focus to the trigger so
+  // close on outside click, or Escape - and return focus to the trigger so
   // a keyboard user isn't dropped onto the page with no indication of where
   // focus went.
   useEffect(() => {
@@ -245,21 +242,15 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     }
   }
 
-  // Same technique Figma's own web eyedropper uses outside its desktop app:
-  // sample the page's own already-rendered DOM, not the OS screen. No
-  // permission dialog, no getDisplayMedia — this is just reading a pixel
-  // color the browser already computed for its own content, so it works
-  // identically in every browser. The trade-off, same as Figma's: it can
-  // only sample colors visible on THIS page, not other apps or windows.
+  // Samples the page's own rendered DOM rather than the OS screen, so there is
+  // no permission prompt and it behaves the same in every browser. The limit
+  // is that it can only read colours on this page, not other windows.
   const sampleCanvas = useRef<HTMLCanvasElement | null>(null)
 
-  // getComputedStyle can serialize a background in rgb(), hsl(), lab(),
-  // oklch(), color(), or a named color — this project's own palette is
-  // largely oklch/lab, not rgb. Rather than regex-matching one format (and
-  // silently failing on the rest, which reads as "nothing sampled" almost
-  // everywhere on an OKLCH-heavy page), let the canvas 2D context — which
-  // already has to parse every CSS color syntax to paint anything — do it:
-  // set it as fillStyle, paint one pixel, read the normalized sRGB back out.
+  // getComputedStyle can return rgb(), hsl(), lab(), oklch(), color() or a
+  // named colour. Rather than regex one format and fail on the rest, hand it
+  // to a canvas context, which already parses every CSS colour syntax: set it
+  // as fillStyle, paint a pixel, read normalized sRGB back.
   const cssColorToHex = (css: string): string | null => {
     if (!sampleCanvas.current) {
       const c = document.createElement('canvas')
@@ -269,9 +260,8 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     const ctx = sampleCanvas.current.getContext('2d', { willReadFrequently: true })
     if (!ctx) return null
     ctx.clearRect(0, 0, 1, 1)
-    // Reset to a known baseline first — an unparseable fillStyle assignment
-    // is a silent no-op per spec, which would otherwise let this frame
-    // reuse whatever color happened to be set on a previous call.
+    // Reset to a known baseline first: an unparseable fillStyle is a silent
+    // no-op, which would otherwise reuse the previous call's colour.
     ctx.fillStyle = 'rgba(0, 0, 0, 0)'
     ctx.fillStyle = css
     ctx.fillRect(0, 0, 1, 1)
@@ -297,8 +287,8 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     document.body.style.cursor = 'crosshair'
     let raf = 0
     const onMove = (e: MouseEvent) => {
-      // mousemove can fire far faster than the DOM-walk + canvas read needs
-      // to run — coalesce to one sample per animation frame.
+      // mousemove fires faster than the DOM walk and canvas read need, so
+      // coalesce to one sample per frame.
       cancelAnimationFrame(raf)
       raf = requestAnimationFrame(() => {
         setPreviewPos({ x: e.clientX, y: e.clientY })
@@ -326,7 +316,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageSampling])
 
-  // Browser eyedropper — native EyeDropper first (Chromium — an even more
+  // Browser eyedropper - native EyeDropper first (Chromium - an even more
   // precise per-pixel screen sample), page-DOM sampling fallback everywhere
   // else. Both commit straight into the picker.
   const pickFromScreen = async () => {
@@ -337,7 +327,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
         const result = await new EyeDropperCtor().open()
         commitHex(result.sRGBHex)
       } catch {
-        // user cancelled — no-op
+        // user cancelled - no-op
       }
       return
     }
@@ -349,7 +339,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
     '#f43f5e', '#a3e635', '#06b6d4', '#6366f1', '#78716c', '#525252', '#0f172a', '#ffffff',
   ]
 
-  // Shared between the anchored (defaultOpen) and portaled render paths —
+  // Shared between the anchored (defaultOpen) and portaled render paths -
   // same panel either way, only the positioning strategy around it differs.
   const panelBody = (
     <>
@@ -357,11 +347,11 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
           (this padding) = 28. */}
       <Surface
         radius={28}
-        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+        lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         className="w-full bg-white shadow-2xl dark:bg-zinc-900"
         style={{ padding: PAD }}
       >
-      {/* ── big SV preview — the dominant swatch ── */}
+      {/* ── big SV preview - the dominant swatch ── */}
       <Surface radius={20} className="relative overflow-hidden">
         <div
           ref={svRef}
@@ -387,7 +377,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
         </div>
       </Surface>
 
-      {/* ── hue rail — plain horizontal slider, not a ring ── */}
+      {/* ── hue rail - plain horizontal slider, not a ring ── */}
       <div
         ref={hueRef}
         role="slider"
@@ -407,7 +397,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
         />
       </div>
 
-      {/* hex + swatch — the swatch doubles as the eyedropper trigger, revealed on hover */}
+      {/* hex + swatch - the swatch doubles as the eyedropper trigger, revealed on hover */}
       <div className="mt-3 flex items-center gap-2">
         <button
           type="button"
@@ -431,7 +421,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
         />
       </div>
 
-      {/* presets — opt-in via showPresets */}
+      {/* presets - opt-in via showPresets */}
       {showPresets && (
         <div className="mt-3 flex flex-wrap justify-center gap-1.5">
           {PRESETS.map(p => (
@@ -451,7 +441,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
 
   return (
     <div className={cn('relative inline-block', className)}>
-      {/* trigger — glossy squircle swatch with a pencil badge, like a saved-palette tile */}
+      {/* trigger - glossy squircle swatch with a pencil badge, like a saved-palette tile */}
       <motion.button
         ref={triggerRef}
         onClick={() => setOpen(o => !o)}
@@ -462,10 +452,10 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
         style={{ width: sz.box, height: sz.box }}
       >
         {/* A perfect circle (radius is always exactly half the box) needs no
-            squircle smoothing — corners only exist on shapes that have them.
+            squircle smoothing - corners only exist on shapes that have them.
             Surface/SmoothCorners also does an async geometry measurement
             pass that briefly renders at zero height while "pending", which
-            for a plain circle is pure unneeded overhead — plain rounded-full
+            for a plain circle is pure unneeded overhead - plain rounded-full
             clips instantly with the very first paint. */}
         <div className="relative h-full w-full overflow-hidden rounded-full">
           <span className="absolute inset-0" style={{ background: CHECKER }} />
@@ -512,7 +502,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
               ref={popRef}
               initial={{ opacity: 0, scale: 0.92, y: 8 }}
               // Motion sets opacity via inline style, which beats a Tailwind
-              // class in specificity — the dim-during-sampling state has to
+              // class in specificity - the dim-during-sampling state has to
               // ride in this same `animate` target, not a CSS class, or it's
               // silently overridden back to fully opaque every render.
               animate={{ opacity: pageSampling ? 0.3 : 1, scale: 1, y: 0 }}
@@ -526,14 +516,14 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
         document.body,
       )}
 
-      {/* page-sampling eyedropper fallback — Firefox/Safari have no native
+      {/* page-sampling eyedropper fallback - Firefox/Safari have no native
           EyeDropper, so this reads the page's own DOM colors instead.
           Everything here is pointer-events-none except the invisible hit
           layer isn't even needed: the window-level listeners in the effect
           above do the work, this just draws the hint + live preview swatch.
           The swatch flips to sit BELOW the cursor near the top of the
           viewport instead of rendering off-screen above it, and always
-          carries its hex value as text — a near-white/near-black sample is
+          carries its hex value as text - a near-white/near-black sample is
           visually indistinguishable from "nothing happened", so the number
           is what actually proves it's live. */}
       {typeof document !== 'undefined' && pageSampling && createPortal(
@@ -556,7 +546,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
               <span className="block h-full w-full" style={{ background: previewColor ?? CHECKER }} />
             </div>
             <span className="rounded-full bg-zinc-900/90 px-2 py-1 font-mono text-[11px] tracking-wide text-white shadow-lg dark:bg-white/90 dark:text-zinc-900">
-              {previewColor ? previewColor.toUpperCase() : '—'}
+              {previewColor ? previewColor.toUpperCase() : '-'}
             </span>
           </div>
         </>,

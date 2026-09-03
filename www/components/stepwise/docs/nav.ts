@@ -9,10 +9,8 @@ export interface DocsNavSection {
 }
 
 export const textEffectsNav: DocsNavItem[] = [
-  { href: '/docs/animated-gradient',    label: 'Animated Gradient' },
   { href: '/docs/circle-annotation',    label: 'Circle Annotation' },
   { href: '/docs/fade-text',            label: 'Fade Text' },
-  { href: '/docs/retro-typewriter',     label: 'Retro Typewriter' },
   { href: '/docs/scramble-text',        label: 'Scramble Text' },
   { href: '/docs/shimmer-text',         label: 'Shimmer Text' },
   { href: '/docs/squiggly-underline',   label: 'Squiggly Underline' },
@@ -47,7 +45,6 @@ export const componentsNav: DocsNavItem[] = [
   { href: '/docs/file-uploader',         label: 'File Uploader' },
   { href: '/docs/folder',                label: 'Folder' },
   { href: '/docs/glow-button',           label: 'Glow Button' },
-  { href: '/docs/infinite-canvas',       label: 'Infinite Canvas' },
   { href: '/docs/input',                 label: 'Input' },
   { href: '/docs/kbd',                   label: 'Kbd' },
   { href: '/docs/modal',                 label: 'Modal' },
@@ -85,11 +82,18 @@ export const cardsNav: DocsNavItem[] = [
 
 export const carouselsNav: DocsNavItem[] = [
   { href: '/docs/arc-carousel',  label: 'Arc' },
-  { href: '/docs/deck-carousel', label: 'Deck' },
   { href: '/docs/lens-carousel', label: 'Lens' },
 ]
 
+export const gettingStartedNav: DocsNavItem[] = [
+  { href: '/docs/introduction', label: 'Introduction' },
+  { href: '/docs/quick-start',  label: 'Quick Start' },
+  { href: '/docs/cli',          label: 'CLI' },
+  { href: '/docs/agents',       label: 'Agents' },
+]
+
 export const docsNav: DocsNavSection[] = [
+  { label: 'Getting Started', items: gettingStartedNav },
   { label: 'All Components',  items: componentsNav },
   { label: 'Backgrounds',     items: backgroundsNav },
   { label: 'Cards',           items: cardsNav },

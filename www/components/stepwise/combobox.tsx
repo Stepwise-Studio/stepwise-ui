@@ -27,15 +27,15 @@ export interface ComboboxProps {
   /** Shown when the query matches nothing. */
   emptyMessage?: string
   disabled?    : boolean
-  /** Render open on mount and ignore outside clicks — for showcases and
+  /** Render open on mount and ignore outside clicks - for showcases and
    *  screenshots that don't want to fight the panel's own space. */
   defaultOpen? : boolean
-  /** Initial search query — for showcases that want to open pre-filtered. */
+  /** Initial search query - for showcases that want to open pre-filtered. */
   defaultQuery?: string
   className?   : string
 }
 
-const FONT = 'var(--font-inter-display)'
+const FONT = 'var(--font-inter-display, ui-sans-serif, system-ui, sans-serif)'
 
 /** Split a label on the query so the match can be emphasised. */
 function highlight(label: string, query: string) {
@@ -108,23 +108,25 @@ export function Combobox({
     return () => document.removeEventListener('mousedown', onDown)
   }, [open, defaultOpen])
 
-  // keep the active option scrolled into view — skipped on the panel's
-  // first open (including `defaultOpen` showcases mounted already-open):
-  // `scrollIntoView` with no prior scroll offset can walk past a listbox
-  // that already fully contains the option and scroll the actual page
-  // instead, which is exactly what was hijacking scroll position on load.
-  // There's nothing to keep in view yet on that first render anyway.
-  const skipNextScrollRef = useRef(true)
+  // Keeps the active option in view by scrolling the listbox only.
+  //
+  // `scrollIntoView` can walk past a listbox that already contains the option
+  // and scroll the page instead. Checking the geometry first, rather than
+  // counting calls, avoids that regardless of mount history: if the option is
+  // already inside the listbox's visible bounds, skip the DOM call entirely.
   useEffect(() => {
-    if (!open) { skipNextScrollRef.current = true; return }
-    if (skipNextScrollRef.current) { skipNextScrollRef.current = false; return }
-    const el = listRef.current?.querySelector<HTMLElement>(`[data-idx="${active}"]`)
-    el?.scrollIntoView({ block: 'nearest' })
+    if (!open) return
+    const list = listRef.current
+    const el = list?.querySelector<HTMLElement>(`[data-idx="${active}"]`)
+    if (!list || !el) return
+    const l = list.getBoundingClientRect()
+    const e = el.getBoundingClientRect()
+    if (e.top < l.top || e.bottom > l.bottom) el.scrollIntoView({ block: 'nearest' })
   }, [active, open])
 
   const close = () => { setOpen(false); setQuery(''); setActive(0) }
 
-  // Reopening should highlight the current selection, not always index 0 —
+  // Reopening should highlight the current selection, not always index 0 -
   // otherwise arrow-key navigation starts from the wrong place and there's
   // no visual cue of the existing choice.
   const openWithActive = () => {
@@ -137,7 +139,7 @@ export function Combobox({
     setSelected(opt.value)
     onChange?.(opt.value)
     if (!defaultOpen) close()
-    // Focus stays on the input — it already shows the selected label once
+    // Focus stays on the input - it already shows the selected label once
     // closed, and a keyboard user's next Tab should continue naturally from
     // this field rather than being dropped to the page body.
   }
@@ -186,7 +188,7 @@ export function Combobox({
         </label>
       )}
 
-      {/* field — the panel below is nested inside this wrapper too, so
+      {/* field - the panel below is nested inside this wrapper too, so
           top-full tracks whatever height the field actually renders at
           (a wrapped label makes it taller) instead of a fixed pixel guess */}
       <div className={cn('relative w-full h-11', disabled && 'opacity-50 pointer-events-none')}>
@@ -252,7 +254,7 @@ export function Combobox({
             >
               <Surface
                 radius={18}
-                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
                 className="w-full bg-white dark:bg-zinc-900 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.18),0_2px_8px_rgba(0,0,0,0.06)]"
               >
                 <ScrollArea
@@ -304,7 +306,7 @@ export function Combobox({
                               'flex shrink-0 items-center justify-center rounded-full transition-colors duration-150',
                               isSelected
                                 ? 'bg-zinc-900 dark:bg-white'
-                                : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border)]',
+                                : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border,rgb(138_138_141_/_0.23))]',
                             )}
                             style={{ width: 16, height: 16 }}
                           >

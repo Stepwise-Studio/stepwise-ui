@@ -21,9 +21,9 @@ export default function ArcCarouselPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Arc Carousel</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Photographs riding a shallow arc. Every card follows one shared path, offset
-            per card so the set spreads evenly along the curve — no per-frame work, and
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A continuously drifting strip of photographs riding a shallow arc. Every card follows one shared path, offset
+            per card so the set spreads evenly along the curve - no per-frame work, and
             the strip lands in the right place on the first paint. Hovering halts it.
           </Text>
         </div>
@@ -35,7 +35,7 @@ export default function ArcCarouselPage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Cards tilt tangentially to the curve, so the ends of the strip lean away
             from the middle.
           </Text>
@@ -53,7 +53,7 @@ export default function ArcCarouselPage() {
             cols="150px 210px 1fr"
             rows={[
               { name: 'items',        type: 'ArcCarouselItem[]', desc: 'Images to loop. { src, alt? }.' },
-              { name: 'arc',          type: 'number',  desc: 'Degrees of arc swept across the visible width — sets both the bow and the card tilt, which on a real curve are the same thing. 0 is flat. Default 30.' },
+              { name: 'arc',          type: 'number',  desc: 'Degrees of arc swept across the visible width - sets both the bow and the card tilt, which on a real curve are the same thing. 0 is flat. Default 30.' },
               { name: 'duration',     type: 'number',  desc: 'Seconds for one full pass. Default 38.' },
               { name: 'itemWidth',    type: 'number',  desc: 'Card width in px. Default 128.' },
               { name: 'ratio',        type: 'number',  desc: 'Card height ÷ width. Default 1.3.' },

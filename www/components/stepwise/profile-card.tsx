@@ -8,11 +8,10 @@ import { Avatar } from '@/components/stepwise/avatar'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ArrowRight02Icon } from '@hugeicons/core-free-icons'
 
-// The verified badge trails the name as literal inline content (not a flex
-// sibling — see VerifiedBadge below), so plain CSS line-clamp will clip it
-// away along with the name once the name alone needs a 3rd line. This measures
-// against a hidden probe and, only when necessary, trims the name at a word
-// boundary so the truncated name + badge always fit within 2 lines together.
+// The badge is inline content trailing the name, not a flex sibling, so CSS
+// line-clamp would clip it away with the name once the name needs a third
+// line. This measures against a hidden probe and trims the name at a word
+// boundary only when needed, so name and badge fit two lines together.
 const BADGE_RESERVE_PX = 26 // ~18px icon + 4px gap + slack
 
 function useTwoLineNameWithBadge(name: string, hasBadge: boolean) {
@@ -81,7 +80,7 @@ export interface ProfileCardProps {
   avatarSrc? : string
   /** object-position for the avatar photo, e.g. "top". Default "center". */
   avatarImagePosition?: string
-  /** Scales the avatar photo within its cover fit — under 1 zooms out a touch. Default 1. */
+  /** Scales the avatar photo within its cover fit. Under 1 zooms out. Default 1. */
   avatarImageScale?: number
   name       : string
   verified?  : boolean
@@ -199,12 +198,10 @@ export function ProfileCard({
 }
 
 function VerifiedBadge() {
-  // iconsax's <Verify variant="Bold"> (what Toast's success state uses) only
-  // takes one `color` — the tick is cut through the badge as a same-fill
-  // hole, not an independent layer, so it can never be its own white. Both
-  // paths below are lifted from Verify's own Bulk/Outline variants instead —
-  // same icon, but there the badge outline and the tick are already two
-  // separate absolute-coordinate paths, so each can take its own color.
+  // iconsax's Verify Bold variant takes a single `color` and cuts the tick out
+  // of the badge as a hole, so the tick can never be its own colour. These two
+  // paths come from the Bulk/Outline variants, where the badge and the tick are
+  // already separate paths and can be coloured independently.
   return (
     <svg
       width="18"

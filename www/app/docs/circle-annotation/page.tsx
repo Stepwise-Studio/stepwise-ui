@@ -27,11 +27,11 @@ export default function CircleAnnotationPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Circle Annotation</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A hand-drawn circle scribbled around the text with generous inner padding,
             drawn on when scrolled into view. Built on{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">rough.js</code>{' '}
-            so the loop is an authentic sketchy ellipse — never a perfect SVG oval.
+            so the loop is an authentic sketchy ellipse - never a perfect SVG oval.
           </Text>
         </div>
 

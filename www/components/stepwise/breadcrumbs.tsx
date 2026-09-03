@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
+import { DropdownMenu } from '@/components/stepwise/dropdown-menu'
 import { cn } from '@/lib/utils/cn'
 
 export interface BreadcrumbItem {
@@ -14,8 +14,8 @@ export interface BreadcrumbsProps {
   /** 'slash' renders "/", 'chevron' renders ›. Default 'slash'. */
   separator? : 'slash' | 'chevron'
   /**
-   * Collapse the middle of the trail into an expandable "…" once there are
-   * more crumbs than this. Set to 0 to never collapse. Default 4.
+   * Collapse the middle of the trail into a "…" menu once there are more
+   * crumbs than this. Set to 0 to never collapse. Default 4.
    */
   maxItems?  : number
   /** Crumbs kept at the head of a collapsed trail. Default 1. */
@@ -49,17 +49,14 @@ function Separator({ kind }: { kind: 'slash' | 'chevron' }) {
 }
 
 /**
- * A trail that stays one line no matter how deep the hierarchy goes.
+ * A trail that stays on one line however deep the hierarchy goes.
  *
- * Past `maxItems`, the middle collapses to a "…" button rather than wrapping
- * to a second line or scrolling sideways — the head and the current page are
- * the two things a breadcrumb exists to show, so those are what survive; the
- * hidden middle is one click away and stays in the DOM order it had, so the
- * expanded trail reads identically to an uncollapsed one.
+ * Past `maxItems` the middle collapses to a menu of the hidden crumbs, so the
+ * row never needs to expand. The first crumb and the current page always stay
+ * visible.
  *
- * Crumbs animate on change (position via `layout`, enter/exit via a short
- * blur-and-slide) so walking up the trail reads as the tail being removed
- * rather than the whole row silently redrawing.
+ * Crumbs animate on change so walking up the trail reads as the tail being
+ * removed rather than the row redrawing.
  */
 export function Breadcrumbs({
   items,
@@ -70,19 +67,13 @@ export function Breadcrumbs({
   onNavigate,
   className,
 }: BreadcrumbsProps) {
-  const [expanded, setExpanded] = useState(false)
   const reduce = useReducedMotion()
 
-  const collapsible = maxItems > 0 && items.length > maxItems && itemsBefore + itemsAfter < items.length
-  const collapsed = collapsible && !expanded
-
-  // A shorter trail (navigating up) must drop the expanded state, or the next
-  // deep trail arrives pre-expanded for no reason the user asked for.
-  useEffect(() => { if (!collapsible) setExpanded(false) }, [collapsible])
+  const collapsed = maxItems > 0 && items.length > maxItems && itemsBefore + itemsAfter < items.length
 
   const head = collapsed ? items.slice(0, itemsBefore) : items
   const tail = collapsed ? items.slice(items.length - itemsAfter) : []
-  const hiddenCount = collapsed ? items.length - itemsBefore - itemsAfter : 0
+  const hidden = collapsed ? items.slice(itemsBefore, items.length - itemsAfter) : []
 
   const motionProps = reduce
     ? {
@@ -94,8 +85,7 @@ export function Breadcrumbs({
     : {
         initial: { opacity: 0, x: -6, filter: 'blur(2px)' },
         animate: { opacity: 1, x: 0, filter: 'blur(0px)' },
-        // Softer than the enter — an exit should get out of the way, not
-        // announce itself.
+        // Softer than the enter, so leaving crumbs get out of the way quietly.
         exit:    { opacity: 0, x: -4, filter: 'blur(2px)', transition: { duration: 0.14, ease: EASE } },
         transition: { duration: 0.24, ease: EASE },
       }
@@ -137,6 +127,11 @@ export function Breadcrumbs({
     </motion.li>
   )
 
+  const goToHidden = (item: BreadcrumbItem, index: number) => {
+    if (onNavigate) onNavigate(item, index)
+    else if (item.href) window.location.href = item.href
+  }
+
   return (
     <nav aria-label="Breadcrumb" className={cn('flex items-center', className)}>
       <ol className="flex flex-wrap items-center gap-1.5">
@@ -146,18 +141,18 @@ export function Breadcrumbs({
           {collapsed && (
             <motion.li key="ellipsis" layout="position" {...motionProps} className="flex items-center gap-1.5">
               <Separator kind={separator} />
-              <button
-                type="button"
-                onClick={() => setExpanded(true)}
-                aria-label={`Show ${hiddenCount} hidden ${hiddenCount === 1 ? 'crumb' : 'crumbs'}`}
-                aria-expanded={false}
-                className={cn(
-                  LINK,
-                  'cursor-pointer px-1 leading-none text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-white',
-                )}
-              >
-                …
-              </button>
+              <DropdownMenu
+                trigger={
+                  <button
+                    type="button"
+                    aria-label={`Show ${hidden.length} hidden ${hidden.length === 1 ? 'crumb' : 'crumbs'}`}
+                    className={cn(LINK, 'cursor-pointer px-1 leading-none text-zinc-400 hover:text-zinc-900 dark:text-zinc-500 dark:hover:text-white')}
+                  >
+                    …
+                  </button>
+                }
+                items={hidden.map((item, i) => ({ label: item.label, onSelect: () => goToHidden(item, itemsBefore + i) }))}
+              />
             </motion.li>
           )}
 

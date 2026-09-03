@@ -22,3 +22,17 @@ export function PaginationSiblingsPreview() {
     </div>
   )
 }
+
+// A handful of pages needs no ellipsis at all - `buildSlots` already returns
+// every page in range once the full run fits, so this is the same component,
+// not a different mode. Kept as its own demo so that's visible without
+// having to page a 12-item example down to 3 by hand.
+export function PaginationFewPagesPreview() {
+  const [page, setPage] = useState(1)
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <Pagination page={page} totalPages={3} onChange={setPage} />
+      <span className="text-[12px] text-zinc-400 tabular-nums">Page {page} of 3</span>
+    </div>
+  )
+}

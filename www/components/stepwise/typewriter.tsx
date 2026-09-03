@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { cn } from '@/lib/utils/cn'
 
-// Reverse pop-out duration. Closes read best quick and quiet — shorter than
-// the 300ms typing-in spring — so backspacing feels brisk, not laggy.
+// Reverse pop-out duration. Closes read best quick and quiet - shorter than
+// the 300ms typing-in spring - so backspacing feels brisk, not laggy.
 const EXIT_MS = 160
 
 export interface TypewriterProps {
@@ -24,9 +24,9 @@ export interface TypewriterProps {
 }
 
 /**
- * Typewriter — types a string on character by character with a blinking caret.
- * Pass an array to cycle words (type, hold, backspace, next). A single string
- * types once and holds. Reduced motion renders the first/only word statically.
+ * Types a string character by character with a blinking caret. Pass an array
+ * to cycle words (type, hold, backspace, next); a single string types once and
+ * holds. Under reduced motion the first word renders statically.
  */
 export function Typewriter({
   words,
@@ -42,21 +42,18 @@ export function Typewriter({
   const reduce = useReducedMotion()
 
   const [text, setText] = useState('')
-  // Screen readers: announce the current word once typing finishes — not per
-  // character. Stable sr-only region stays mounted so polite updates are reliable.
+  // Announced once per finished word, not per character. The sr-only region
+  // stays mounted so polite updates land reliably.
   const [liveText, setLiveText] = useState('')
-  // The caret blinks only while idle (the `holding` pause between words) —
-  // solid and steady while actively typing or deleting, so it never flickers
-  // out of sync with a character that's mid-keystroke.
+  // The caret blinks only while idle, and stays solid while typing or
+  // deleting so it never flickers against a character mid-keystroke.
   const [holding, setHolding] = useState(false)
   const wordIdx = useRef(0)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  // Bumped every time a new word starts typing. Character keys are
-  // `${gen}-${i}` — without this, index-only keys collide across a word
-  // transition: the outgoing word's char 0 is still mid exit-animation
-  // exactly when the incoming word's char 0 mounts, and AnimatePresence
-  // blends the two into one glyph instead of sequencing them, because
-  // reused positional keys are treated as the same element.
+  // Bumped on each new word so character keys are `${gen}-${i}`. Index-only
+  // keys collide across a word change: the outgoing char 0 is still exiting
+  // when the incoming char 0 mounts, and AnimatePresence treats the reused
+  // key as one element and blends them into a single glyph.
   const gen = useRef(0)
 
   useEffect(() => {
@@ -104,9 +101,8 @@ export function Typewriter({
         phase = 'typing'
         wordIdx.current = (wordIdx.current + 1) % list.length
         gen.current++
-        // The last character's reverse pop-out is still finishing (EXIT_MS) —
-        // wait for it before the next word's first character mounts in the
-        // same flex slot, or the two would render side by side for a beat.
+        // Wait for the last character's exit to finish before the next word's
+        // first character mounts in the same slot, or both show for a beat.
         timer.current = setTimeout(step, Math.max(typeSpeed, EXIT_MS))
       } else {
         timer.current = setTimeout(step, deleteSpeed)
@@ -119,11 +115,9 @@ export function Typewriter({
   }, [reduce, typeSpeed, deleteSpeed, holdTime, shouldLoop, JSON.stringify(list)])
 
   return (
-    // inline-grid + every candidate word stacked in the same cell: the grid track
-    // auto-sizes to the widest word, so the box holds a constant width and sibling
-    // text never reflows as the visible word types or deletes. Pure CSS, no
-    // ResizeObserver or width measurement needed — stays correct across fonts,
-    // tracking, and font-size changes.
+    // Every candidate word is stacked in one grid cell, so the track sizes to
+    // the widest and the box keeps a constant width while typing. No measuring
+    // needed, and it stays correct across fonts and sizes.
     <span className={cn('relative inline-grid whitespace-pre align-baseline', className)}>
       <span className="sr-only" aria-live="polite" aria-atomic="true">{liveText}</span>
       {list.map((w, i) => (
@@ -133,26 +127,23 @@ export function Typewriter({
       ))}
       <span className="col-start-1 row-start-1 inline-flex items-baseline">
         {/* each character pops in with the same blurred spring as the OTP digit
-            reveal, and pops back out in reverse on delete — keyed by position
+            reveal, and pops back out in reverse on delete - keyed by position
             so only the newest/last char (dis)mounts; already-typed characters
             keep their identity and never re-animate. The exit is quicker than
             the enter (closes read best quick and quiet), and the state machine
             waits EXIT_MS before starting the next word so the last exiting
             character finishes before the new one mounts in the same flex slot
-            — otherwise they'd render side by side for a beat. */}
+            - otherwise they'd render side by side for a beat. */}
         <span aria-hidden className="relative inline-flex">
           {reduce ? (
-            // Reduced motion: the effect above sets the full word once and
-            // never runs the char-by-char loop again, but AnimatePresence's
-            // `initial={false}` only suppresses items present at ITS OWN first
-            // render — since text starts empty, the word arriving a tick later
-            // still counts as a fresh mount and would play the full spring
-            // burst. Skip the animated path entirely and render plain text.
+            // Reduced motion renders plain text. `initial={false}` would not be
+            // enough: text starts empty, so the word arriving a tick later still
+            // counts as a fresh mount and would play the full entrance.
             <span style={{ whiteSpace: 'pre' }}>{text}</span>
           ) : (
             // popLayout: the moment a character starts exiting it's pulled out
             // of flex flow (position: absolute) so the caret and remaining
-            // characters snap to their new position immediately — otherwise
+            // characters snap to their new position immediately - otherwise
             // the still-fading "ghost" characters keep their layout footprint
             // for the full exit duration and shove the caret away from the
             // real cursor position, which is exactly what looked like "the

@@ -47,7 +47,7 @@ const INSET  = 0
 const FILL_R = 14
 const CAP    = 9
 
-// Classical layout — one geometry, used everywhere:
+// Classical layout - one geometry, used everywhere:
 //   track 24px pill, knob 16px, 4px gap on every side (top/bottom/left/right).
 //   Fill is also a pill so it wraps the knob; a rectangular fill looks like a
 //   square box and a dark ring. Do not use Surface here.
@@ -166,7 +166,7 @@ export function Slider({
 
   const fillLeft  = isRange ? pct(thumbs[0]) : 0
   const fillRight = isRange ? pct(thumbs[1]) : pct(thumbs[0])
-  /** At min (plain/dots) or when handles coincide (range), show only the handle — no fill cap. */
+  /** At min (plain/dots) or when handles coincide (range), show only the handle - no fill cap. */
   const showFill  = isRange ? thumbs[1] > thumbs[0] : thumbs[0] > min
 
   const n = Math.max(2, dotCount)
@@ -393,7 +393,7 @@ export function Slider({
                 aria-disabled={disabled}
                 onKeyDown={onThumbKey(idx)}
                 className={cn(
-                  'stepwise-slider-thumb absolute top-1/2 outline-none rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.18)]',
+                  'after:content-[""] after:absolute after:left-1/2 after:top-1/2 after:[translate:-50%_-50%] after:w-6 after:h-11 absolute top-1/2 outline-none rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.18)]',
                   'focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 dark:focus-visible:ring-sky-400',
                   active
                     ? 'w-1 h-6 bg-zinc-700 dark:bg-zinc-100'
@@ -430,7 +430,7 @@ export function Slider({
           'absolute inset-0 pointer-events-none rounded-[18px] border border-solid',
           'transition-[border-color] duration-250 motion-reduce:transition-none',
           disabled || !dragging
-            ? 'border-[var(--ui-border)]'
+            ? 'border-[var(--ui-border,rgb(138_138_141_/_0.23))]'
             : 'border-zinc-300 dark:border-zinc-600',
         )}
       />

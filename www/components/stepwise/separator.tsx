@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils/cn'
 
 export interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical'
-  /** Optional centered label — only for horizontal separators. */
+  /** Optional centered label - only for horizontal separators. */
   label?: React.ReactNode
 }
 

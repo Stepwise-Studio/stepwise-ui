@@ -33,7 +33,7 @@ export default function CommandPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Command Palette</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A searchable ⌘K command menu with grouped items, fuzzy matching, full keyboard
             navigation, and per-item shortcuts. Binds ⌘K / Ctrl+K by default.
           </Text>
@@ -58,7 +58,7 @@ export default function CommandPage() {
             { name: 'hotkey',       type: 'boolean', desc: 'Bind ⌘K / Ctrl+K to toggle. Default true.' },
             { name: 'placeholder',  type: 'string', desc: 'Search input placeholder.' },
           ]} />
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mt-2">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mt-2 text-pretty">
             Each item accepts id, label, icon, keywords (extra search terms), shortcut, and onSelect.
           </Text>
         </section>

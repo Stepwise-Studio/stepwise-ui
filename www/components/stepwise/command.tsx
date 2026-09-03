@@ -26,9 +26,8 @@ export interface CommandGroup {
 export interface CommandPaletteProps {
   groups: CommandGroup[]
   /**
-   * Portal target. Defaults to `document.body`. Point it at an element that
-   * establishes a containing block to scope the palette's `fixed` overlay to
-   * that box instead of the viewport.
+   * Portal target. Defaults to `document.body`. Point it at an element with a
+   * containing block to scope the fixed overlay to that box.
    */
   container?: HTMLElement | null
   open?: boolean
@@ -75,7 +74,7 @@ export function CommandPalette({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, hotkey])
 
-  // reset on open, focus input, and restore focus to the trigger on close
+  // Reset on open, focus the input, and return focus to the trigger on close.
   useEffect(() => {
     if (open) {
       restoreFocusRef.current = document.activeElement as HTMLElement | null
@@ -130,7 +129,7 @@ export function CommandPalette({
   }, [active])
 
   // This custom Next.js build's SSR pass apparently exposes a partial
-  // `document` global (typeof check alone isn't enough here) — guard on
+  // `document` global (typeof check alone isn't enough here) - guard on
   // `document.body` actually existing before handing it to createPortal.
   if (typeof document === 'undefined' || !document.body) return null
 
@@ -162,7 +161,7 @@ export function CommandPalette({
           >
             <Surface
               radius={20}
-              lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+              lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
               className="overflow-hidden bg-white shadow-[0_20px_60px_-12px_rgba(0,0,0,0.28)] dark:bg-zinc-900 dark:shadow-[0_24px_70px_-12px_rgba(0,0,0,0.8)]"
             >
               {/* search row */}

@@ -13,7 +13,7 @@ export interface PopoverProps {
   children: ReactNode
   side?: PopoverSide
   align?: PopoverAlign
-  /** Controlled open state — omit for uncontrolled. */
+  /** Controlled open state - omit for uncontrolled. */
   open?: boolean
   onOpenChange?: (open: boolean) => void
   className?: string
@@ -26,13 +26,10 @@ export interface PopoverProps {
   'aria-label'?: string
 }
 
-// Motion tokens (transitions-dev): dropdown open/close is asymmetric — the
-// open invites (250ms, --duration-fast), the close gets out of the way
-// faster (150ms, --duration-quick). Scale is asymmetric too: 0.97
-// (--scale-medium) on the way in, a much subtler 0.99 (--scale-tiny) on the
-// way out. Distance is --distance-base (8px), carried by the enter phase
-// only — the exit drops it to a quiet fade instead of flinging the panel
-// back toward the trigger.
+// Open and close are deliberately asymmetric: the open takes 250ms and the
+// close 150ms, and the scale goes 0.97 in but only 0.99 out. The 8px travel
+// applies to the enter only, so the exit is a quiet fade rather than the panel
+// flying back to the trigger.
 const EASE = [0.22, 1, 0.36, 1] as const
 const OPEN_DUR = 0.25
 const CLOSE_DUR = 0.15
@@ -113,10 +110,8 @@ export function Popover({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
-  // Move focus into the panel on open (there's usually something worth
-  // landing on — a form field, an action) and always hand it back to the
-  // trigger on close, however the panel closed (Escape, outside click, or
-  // toggling the trigger again).
+  // Focus moves into the panel on open and returns to the trigger on close,
+  // however it closed: Escape, outside click, or the trigger again.
   useEffect(() => {
     if (!open) {
       triggerRef.current?.focus?.()
@@ -131,7 +126,7 @@ export function Popover({
 
   // Flip vertically and clamp horizontally when the preferred placement
   // would push the panel off-screen. Runs in useLayoutEffect so any
-  // correction lands before the browser paints — no visible jump.
+  // correction lands before the browser paints - no visible jump.
   useLayoutEffect(() => {
     if (!open) { setResolvedSide(side); setOffsetX(0); return }
     const trigger = rootRef.current
@@ -157,18 +152,16 @@ export function Popover({
   const originY = resolvedSide === 'top' ? 'bottom' : 'top'
   const originX = align === 'end' ? 'right' : align === 'start' ? 'left' : 'center'
 
-  // Cloning the trigger (rather than wrapping it in an extra clickable div)
-  // lets the ARIA disclosure attributes and the focus-return ref land on the
-  // real interactive element itself — a <div onClick> around it would carry
-  // aria-expanded/aria-haspopup on a node that's never actually focusable,
-  // so assistive tech would never see them.
+  // The trigger is cloned rather than wrapped so the ARIA attributes and the
+  // focus-return ref land on the real interactive element. On a wrapper div,
+  // aria-expanded would sit on a node that is never focusable.
   const isElementTrigger = isValidElement<Record<string, unknown>>(trigger)
 
-  // globalThis, not `process` directly — a bare `process` reference needs
-  // @types/node to typecheck, which non-Next consumers (Vite, CRA) don't have.
+  // globalThis rather than a bare `process`, which would need @types/node to
+  // typecheck in projects that don't already have it.
   const nodeEnv = (globalThis as { process?: { env?: { NODE_ENV?: string } } }).process?.env?.NODE_ENV
   if (nodeEnv !== 'production' && !isElementTrigger) {
-    console.warn('[Stepwise Popover] `trigger` should be a single element (e.g. a Button) — a non-element trigger falls back to a plain, non-keyboard-accessible click target.')
+    console.warn('[Stepwise Popover] `trigger` should be a single element (e.g. a Button) - a non-element trigger falls back to a plain, non-keyboard-accessible click target.')
   }
 
   const triggerElement = isElementTrigger
@@ -211,7 +204,7 @@ export function Popover({
               ref={panelRef}
               id={contentId}
               radius={16}
-              lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+              lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
               className={cn(
                 'bg-white p-3 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.12),0_2px_6px_-2px_rgba(0,0,0,0.06)] dark:bg-zinc-900 dark:shadow-[0_10px_30px_-6px_rgba(0,0,0,0.6)]',
                 contentClassName,

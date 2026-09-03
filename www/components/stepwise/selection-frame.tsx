@@ -15,7 +15,7 @@ export interface SelectionFrameProps {
   line?      : FrameLine
   /** Override the [dash, gap] px pair a non-solid `line` resolves to. */
   dash?      : [number, number]
-  /** Marching ants — only applies to "dashed" / "long" lines. Default false. */
+  /** Marching ants - only applies to "dashed" / "long" lines. Default false. */
   animated?  : boolean
   /** Accent color. Default Figma blue. */
   color?     : string
@@ -67,11 +67,9 @@ export function SelectionFrame({
   const resolvedDash = dash ?? LINE_DASH[line]
   const period = resolvedDash ? resolvedDash[0] + resolvedDash[1] : 0
 
-  // Marching ants only — a "draws itself on" reveal never made sense for a
-  // solid stroke (there's no dash pattern to march), so animated + solid is
-  // just a static frame with animated corner handles. Reduced motion turns
-  // this off too — it's an infinite, indefinitely-repeating loop, exactly
-  // the case the preference exists for.
+  // Marching ants need a dash pattern, so `animated` with a solid stroke is
+  // just a static frame with animated corner handles. Reduced motion disables
+  // it as well, since the march is an indefinite loop.
   const marching = animated && !!resolvedDash && !reduceMotion
   const animateHandles = animated && !reduceMotion
 
@@ -119,7 +117,7 @@ export function SelectionFrame({
             />
           </svg>
 
-          {/* corner handles — boxSizing: border-box is what actually keeps
+          {/* corner handles - boxSizing: border-box is what actually keeps
               these centered on their corner point: without it, the border
               adds outside the declared width/height, so the -handleSize/2
               margin offset (sized for the border-less box) undershoots and

@@ -5,24 +5,24 @@ import { cn } from '@/lib/utils/cn'
 const textVariants = cva('', {
   variants: {
     variant: {
-      // Display — 3-step: mobile / md:tablet / lg:desktop
+      // Display - 3-step: mobile / md:tablet / lg:desktop
       hero:           'text-[36px] md:text-[48px] lg:text-[64px] font-semibold tracking-[-0.03em] leading-tight   text-balance',
       headline:       'text-[28px] md:text-[38px] lg:text-[48px] font-semibold tracking-[-0.03em] leading-tight   text-balance',
-      // Headings — 3-step: mobile / md:tablet / lg:desktop
+      // Headings - 3-step: mobile / md:tablet / lg:desktop
       h1:             'text-[26px] md:text-[30px] lg:text-[36px] font-semibold tracking-[-0.03em] leading-tight   text-balance',
       'h1-soft':      'text-[26px] md:text-[30px] lg:text-[36px] font-medium   tracking-[-0.03em] leading-tight   text-balance',
       h2:             'text-[22px] md:text-[26px] lg:text-[30px] font-semibold tracking-[-0.03em] leading-tight   text-balance',
       'h2-soft':      'text-[22px] md:text-[26px] lg:text-[30px] font-medium   tracking-[-0.03em] leading-tight   text-balance',
       h3:             'text-[20px] md:text-[22px] lg:text-[24px] font-semibold tracking-[-0.03em] leading-snug    text-balance',
       'h3-soft':      'text-[20px] md:text-[22px] lg:text-[24px] font-medium   tracking-[-0.03em] leading-snug    text-balance',
-      // Sub-headings — 2-step: mobile / md:desktop (delta small enough)
+      // Sub-headings - 2-step: mobile / md:desktop (delta small enough)
       h4:             'text-[18px] md:text-[20px] font-semibold tracking-[-0.03em] leading-snug    text-balance',
       'h4-soft':      'text-[18px] md:text-[20px] font-medium   tracking-[-0.03em] leading-snug    text-balance',
       h5:             'text-[16px] md:text-[18px] font-semibold tracking-[-0.03em] leading-snug    text-balance',
       'h5-soft':      'text-[16px] md:text-[18px] font-medium   tracking-[-0.03em] leading-snug    text-balance',
       h6:             'text-[15px] md:text-[16px] font-semibold tracking-[-0.03em] leading-normal  text-balance',
       'h6-soft':      'text-[15px] md:text-[16px] font-medium   tracking-[-0.03em] leading-normal  text-balance',
-      // Body & below — fixed (already readable at all sizes)
+      // Body & below - fixed (already readable at all sizes)
       body:           'text-[16px] font-semibold tracking-[-0.02em] leading-relaxed text-pretty',
       'body-soft':    'text-[16px] font-normal   tracking-[-0.02em] leading-relaxed text-pretty',
       detail:         'text-[14px] font-normal   tracking-normal leading-relaxed text-pretty',

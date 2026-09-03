@@ -63,9 +63,9 @@ export default function MultiselectPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Multiselect</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Multi-option selector with removable pills in the trigger for selected values.
-            Opens into a floating panel — matching Select and Combobox — with checkable rows.
+            Opens into a floating panel - matching Select and Combobox - with checkable rows.
             Supports overflow with a{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">+N</code>{' '}
             badge when selections exceed{' '}
@@ -98,7 +98,7 @@ export default function MultiselectPage() {
 
         <section id="controlled" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Controlled</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">value</code>{' '}
             (string array) and{' '}
@@ -114,7 +114,7 @@ export default function MultiselectPage() {
 
         <section id="overflow" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Overflow</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             When more items are selected than{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">maxVisible</code>{' '}
             (default: 2), the remaining count shows as a{' '}

@@ -34,7 +34,7 @@ type Variant = typeof variantMeta[number]['name']
 function parseMeta(classes: string) {
   // Extract all responsive sizes; show the largest (desktop canonical) as the reference
   const sizes = [...classes.matchAll(/text-\[(\d+)px\]/g)].map(m => m[1] + 'px')
-  const size = sizes[sizes.length - 1] ?? '—'
+  const size = sizes[sizes.length - 1] ?? '-'
   const fontMap: Record<string, string> = { semibold: 'Semibold', medium: 'Medium', normal: 'Regular' }
   const weight = fontMap[classes.match(/font-(\w+)/)?.[1] ?? ''] ?? ''
   return `${size} / ${weight}`
@@ -48,18 +48,18 @@ const headingsCode = `<Text variant="h1">Consistent by default</Text>
 <Text variant="h2">Ship faster, look better</Text>
 <Text variant="h3">Every detail matters</Text>`
 
-const softCode = `{/* SemiBold — default emphasis */}
+const softCode = `{/* SemiBold - default emphasis */}
 <Text variant="h2">Consistent by design</Text>
 
-{/* Medium — reduced weight, same size */}
+{/* Medium - reduced weight, same size */}
 <Text variant="h2-soft">Consistent by design</Text>`
 
-const bodyCode = `{/* SemiBold body — for emphasis in copy */}
+const bodyCode = `{/* SemiBold body - for emphasis in copy */}
 <Text variant="body">
   Stepwise UI gives you a consistent type scale.
 </Text>
 
-{/* Regular body — default reading weight */}
+{/* Regular body - default reading weight */}
 <Text variant="body-soft">
   Stepwise UI gives you a consistent type scale.
 </Text>
@@ -74,7 +74,7 @@ const labelsCode = `<Text variant="caption">Labels, metadata, timestamps</Text>
 
 const monoCode = `<Text variant="mono">const stepwise = () =&gt; "consistent"</Text>`
 
-const asPropCode = `{/* Visual h1 style on a semantic h2 — correct for SEO */}
+const asPropCode = `{/* Visual h1 style on a semantic h2 - correct for SEO */}
 <Text variant="h1" as="h2">Page section title</Text>
 
 {/* Styled timestamp with correct semantic element */}
@@ -153,9 +153,9 @@ export default function TypographyPage() {
         {/* Header */}
         <div className="mb-10">
           <Text variant="headline" as="h1" className="mb-4">Typography</Text>
-          <Text variant="h5-soft" as="p" className="text-zinc-500">
-            22 semantic variants built on Inter Display. Every variant locks in size, weight,
-            letter spacing, and line height — no decisions needed at the call site.
+          <Text variant="h5-soft" as="p" className="text-zinc-500 text-pretty">
+            A semantic type scale built on Inter Display. Every variant locks in size, weight,
+            letter spacing, and line height - no decisions needed at the call site.
           </Text>
         </div>
 
@@ -355,13 +355,13 @@ export default function TypographyPage() {
                   typeColor: 'text-violet-400',
                   default: 'per variant',
                   required: false,
-                  desc: 'HTML element to render. Overrides the default without changing the visual style — essential for correct heading hierarchy and semantic markup.',
+                  desc: 'HTML element to render. Overrides the default without changing the visual style - essential for correct heading hierarchy and semantic markup.',
                 },
                 {
                   prop: 'children',
                   type: 'ReactNode',
                   typeColor: 'text-violet-400',
-                  default: '—',
+                  default: '-',
                   required: false,
                   desc: 'Content to render inside the element.',
                 },
@@ -369,15 +369,15 @@ export default function TypographyPage() {
                   prop: 'className',
                   type: 'string',
                   typeColor: 'text-sky-400',
-                  default: '—',
+                  default: '-',
                   required: false,
-                  desc: 'Additional Tailwind classes merged via cn(). Applied after variant classes — use to override color, margin, or width.',
+                  desc: 'Additional Tailwind classes merged via cn(). Applied after variant classes - use to override color, margin, or width.',
                 },
                 {
                   prop: '...rest',
                   type: 'HTMLAttributes',
                   typeColor: 'text-violet-400',
-                  default: '—',
+                  default: '-',
                   required: false,
                   desc: 'Any valid HTML attribute for the rendered element (id, onClick, data-*, aria-*, etc.).',
                 },

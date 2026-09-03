@@ -9,7 +9,7 @@ export interface OtpInputProps {
   /** 'numeric' → digits only (default). 'alphanumeric' → letters + digits (security code). */
   type?       : 'numeric' | 'alphanumeric'
   value?      : string
-  /** Initial value for uncontrolled use — ignored once `value` is passed. */
+  /** Initial value for uncontrolled use - ignored once `value` is passed. */
   defaultValue?: string
   onChange?   : (value: string) => void
   /** Fires once when every box is filled. */
@@ -48,7 +48,7 @@ export function OtpInput({
   const refs    = useRef<(HTMLInputElement | null)[]>([])
   const doneFor = useRef<string | null>(null)
 
-  // resend countdown — only runs when a resend handler exists
+  // resend countdown - only runs when a resend handler exists
   useEffect(() => {
     if (!onResend || countdown <= 0) return
     const t = setTimeout(() => setCountdown(c => c - 1), 1000)
@@ -194,7 +194,7 @@ export function OtpInput({
         })}
       </motion.div>
 
-      {/* resend line — countdown, then a live link */}
+      {/* resend line - countdown, then a live link */}
       {onResend && (
         <div className="flex items-center gap-1 text-[13px] text-zinc-400 dark:text-zinc-500">
           <span>Didn&apos;t get the code?</span>

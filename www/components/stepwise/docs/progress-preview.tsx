@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Progress, type ProgressColor } from '@/components/stepwise/progress'
 
 // A rAF loop advancing by a hair every frame, instead of a big jump on a
-// slow interval — a 4%-every-500ms tick paired with the bar's own 500ms
+// slow interval - a 4%-every-500ms tick paired with the bar's own 500ms
 // ease-out transition meant each step fully decelerated to a stop right as
 // the next one began, reading as "move, pause, move, pause." Continuous
 // per-frame targets never let the transition catch up to a standstill, so
@@ -44,7 +44,7 @@ export function ProgressIndeterminatePreview() {
 }
 
 // Storage-warning pattern: the color isn't a fixed prop here, it's derived
-// from the value itself — plenty of room reads as safe green, then warns,
+// from the value itself - plenty of room reads as safe green, then warns,
 // then goes critical as free space actually runs out.
 function storageColor(pct: number): ProgressColor {
   if (pct >= 90) return 'danger'
@@ -58,7 +58,7 @@ export function ProgressLabelPreview() {
     const id = setInterval(() => setV(p => (p >= 100 ? 0 : p + 5)), 400)
     return () => clearInterval(id)
   }, [])
-  // Starts at 50%, not 0 — from zero, the 9s cycle spends its first ~6.3s
+  // Starts at 50%, not 0 - from zero, the 9s cycle spends its first ~6.3s
   // sitting in the "safe" green band before ever reaching the warning
   // threshold, which is a long wait just to see the color actually change.
   const storage = useSmoothProgress(9000, 50)

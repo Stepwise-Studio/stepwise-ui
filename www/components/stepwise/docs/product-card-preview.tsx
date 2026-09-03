@@ -2,32 +2,33 @@
 
 import { ProductCard } from '@/components/stepwise/product-card'
 
-export function ProductCardDefaultPreview() {
+export function ProductCardBasicPreview() {
   return (
     <ProductCard
-      previewIcon={<span className="text-[64px]">🧴</span>}
-      name="Winter skin care combo"
-      tag={{ label: '✦ Organic', color: 'pink' }}
-      description="A gentle, fragrance-free routine for dry winter skin — cleanser, moisturizer, and lip balm in one bundle."
-      price={109}
+      images={['https://images.unsplash.com/photo-1510936470381-68e4c0a5e24b?w=800&q=80&auto=format&fit=crop']}
+      name="Hardcover Novel"
+      tag={{ label: 'New', color: 'sky' }}
+      description="A quality cloth-bound hardcover with a ribbon marker and matte-laminated jacket. Printed on cream, acid-free paper built to last."
+      price={24}
       showWishlist
       ctaLabel="Add to Cart"
     />
   )
 }
 
-export function ProductCardObjectPreview() {
+export function ProductCardStatsPreview() {
   return (
     <ProductCard
-      previewIcon={<span className="text-[64px]">🛋️</span>}
-      name="Single seater sofa"
-      tag={{ label: '✦ New Arrival', color: 'indigo' }}
-      description="The CozyNest single seater sofa offers unparalleled comfort with its plush cushions and sleek design."
-      price={120}
+      images={['https://images.unsplash.com/photo-1784638889238-feb6277ca95f?w=800&q=80&auto=format&fit=crop']}
+      name="Nordic Lounge Chair"
+      tag={{ label: 'New Arrival', color: 'sky' }}
+      imagePosition="center 55%"
+      description="Solid oak legs, breathable wool-blend upholstery, and a low-slung frame built for long afternoons. Assembles in minutes, no tools needed."
+      price={340}
       stats={[
-        { label: 'Happy Buyers',       value: '1.6K' },
-        { label: 'Rating',             value: '4.8'  },
-        { label: 'Extended Warranty',  value: '5 Yrs' },
+        { label: 'Sold',     value: '2.1K' },
+        { label: 'Rating',   value: '4.9'  },
+        { label: 'Warranty', value: '5 Yrs' },
       ]}
       showWishlist
       ctaLabel="Add to Cart"
@@ -35,14 +36,14 @@ export function ProductCardObjectPreview() {
   )
 }
 
-export function ProductCardTshirtPreview() {
+export function ProductCardVariantsPreview() {
   return (
     <ProductCard
-      previewIcon={<span className="text-[64px]">👕</span>}
-      name="Summer wear T-shirt"
-      tag={{ label: '★ 4.8', color: 'green' }}
-      description="The TrendyThreads summer T-shirt is crafted from lightweight, breathable fabric, ensuring comfort during warm days."
-      price={15}
+      images={['https://images.unsplash.com/photo-1651761179569-4ba2aa054997?w=800&q=80&auto=format&fit=crop']}
+      name="Classic Cotton Tee"
+      tag={{ label: '4.8 ★', color: 'green' }}
+      description="100% combed cotton, pre-shrunk and garment-dyed for a soft, broken-in feel from the very first wear."
+      price={28}
       colors={['#38bdf8', '#f97316', '#f43f5e', '#22c55e', '#6366f1', '#eab308', '#14b8a6']}
       sizes={['XS', 'S', 'M', 'XL', '2XL']}
       showWishlist

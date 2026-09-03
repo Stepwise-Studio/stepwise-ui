@@ -41,7 +41,7 @@ toast.show({
 })`
 
 const soundCode = `// Opt in to a toaster "pop + ding" when the toast appears.
-// Synthesized with the Web Audio API — no audio files.
+// Synthesized with the Web Audio API - no audio files.
 toast.success('Toast is ready!', {
   description: 'Pops up with a toaster ding.',
   sound: true,
@@ -71,8 +71,8 @@ export default function ToastPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Toast</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Global notification toasts in four types — success, warning, error, and info.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Global notification toasts in four types - success, warning, error, and info.
             Slides up from the bottom center, auto-dismisses after 5 seconds, and renders
             via a portal so it sits above everything else.
           </Text>
@@ -85,19 +85,19 @@ export default function ToastPage() {
 
         <section id="setup" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Setup</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Add{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">{'<Toaster />'}</code>{' '}
             once in your app root. Then call{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">toast.*</code>{' '}
-            anywhere — no context provider needed.
+            anywhere - no context provider needed.
           </Text>
           <CodeBlock code={setupCode} lang="tsx" />
         </section>
 
         <section id="types" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Types</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Click the buttons to see each toast type.
           </Text>
           <PreviewCode
@@ -109,7 +109,7 @@ export default function ToastPage() {
 
         <section id="action" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">With action</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass an{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">action</code>{' '}
             object to replace the dismiss × with a labeled button. Clicking it runs{' '}
@@ -125,10 +125,10 @@ export default function ToastPage() {
 
         <section id="sound" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Sound</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Set{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">sound: true</code>{' '}
-            to play a toaster "pop + ding" when the toast appears — synthesized with the Web Audio
+            to play a toaster "pop + ding" when the toast appears - synthesized with the Web Audio
             API, so there are no audio files to ship. It is off by default; toggle it per toast.
           </Text>
           <PreviewCode
@@ -140,7 +140,7 @@ export default function ToastPage() {
 
         <section id="dismiss" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Dismiss</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Toasts auto-dismiss after 5 seconds (configurable via{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">duration</code>
             ).{' '}
@@ -156,7 +156,7 @@ export default function ToastPage() {
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mb-2">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mb-2 text-pretty">
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">toast.show()</code> accepts:
           </Text>
           <PropsTable rows={[

@@ -28,10 +28,10 @@ export default function ScrollAreaPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Scroll Area</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Scrolls with no visible scrollbar by default. Pass{' '}
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A scroll container that hides the scrollbar by default, or renders a slim custom one. Pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">showScrollbar</code>{' '}
-            for Stepwise&apos;s minimal scrollbar instead — a fully transparent track with a slim
+            for Stepwise&apos;s minimal scrollbar instead - a fully transparent track with a slim
             rounded thumb that darkens when you hover or drag it. Theme-aware and self-contained;
             it&apos;s what powers the scroll region inside Command Palette.
           </Text>
@@ -56,7 +56,7 @@ export default function ScrollAreaPage() {
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
             { name: 'maxHeight',     type: 'number | string', desc: 'Cap the height and scroll vertically past it.' },
-            { name: 'maxWidth',      type: 'number | string', desc: 'Cap the width and scroll horizontally past it — for axis="x" or "both".' },
+            { name: 'maxWidth',      type: 'number | string', desc: 'Cap the width and scroll horizontally past it - for axis="x" or "both".' },
             { name: 'axis',          type: "'y' | 'x' | 'both'", desc: 'Scroll axis. Default y.' },
             { name: 'showScrollbar', type: 'boolean', desc: 'Show the thumb instead of scrolling invisibly. Default false.' },
             { name: 'className',     type: 'string', desc: 'Merged onto the scroll container.' },

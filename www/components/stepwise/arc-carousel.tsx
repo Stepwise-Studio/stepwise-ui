@@ -39,30 +39,19 @@ const DEG = Math.PI / 180
 const MAX_HALF_SWEEP = 80 * DEG
 
 /**
- * Photographs riding a real arc, drifting continuously.
+ * Photographs riding an arc, drifting continuously.
  *
- * The cards ride a **CSS motion path** — one `offset-path` circular arc shared
- * by every card, each parked at a different `offset-distance` via a negative
- * animation delay, so the set spreads evenly along the curve and wraps
- * seamlessly. `offset-rotate: auto` is the whole point: the browser derives
- * each card's angle from the tangent of the path it is actually standing on.
+ * Every card shares one `offset-path` circular arc and sits at a different
+ * `offset-distance` via a negative animation delay, so the set spreads evenly
+ * along the curve and wraps seamlessly. `offset-rotate: auto` lets the browser
+ * take each card's angle from the tangent of the curve it stands on, which is
+ * why `arc` controls both the depth and the tilt: on a real curve those are
+ * the same quantity and cannot be set separately.
  *
- * That is what the previous hand-rolled version got wrong. It generated
- * keyframes that set `translate()` from one formula and `rotate()` from a
- * different, unrelated one — the tilt was a linear ramp of horizontal
- * position while the drop was a cosine of that ramp. Those two curves only
- * agree at the peak, so every card away from the centre was tilted by an
- * angle the curve underneath it never had, and the strip read as cards
- * floating near an arc rather than sitting on one. Two independent knobs
- * (`arc` and `lift`) for one geometric quantity guaranteed it: on a real
- * curve the tilt *is* the tangent, so depth and angle cannot be set
- * separately. `lift` is gone for that reason — `arc` now drives both.
- *
- * Geometry is derived from the measured width rather than the card count, so
- * the bow looks the same whether there are six photos or sixty, and the path
- * is cut to exactly the viewport plus one card of overscan at each end — the
- * card list is repeated to fill it, so a short `items` array still yields an
- * unbroken strip.
+ * Geometry comes from the measured width, not the card count, so the bow looks
+ * the same with six photos or sixty. The path covers the viewport plus one
+ * card of overscan at each end and the list repeats to fill it, so a short
+ * `items` array still gives an unbroken strip.
  *
  * Requires `offset-path` (Chrome 46+, Firefox 72+, Safari 16+).
  */
@@ -88,8 +77,8 @@ export function ArcCarousel({
   // useId carries colons, which are not valid in a CSS identifier.
   const uid = `axarc${useId().replace(/[^a-zA-Z0-9]/g, '')}`
 
-  // Layout effect, not effect — the width lands before the browser paints, so
-  // the strip is never seen stacked at the origin waiting to be measured.
+  // Layout effect so the width lands before paint, otherwise the strip is
+  // briefly visible stacked at the origin.
   useLayoutEffect(() => {
     const el = rootRef.current
     if (!el) return
@@ -105,13 +94,11 @@ export function ArcCarousel({
   const W = Math.max(width, 1)
   const geometryKey = `${W}|${arc}|${itemWidth}|${ratio}|${gap}|${duration}`
 
-  // A CSS animation's clock starts when its element is first rendered, so any
-  // re-render that adds a card — the very first measure, or a resize that
-  // changes `count` — leaves the newcomers running against a different origin
-  // than their neighbours. The set stays evenly spread in *delay* but not in
-  // *time*, which shows up as one stubbornly wrong gap travelling around the
-  // strip while every other gap is exact. Pinning every card's animation to a
-  // single startTime puts the whole set back on one clock.
+  // A CSS animation's clock starts when its element first renders, so cards
+  // added by a later re-render (the first measure, or a resize that changes
+  // `count`) run against a different origin than the rest. That shows up as
+  // one wrong gap travelling around an otherwise even strip. Pinning every
+  // card to a single startTime keeps them on one clock.
   useLayoutEffect(() => {
     const el = trackRef.current
     if (!el) return
@@ -129,21 +116,17 @@ export function ArcCarousel({
   let R = arcRad > 1e-4 ? W / arcRad : 0
   if (R > 0 && seed / (2 * R) > MAX_HALF_SWEEP) R = seed / (2 * MAX_HALF_SWEEP)
 
-  // Cards sit perpendicular to the radius, so neighbours fan out from a
-  // centre below the arc: their inner (lower) corners converge while the
-  // outer ones splay open. That means centre-to-centre distance is NOT the
-  // clearance — pitching the cards a flat `itemWidth + gap` apart delivers
-  // that gap only at the card's mid-line, and at the inner edge it collapses
-  // to about a pixel, which is why neighbours read as touching while the
-  // gap above them stayed obvious. Dividing by the fan factor solves for the
-  // pitch that puts `gap` at the *closest* point instead, so the tightest
-  // clearance is uniform and is the number that was actually asked for.
+  // Cards sit perpendicular to the radius, so neighbours fan out from a centre
+  // below the arc and their inner corners converge. Centre-to-centre distance
+  // is therefore not the clearance: a flat `itemWidth + gap` pitch delivers
+  // that gap at the mid-line but nearly nothing at the inner edge. Dividing by
+  // the fan factor solves for the pitch that puts `gap` at the closest point.
   const fan = R > 0 ? Math.max(0.55, 1 - itemHeight / (2 * R)) : 1
   const spacing = nominal / fan
 
   // Enough cards to cover the viewport plus one entering and one leaving.
   // `offset-distance` is measured in path length, so cards spaced evenly in
-  // distance are spaced evenly along the curve — which means the path length
+  // distance are spaced evenly along the curve - which means the path length
   // has to be an exact multiple of the card pitch.
   const count = Math.max(2, Math.ceil((W + spacing * 2) / spacing))
   const pathLen = count * spacing
@@ -152,9 +135,8 @@ export function ArcCarousel({
   const chordHalf = R > 0 ? R * Math.sin(halfSweep) : pathLen / 2
   const sagitta   = R > 0 ? R * (1 - Math.cos(halfSweep)) : 0
 
-  // The deepest / most tilted a card can be while still on screen — the box
-  // only has to be tall enough for those, not for the ones the mask has
-  // already faded out past the edges.
+  // The deepest and most tilted a card can be while still on screen. The box
+  // only needs to clear those, not the ones already faded out by the mask.
   const uEdge = Math.min(W / 2 + itemWidth / 2, chordHalf)
   const edgeDrop = R > 0 ? R - Math.sqrt(Math.max(0, R * R - uEdge * uEdge)) : 0
   const edgeTilt = R > 0 ? Math.asin(Math.min(1, uEdge / R)) : 0

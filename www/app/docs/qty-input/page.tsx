@@ -28,7 +28,7 @@ export default function QtyInputPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Quantity Input</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A compact +/− stepper for cart quantities, numeric settings, or any bounded
             integer. The count animates on change. Minus is disabled at{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">min</code>,

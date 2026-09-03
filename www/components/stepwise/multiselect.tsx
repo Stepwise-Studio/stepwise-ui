@@ -24,33 +24,28 @@ export interface MultiselectProps {
   label?       : string
   disabled?    : boolean
   maxVisible?  : number
-  /** Render open on mount and ignore outside clicks/Escape — for showcases
+  /** Render open on mount and ignore outside clicks/Escape - for showcases
    *  and screenshots that don't want to fight the panel's own space. */
   defaultOpen? : boolean
   className?   : string
 }
 
-const FONT = 'var(--font-inter-display)'
+const FONT = 'var(--font-inter-display, ui-sans-serif, system-ui, sans-serif)'
 const TRACKING = { letterSpacing: '-0.03em' }
-// A toggle chip fires on every click — a high-frequency, low-ceremony
-// interaction, not an emphasis moment. Symmetric duration/easing both ways
-// (same as icon-swap/text-swap, not a split open/close pair), no spring:
-// springs have no fixed duration and their rest-detection tail delays when
-// the element actually unmounts and lets siblings reflow, which reads as lag
-// on a repeated interaction. scale 0.9, not 0.6 — anything below ~0.9 reads
-// as a "zoom" rather than a subtle pop, which is its own source of felt lag.
+// Toggling a chip is a frequent, low-ceremony interaction, so the timing is
+// symmetric in both directions and deliberately not a spring: a spring has no
+// fixed duration, and its settling tail delays the unmount that lets siblings
+// close the gap, which reads as lag. Scale stays at 0.9; much below that
+// reads as a zoom rather than a pop.
 const PILL_TRANSITION = { duration: 0.12, ease: [0.22, 1, 0.36, 1] } as const
 
-// Selected items shown as removable pills in the trigger — pops in / shrinks out.
+// Selected items as removable pills in the trigger.
 //
-// `mode="popLayout"` clones each direct child to inject a ref and a
-// `position: absolute` style the moment it starts exiting, which is what takes
-// the leaving pill out of the flow so the rest can close the gap immediately.
-// A plain function component swallows both, so the exiting pill used to sit in
-// the flow at full width for the whole exit — leaving a blank slot, shoving the
-// promoted pill and the +N counter out of the row until it finally unmounted.
-// Forwarding the ref and merging the injected style is what makes popLayout
-// actually apply here.
+// `mode="popLayout"` injects a ref and a `position: absolute` style into each
+// exiting child, which is what pulls the leaving pill out of the flow so the
+// rest can close the gap immediately. A plain function component would swallow
+// both, leaving a blank slot for the whole exit, so this forwards the ref and
+// merges the injected style.
 const SelectedPill = forwardRef<HTMLSpanElement, {
   label: string
   onRemove: () => void
@@ -130,8 +125,7 @@ export function Multiselect({
   const visibleChips = selected.slice(0, maxVisible)
   const overflow = selected.length - maxVisible
 
-  // Open steps up one notch like Input's own focus state (zinc-400/500), not
-  // a near-black/near-white ring.
+  // Open steps up one notch, matching Input's focus state.
   const idleBorder = dark ? '#27272a' : '#e4e4e7'
   const openBorder = dark ? '#71717a' : '#a1a1aa'
   const borderColor = disabled ? idleBorder : (isOpen ? openBorder : idleBorder)
@@ -148,10 +142,10 @@ export function Multiselect({
         </label>
       )}
 
-      {/* trigger — stays mounted; pills for selected values. Its own height
+      {/* trigger - stays mounted; pills for selected values. Its own height
           grows as pills wrap to more than one line, so the panel below is
           positioned with top-full off THIS wrapper, not a fixed pixel guess
-          off the outer column — otherwise a taller (wrapped) trigger pushes
+          off the outer column - otherwise a taller (wrapped) trigger pushes
           straight through a panel still parked at the old, shorter offset. */}
       <div className="relative min-h-11 w-full">
         <Surface radius={18} className="relative min-h-11 w-full bg-white dark:bg-zinc-900">
@@ -215,7 +209,7 @@ export function Multiselect({
           style={{ borderRadius: 18, borderWidth: 1, borderStyle: 'solid', borderColor, transition: 'border-color 250ms ease' }}
         />
 
-        {/* panel — floats below the trigger, matches Select/Combobox */}
+        {/* panel - floats below the trigger, matches Select/Combobox */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -281,7 +275,7 @@ export function Multiselect({
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-0"
-                style={{ borderRadius: 18, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border)' }}
+                style={{ borderRadius: 18, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border, rgb(138 138 141 / 0.23))' }}
               />
             </motion.div>
           )}

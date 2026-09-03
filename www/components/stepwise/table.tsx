@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@hugeicons/core-free-icons'
@@ -46,15 +46,6 @@ const ROW_VARIANTS = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.15, ease: [0.22, 1, 0.36, 1] as const } },
 } satisfies Record<string, object>
 
-// Fade mask on whichever edges still have hidden content — only shows the
-// cue when there's actually something to scroll to, in either direction.
-function edgeMask(left: boolean, right: boolean) {
-  if (!left && !right) return undefined
-  if (left && right) return 'linear-gradient(to right, transparent, black 24px, black calc(100% - 24px), transparent)'
-  if (left) return 'linear-gradient(to right, transparent, black 24px)'
-  return 'linear-gradient(to right, black calc(100% - 24px), transparent)'
-}
-
 function ArrowBtn({ dir, onClick, disabled }: { dir: 'prev' | 'next'; onClick: () => void; disabled: boolean }) {
   return (
     <button
@@ -90,27 +81,6 @@ export function Table<T = Record<string, unknown>>({
   const auto = columns.map(c => c.width ?? '1fr').join(' ')
   const template = gridCols ?? auto
 
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [scrollState, setScrollState] = useState({ left: false, right: false })
-
-  const updateScrollState = useCallback(() => {
-    const el = scrollRef.current
-    if (!el) return
-    setScrollState({
-      left: el.scrollLeft > 4,
-      right: el.scrollLeft + el.clientWidth < el.scrollWidth - 4,
-    })
-  }, [])
-
-  useEffect(() => {
-    updateScrollState()
-    const el = scrollRef.current
-    if (!el) return
-    const ro = new ResizeObserver(updateScrollState)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [updateScrollState])
-
   const [internalPage, setInternalPage] = useState(1)
   const paginated = !!pageSize && rows.length > pageSize
   const pages = paginated ? Math.ceil(rows.length / pageSize!) : 1
@@ -128,13 +98,7 @@ export function Table<T = Record<string, unknown>>({
 
   return (
     <div className={cn('relative', className)}>
-      <Surface
-        ref={scrollRef}
-        radius={24}
-        className="overflow-x-auto"
-        onScroll={updateScrollState}
-        style={{ maskImage: edgeMask(scrollState.left, scrollState.right), WebkitMaskImage: edgeMask(scrollState.left, scrollState.right) }}
-      >
+      <Surface radius={24} className="overflow-x-auto">
         <div role="table" style={{ minWidth }}>
           {/* Header */}
           <div
@@ -155,7 +119,7 @@ export function Table<T = Record<string, unknown>>({
 
           {/* Everything below the header lives in one rounded block */}
           <div className="overflow-hidden rounded-b-[23px]">
-            {/* Rows — the page cross-fades as one block on page change */}
+            {/* Rows - the page cross-fades as one block on page change */}
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.div
                 key={current}
@@ -200,7 +164,7 @@ export function Table<T = Record<string, unknown>>({
               </motion.div>
             </AnimatePresence>
 
-            {/* Footer — page read-out + arrows */}
+            {/* Footer - page read-out + arrows */}
             {paginated && (
               <div className="flex items-center justify-between border-t border-zinc-200/70 bg-zinc-50 px-4 py-2.5 dark:border-zinc-700/40 dark:bg-zinc-900">
                 <span className="pl-2 text-[12px] tabular-nums text-zinc-400 dark:text-zinc-500">
@@ -216,11 +180,11 @@ export function Table<T = Record<string, unknown>>({
         </div>
       </Surface>
 
-      {/* border overlay — outside the squircle clip so it never gets shaved */}
+      {/* border overlay - outside the squircle clip so it never gets shaved */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ borderRadius: 24, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border)' }}
+        style={{ borderRadius: 24, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border, rgb(138 138 141 / 0.23))' }}
       />
     </div>
   )

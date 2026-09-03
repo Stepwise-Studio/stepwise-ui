@@ -30,7 +30,7 @@ export function DropdownBasicPreview() {
   )
 }
 
-// ─── Text only — no icon prop passed, so no icon gutter is reserved ───────────
+// ─── Text only - no icon prop passed, so no icon gutter is reserved ───────────
 export function DropdownTextOnlyPreview() {
   return (
     <DropdownMenu
@@ -46,10 +46,10 @@ export function DropdownTextOnlyPreview() {
   )
 }
 
-// ─── Nested — items with their own `items` become submenu triggers ───────────
+// ─── Nested - items with their own `items` become submenu triggers ───────────
 export function DropdownNestedPreview() {
   return (
-    // Horizontally centered (matches the other demos) but top-anchored —
+    // Horizontally centered (matches the other demos) but top-anchored -
     // the panel only grows downward, so vertical centering left almost no
     // room below it; self-start overrides just the box's vertical centering.
     // Horizontal overflow is already handled for real by the submenu's own

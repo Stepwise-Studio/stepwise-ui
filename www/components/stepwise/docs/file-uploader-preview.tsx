@@ -24,11 +24,11 @@ function useFiles() {
   return { files, onFiles, onRemove }
 }
 
-/* ── draggable demo chips — real HTML5 drag-and-drop onto the dropzone
+/* ── draggable demo chips - real HTML5 drag-and-drop onto the dropzone
    below, so the upload + progress animation is something to actually try,
    not just imagine from a code sample. They render the folder's own
    SkeletonCard at file-card proportions, so what you pick up is visibly the
-   same object that lands in the fan — and each sits at a slight rest tilt
+   same object that lands in the fan - and each sits at a slight rest tilt
    that straightens as you hover it, marking it as something to grab. ───── */
 const DEMO_MIME = 'application/x-stepwise-demo-file'
 const DEMO_FILES = [

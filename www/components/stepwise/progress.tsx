@@ -14,23 +14,19 @@ export interface ProgressProps extends Omit<HTMLAttributes<HTMLDivElement>, 'col
   /** Label shown above the track, on the left. */
   label?: string
   /** Show the current value on the right. Ignored (and never shown) while
-   *  indeterminate — there's no percentage to report. Default false. */
+   *  indeterminate - there's no percentage to report. Default false. */
   showValue?: boolean
   /** Format the displayed value. Default `${n}%`. */
   formatValue?: (value: number) => string
   className?: string
 }
 
-// success/warning need to be darker in light mode than dark to clear WCAG
-// 1.4.11's 3:1 non-text-contrast minimum against the light track (zinc-100)
-// — green-500/amber-500 measure only 2.07:1 / 1.95:1 there. Tailwind's own
-// 700 step clears it but reads muddy/desaturated at full track width; these
-// are custom OKLCH shades instead — same hue and chroma as the 500s (so they
-// stay just as vivid, not "darker AND duller"), lightness lowered only as
-// far as the contrast floor actually requires, with a little headroom
-// (3.3–3.7:1) rather than sitting right on the 3.0 edge. Against the dark
-// track (zinc-800) the 500 shades already pass comfortably (6.5:1+), so only
-// light mode needs the swap.
+// success and warning need darker shades in light mode to clear WCAG 1.4.11's
+// 3:1 minimum against the zinc-100 track, where green-500 and amber-500 only
+// reach 2.07:1 and 1.95:1. These are custom OKLCH values rather than Tailwind's
+// 700 step, which clears the bar but reads muddy: same hue and chroma as the
+// 500s, lightness lowered just far enough to land at 3.3-3.7:1. The dark track
+// already passes comfortably, so only light mode swaps.
 const bar: Record<ProgressColor, string> = {
   brand:   'bg-zinc-900 dark:bg-white',
   success: 'bg-[oklch(0.56_0.219_149.579)] dark:bg-green-500',
@@ -60,11 +56,9 @@ export function Progress({
       {showLabelRow && (
         <div className="mb-1.5 flex items-center justify-between gap-2">
           {label && (
-            // leading-[1.2], not leading-none — this label truncates
-            // (overflow:hidden), and a line-height of exactly 1 sits tighter
-            // than the font's true glyph metrics, so a descender like the
-            // 'g' in "Uploading" was getting sliced off by the truncate
-            // clip. Same fix as Button's own label needed for the same reason.
+            // leading-[1.2] rather than leading-none: this label truncates, and
+            // a line-height of exactly 1 is tighter than the font's real glyph
+            // metrics, which clips descenders.
             <span className="min-w-0 truncate text-[13px]/[1.2] font-medium tracking-[-0.01em] text-zinc-500 dark:text-zinc-400">
               {label}
             </span>
@@ -90,7 +84,7 @@ export function Progress({
       >
         {indeterminate ? (
           <div className={cn('ax-prog-indet absolute inset-y-0 rounded-full', bar[color])}>
-            {/* Soft leading/trailing fade instead of a flat-cut block — a
+            {/* Soft leading/trailing fade instead of a flat-cut block - a
                 block sliding at a constant width read as a solid brick
                 shoving back and forth rather than something moving. */}
             <div

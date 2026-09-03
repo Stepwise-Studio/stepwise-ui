@@ -14,7 +14,7 @@ export interface DiagonalLinesProps extends React.HTMLAttributes<HTMLDivElement>
 
 /**
  * Diagonal hairlines for section backgrounds. Absolutely positioned to fill
- * its nearest positioned ancestor — give the parent `relative` and a height.
+ * its nearest positioned ancestor - give the parent `relative` and a height.
  */
 export const DiagonalLines = React.forwardRef<HTMLDivElement, DiagonalLinesProps>(
   ({ className, style, variant = 'right', size = 24, faded = true, ...props }, ref) => {

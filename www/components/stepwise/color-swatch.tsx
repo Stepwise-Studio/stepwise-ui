@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { cn } from '@/lib/utils/cn'
 
 export interface ColorSwatchProps {
-  /** The selectable colors — any CSS color. */
+  /** The selectable colors - any CSS color. */
   colors: string[]
   value?: string
   defaultValue?: string
@@ -17,9 +17,9 @@ export interface ColorSwatchProps {
 }
 
 /**
- * A row of colour circles with a single active selection. Selecting a swatch
- * draws a ring in its *own colour* while the inner circle shrinks in to make
- * room — so the footprint never changes and there's no stray hopping ring.
+ * A row of colour circles with a single active selection. The selected swatch
+ * draws a ring in its own colour while the inner circle shrinks to make room,
+ * so the footprint stays the same and nothing shifts around it.
  */
 export function ColorSwatch({
   colors,
@@ -56,13 +56,13 @@ export function ColorSwatch({
             )}
             style={{ width: size, height: size }}
           >
-            {/* ring — same colour as the swatch, at the footprint edge; fades in on select */}
+            {/* ring - same colour as the swatch, at the footprint edge; fades in on select */}
             <span
               aria-hidden
               className="absolute inset-0 rounded-full transition-opacity duration-200 ease-out"
               style={{ boxShadow: `inset 0 0 0 2px ${c}`, opacity: isActive ? 1 : 0 }}
             />
-            {/* inner colour — shrinks in when selected to reveal the ring; size never grows */}
+            {/* inner colour - shrinks in when selected to reveal the ring; size never grows */}
             <span
               aria-hidden
               className="absolute inset-0 rounded-full transition-transform duration-200 ease-[cubic-bezier(0.34,1.35,0.64,1)]"

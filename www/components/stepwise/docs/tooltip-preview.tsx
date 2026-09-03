@@ -27,7 +27,7 @@ export function TooltipPreview() {
 
   return (
     // All tooltips use this container as their collision boundary. Normal
-    // document flow (stacked rows, not absolute-positioned anchor points) —
+    // document flow (stacked rows, not absolute-positioned anchor points) -
     // the previous version placed Top/Bottom at fixed pixel offsets and the
     // middle row at fixed 30/50/70% points, none of which accounted for the
     // buttons' actual widths, so anything narrower than desktop overlapped.

@@ -9,16 +9,23 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     <div className="min-h-screen">
       <DocsHeader sections={docsNav} />
 
-      <div className="max-w-[1400px] mx-auto flex min-h-[calc(100vh-56px)]">
-        {/* Sidebar — hidden on mobile, visible on md+ */}
-        <aside className="hidden md:block w-56 shrink-0 border-r border-zinc-100 dark:border-zinc-900 sticky top-14 h-[calc(100vh-56px)]">
+      {/* No header strip on mobile any more (see `DocsHeader`), so its
+          64px only needs subtracting from the desktop min-height. */}
+      <div className="max-w-[1400px] mx-auto flex min-h-screen md:min-h-[calc(100vh-64px)]">
+        {/* Sidebar - hidden on mobile, visible on md+ */}
+        <aside className="hidden md:block w-56 shrink-0 border-r border-zinc-100 dark:border-zinc-900 sticky top-16 h-[calc(100vh-64px)]">
           <ScrollArea axis="y" showScrollbar className="flex flex-col gap-8 px-4 py-8">
             <SidebarNav sections={docsNav} />
           </ScrollArea>
         </aside>
 
-        {/* Main content */}
-        <main className="flex-1 min-w-0 px-4 md:px-10 py-12">
+        {/* Main content - `MobileTopBar` is `sticky`, so (unlike the
+            floating icons it replaced) it already reserves its own space
+            in flow; only the bottom needs extra padding, clearing the
+            fixed `MobileBottomNav` bar (~48px pill + 16px gap + safe-area).
+            Not needed at `md`, where the real sticky header reserves its
+            own space and there's no bottom bar at all. */}
+        <main className="flex-1 min-w-0 px-4 pb-28 pt-12 md:px-10 md:py-12">
           {children}
         </main>
       </div>

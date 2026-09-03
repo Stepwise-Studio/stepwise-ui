@@ -22,6 +22,10 @@ export async function CodeBlock({ code, lang = 'tsx', copyable = true, flat = fa
 
   return (
     <Surface
+      // A stable hook for containers that want to own the code background
+      // themselves - see PreviewCode, which paints it on the full-height panel
+      // so a short snippet doesn't leave a bare strip underneath.
+      data-code-block=""
       corners={flat ? {
         topLeft: 0, topRight: 0,
         bottomLeft: { radius: 24, smoothing: 0.6 },
@@ -45,10 +49,27 @@ export async function CodeBlock({ code, lang = 'tsx', copyable = true, flat = fa
   )
 }
 
+/**
+ * A one-line install command.
+ *
+ * Highlighted by hand rather than through Shiki: these are always the same
+ * shape (`npx <bin> <verb> <args>`), and a real bash grammar renders every
+ * token the same colour anyway, which is why this read as flat text before.
+ * The runner and the subcommand are what people scan for, so those are the
+ * parts that get colour.
+ */
 export function InlineInstall({ command }: { command: string }) {
+  const [runner, bin, verb, ...args] = command.split(' ')
   return (
     <Surface radius={20} className="flex items-center justify-between gap-4 bg-zinc-100/80 dark:bg-zinc-900/70 px-5 py-3.5">
-      <span className="text-[14px] font-mono text-zinc-600 dark:text-zinc-300">{command}</span>
+      <span className="min-w-0 truncate text-[14px] font-mono">
+        <span className="text-violet-600 dark:text-violet-400">{runner}</span>{' '}
+        <span className="text-zinc-800 dark:text-zinc-200">{bin}</span>
+        {verb && <>{' '}<span className="text-sky-600 dark:text-sky-400">{verb}</span></>}
+        {args.length > 0 && (
+          <>{' '}<span className="text-zinc-500 dark:text-zinc-400">{args.join(' ')}</span></>
+        )}
+      </span>
       <CopyButton text={command} className="shrink-0" />
     </Surface>
   )

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils/cn'
 
 export interface SquigglyUnderlineProps {
   children     : React.ReactNode
-  /** Stroke color — also applied to the text so emphasis never relies on the underline alone. Default currentColor. */
+  /** Stroke color - also applied to the text so emphasis never relies on the underline alone. Default currentColor. */
   color?       : string
   /** Wave height in px. Scales from font size when omitted. */
   amplitude?   : number
@@ -30,16 +30,14 @@ interface Metrics {
   rtl         : boolean
 }
 
-// Build a smooth sine path in real pixel space (no viewBox stretching, so the
-// stroke width never distorts) using cubic segments per half-wave.
+// A sine path built in real pixel space (no viewBox stretching, so the stroke
+// never distorts), one cubic segment per half-wave.
 //
-// The half-wave length almost never divides the text width evenly, so a
-// naive walk-and-clamp leaves a squished, asymmetric final segment wherever
-// it happens to hit the edge — the underline looks like it was just cut off
-// mid-wave rather than ending cleanly. Instead, pick the nearest whole number
-// of half-waves for this width and spread them evenly across it: the
-// wavelength stretches or compresses by a few percent (imperceptible) but
-// every path always ends exactly on the baseline, in a full crest or trough.
+// The half-wave length rarely divides the text width evenly, so the wave is
+// fitted to the nearest whole number of half-waves and spread across the
+// width. The wavelength shifts by a few percent, which is imperceptible, and
+// every path ends on the baseline in a full crest or trough instead of being
+// cut off mid-wave.
 function wavePath(width: number, amp: number, len: number, midY: number) {
   if (width <= 0) return ''
   const half = len / 2
@@ -112,10 +110,9 @@ export function SquigglyUnderline({
     if (!el) return
     const cs = getComputedStyle(el)
     const fontSize = parseFloat(cs.fontSize) || 16
-    // `top: 100%` anchors to the line box, not the glyph baseline — a roomy
-    // line-height (e.g. leading-relaxed) leaves several px of invisible
-    // leading below the descender before that edge. Half of the leading sits
-    // below the text, so subtracting it pulls the wave up to the glyphs.
+    // `top: 100%` anchors to the line box, not the baseline, so a roomy
+    // line-height leaves empty leading below the descender. Half the leading
+    // sits below the text, so subtracting it pulls the wave up to the glyphs.
     const lineHeight = parseFloat(cs.lineHeight)
     const halfLeading = Number.isFinite(lineHeight) ? Math.max(0, (lineHeight - fontSize) / 2) : 0
     setMetrics({

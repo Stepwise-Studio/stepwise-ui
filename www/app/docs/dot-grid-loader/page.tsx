@@ -27,8 +27,8 @@ export default function DotGridLoaderPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Dot Grid Loader</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A 3×3 grid of dots with four personalities. Each cell only gets a delay from the chosen
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A 3×3 grid of animated dots, in four rhythms. Each cell only gets a delay from the chosen
             pattern, so the same nine dots read as a sweep, a ripple, a chase, or a scatter.
           </Text>
         </div>

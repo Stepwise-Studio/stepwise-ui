@@ -31,7 +31,7 @@ export default function SeparatorPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Separator</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A thin divider between content. Horizontal or vertical, with an optional centered label.
           </Text>
         </div>
@@ -60,7 +60,7 @@ export default function SeparatorPage() {
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
             { name: 'orientation', type: "'horizontal' | 'vertical'", desc: 'Direction. Default horizontal.' },
-            { name: 'label',       type: 'ReactNode', desc: 'Centered label — horizontal only.' },
+            { name: 'label',       type: 'ReactNode', desc: 'Centered label - horizontal only.' },
             { name: 'className',   type: 'string',    desc: 'Merged onto the root.' },
           ]} />
         </section>

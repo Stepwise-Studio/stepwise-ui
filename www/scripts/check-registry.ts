@@ -2,7 +2,7 @@
  * Validates the generated registry before it ships.
  *
  * A broken registry fails on the user's machine, mid-install, after files are
- * already written — so every one of these is checked here instead:
+ * already written - so every one of these is checked here instead:
  *   - every `src` file exists
  *   - every registryDependency resolves to a real component
  *   - no dependency cycles (the CLI recurses, so a cycle hangs it)
@@ -81,7 +81,7 @@ const installed = new Set(Object.keys(pkg.dependencies ?? {}))
 for (const c of registry) {
   for (const d of [...c.dependencies, ...c.peerDependencies]) {
     if (!installed.has(d)) {
-      errors.push(`${c.name}: dependency "${d}" is not installed in www — typo?`)
+      errors.push(`${c.name}: dependency "${d}" is not installed in www - typo?`)
     }
   }
   const overlap = c.dependencies.filter(d => c.peerDependencies.includes(d))
@@ -115,7 +115,7 @@ for (const w of warnings) console.warn(`  ! ${w}`)
 for (const e of errors) console.error(`  ✗ ${e}`)
 
 if (errors.length > 0) {
-  console.error(`\n${errors.length} error(s) — registry is not safe to publish.`)
+  console.error(`\n${errors.length} error(s) - registry is not safe to publish.`)
   process.exit(1)
 }
 

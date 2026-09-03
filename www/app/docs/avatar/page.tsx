@@ -17,12 +17,12 @@ const accentCode = `<Avatar name="Asta" textClassName="text-sky-600 dark:text-sk
 const lettersCode = `<Avatar name="Asta" />                 // 1 letter (default)
 <Avatar name="Asta" letters={2} />     // 2 letters`
 
-const imageCode = `// Your own photo — fills the circle edge to edge, cropped. This is
+const imageCode = `// Your own photo - fills the circle edge to edge, cropped. This is
 // the default: any URL works, nothing extra to configure.
 <Avatar name="Asta" src="/your-photo.jpg" />
 
 // This site's own 5 illustrated characters (shown above), copied into
-// /public/avatars — object-position "top" keeps the crop on the face
+// /public/avatars - object-position "top" keeps the crop on the face
 // instead of centering on the chest below it.
 <Avatar name="Snoofy" src="/avatars/avatar5.svg" imagePosition="top" />
 
@@ -59,8 +59,8 @@ export default function AvatarPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Avatar</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Circular user representation in two variants — a neutral-fill initial, or a photo.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Circular user representation in two variants - a neutral-fill initial, or a photo.
             Stack them in an overlapping group with a + button wired to your invite flow.
           </Text>
         </div>
@@ -72,7 +72,7 @@ export default function AvatarPage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A neutral fill with a zinc initial.
           </Text>
           <PreviewCode
@@ -84,7 +84,7 @@ export default function AvatarPage() {
 
         <section id="accent" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Accent</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">textClassName</code>{' '}
             for a different accent color.
@@ -98,7 +98,7 @@ export default function AvatarPage() {
 
         <section id="letters" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Letters</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">letters={'{2}'}</code>{' '}
             for two initials instead of one.
@@ -112,14 +112,14 @@ export default function AvatarPage() {
 
         <section id="image" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Image</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass any URL as <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">src</code>{' '}
-            to use your own picture — it fills the circle by default, no extra setup. The 5
+            to use your own picture - it fills the circle by default, no extra setup. The 5
             characters shown here are this docs site's own illustrations, not part of the
             installed component; copy the SVGs from{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">public/avatars</code>{' '}
             if you want them, or point <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">src</code>{' '}
-            at anything else — a real photo needs nothing more than that. They're cropped with{' '}
+            at anything else - a real photo needs nothing more than that. They're cropped with{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">imagePosition="top"</code>{' '}
             so the crop favors the face over the chest below it.
           </Text>
@@ -132,7 +132,7 @@ export default function AvatarPage() {
 
         <section id="badge" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Badge</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A small status dot on the bottom-right edge. Pass{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">badge</code>{' '}
             with one of the four presence states below.
@@ -146,12 +146,12 @@ export default function AvatarPage() {
 
         <section id="group" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Avatar Group</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Hover any avatar to see their name. Hover the{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">+N</code>{' '}
             overflow pill to see everyone it's hiding. Pass{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">onAdd</code>{' '}
-            to get the dashed + button — wire it up to whatever your invite flow needs.
+            to get the dashed + button - wire it up to whatever your invite flow needs.
           </Text>
           <PreviewCode
             minHeight={260}
@@ -170,7 +170,7 @@ export default function AvatarPage() {
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Props — Avatar</Text>
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Props - Avatar</Text>
           <PropsTable rows={[
             { name: 'src',       type: 'string',                    desc: 'Image URL. Falls back to the default variant if absent or broken.' },
             { name: 'name',      type: 'string',                    desc: 'Drives the initial(s).' },
@@ -181,12 +181,12 @@ export default function AvatarPage() {
             { name: 'imagePosition', type: 'string',                desc: 'object-position for the "cover" fit, e.g. "top". Default "center".' },
             { name: 'imageScale', type: 'number',                   desc: 'Scales the photo within its "cover" fit. Under 1 zooms out a touch. Default 1.' },
             { name: 'badge',     type: '"online" | "away" | "busy" | "offline"', desc: 'Small status dot on the bottom-right edge. Omit for none.' },
-            { name: 'bordered',  type: 'boolean',                   desc: 'The tinted border stroke. Default true — AvatarGroup turns it off itself.' },
+            { name: 'bordered',  type: 'boolean',                   desc: 'The tinted border stroke. Default true - AvatarGroup turns it off itself.' },
             { name: 'showTooltip', type: 'boolean',                 desc: 'Names the avatar on hover, via Tooltip. Default true.' },
             { name: 'textClassName', type: 'string',                desc: 'Overrides the initial\'s color. Default "text-zinc-800 dark:text-zinc-200".' },
           ]} />
 
-          <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">Props — AvatarGroup</Text>
+          <Text variant="h3" className="text-zinc-900 dark:text-white mt-6">Props - AvatarGroup</Text>
           <PropsTable rows={[
             { name: 'avatars',   type: 'AvatarProps[]', desc: 'Array of avatar objects.' },
             { name: 'max',       type: 'number',        desc: 'Maximum avatars shown. Default 5.' },

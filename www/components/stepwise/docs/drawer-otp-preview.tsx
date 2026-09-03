@@ -51,7 +51,7 @@ export function OtpStandalonePreview() {
         resendAfter={15}
       />
       <p className={done ? 'text-[12px] font-medium text-green-600 dark:text-green-400' : 'text-[12px] tabular-nums text-zinc-400 dark:text-zinc-500'}>
-        {done ? '✓ Code complete — verifying…' : `${otp.length}/6 digits entered`}
+        {done ? '✓ Code complete - verifying…' : `${otp.length}/6 digits entered`}
       </p>
     </div>
   )

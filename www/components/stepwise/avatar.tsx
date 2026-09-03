@@ -16,26 +16,25 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'class
   src?       : string
   name?      : string
   /**
-   * "letter" — initial(s) on a neutral fill, matching border and a soft shadow (default).
-   * "image"  — the photo, on the same tinted backdrop; falls back to "letter" if it fails to load.
+   * "letter" - initial(s) on a neutral fill, matching border and a soft shadow (default).
+   * "image"  - the photo, on the same tinted backdrop; falls back to "letter" if it fails to load.
    */
   variant?   : AvatarVariant
   size?      : AvatarSize
   /** How many initials the letter variant shows. Default 1. */
   letters?   : 1 | 2
   /**
-   * "cover" — the photo fills the circle edge to edge, cropped (default,
-   * right for an ordinary headshot). "contain" — the photo sits inset with
-   * room to breathe, right for art with its own transparent margin.
+   * "cover" fills the circle and crops, which suits a headshot (default).
+   * "contain" insets the image, which suits art with its own margin.
    */
   imageFit?  : 'cover' | 'contain'
-  /** `object-position` for the "cover" fit — e.g. "top" to favor a face over the chest below it. Default "center". */
+  /** `object-position` for the "cover" fit, e.g. "top" to favour a face. Default "center". */
   imagePosition?: string
-  /** Scales the photo within its "cover" fit — under 1 zooms out a touch, revealing a little more around the crop. Default 1. */
+  /** Scales the photo within a "cover" fit. Under 1 reveals more around the crop. Default 1. */
   imageScale?: number
   /** Small status dot on the bottom-right edge. Omit for none. */
   badge?     : AvatarBadge
-  /** The tinted border stroke. Default true — AvatarGroup turns it off itself. */
+  /** The tinted border stroke. Default true; AvatarGroup turns it off itself. */
   bordered?  : boolean
   /** Names the avatar on hover, via Tooltip. Default true. */
   showTooltip?: boolean
@@ -53,7 +52,7 @@ export interface AvatarGroupProps {
   className?: string
 }
 
-// rem, not px — so avatars scale with the user's browser text-size setting
+// rem, not px - so avatars scale with the user's browser text-size setting
 // rather than staying a fixed physical size at 200% zoom.
 const SIZE: Record<AvatarSize, { rem: number; text: string }> = {
   xs:      { rem: 1.5,  text: 'text-[0.5625rem]' },
@@ -89,9 +88,8 @@ function initials(name: string, count: 1 | 2) {
 }
 
 /**
- * Names itself on hover by default (a Tooltip, fading in via FadeText) — set
- * `showTooltip={false}` for the cases that don't want it, e.g. a spot where
- * the name is already printed right next to the avatar.
+ * Shows the name in a Tooltip on hover. Set `showTooltip={false}` where the
+ * name is already visible next to the avatar.
  */
 export function Avatar({
   src, name = '', variant, size = 'default', letters = 1, imageFit = 'cover', imagePosition = 'center', imageScale = 1,
@@ -107,15 +105,15 @@ export function Avatar({
   const avatar = (
     <div className="relative inline-block shrink-0" style={{ width: `${rem}rem`, height: `${rem}rem` }}>
       <div
-        // tabIndex/aria-label only when a Tooltip will actually wrap this (showTooltip)
-        // — that's the only case hover reveals something with no other visible text.
+        // Only focusable when a Tooltip wraps it, since that is the only case
+        // where hover reveals text that isn't otherwise on screen.
         tabIndex={showTooltip ? 0 : undefined}
         aria-label={showTooltip ? name || 'Unnamed' : undefined}
         className={cn(
           'flex h-full w-full shrink-0 items-center justify-center overflow-hidden select-none rounded-full shadow-sm',
           showImage
-            ? cn('bg-white', bordered && 'border border-[var(--ui-border)]')
-            : cn('bg-zinc-100 dark:bg-zinc-900', bordered && 'border border-[var(--ui-border)]'),
+            ? cn('bg-white', bordered && 'border border-[var(--ui-border,rgb(138_138_141_/_0.23))]')
+            : cn('bg-zinc-100 dark:bg-zinc-900', bordered && 'border border-[var(--ui-border,rgb(138_138_141_/_0.23))]'),
           showTooltip && 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-600 dark:focus-visible:ring-sky-400',
           className,
         )}
@@ -146,12 +144,9 @@ export function Avatar({
           style={{
             width: `${badgeRem}rem`,
             height: `${badgeRem}rem`,
-            // The circle's own bottom-right point sits at 50% + 50%·cos45°
-            // along each axis (≈85.36%), not the square container's corner
-            // — right:0/bottom:0 was aligning to the corner of the bounding
-            // box, which sits outside the circle, so the dot read as
-            // shifted inward off the actual stroke. Percentage + centering
-            // transform lands exactly on the ring regardless of size.
+            // The circle's bottom-right point is at 50% + 50%·cos45° (~85.36%)
+            // on each axis, not the bounding box's corner. Positioning by
+            // percentage puts the dot on the ring at any size.
             top: '85.36%',
             left: '85.36%',
             transform: 'translate(-50%, -50%)',
@@ -178,14 +173,10 @@ interface OverflowFlyoutProps {
 }
 
 /**
- * The overflow list, portaled to <body> with fixed, viewport-clamped
- * coordinates — not CSS-anchored like a plain dropdown — because it's
- * shown from inside a clipped/scrollable ancestor (a docs preview box, a
- * card, a modal) as often as not, and anything a clipped ancestor's
- * descendant renders outside that ancestor's own box gets silently cut
- * off (the same class of bug the DropdownMenu submenu panel solves this
- * exact way). The open transition reuses DropdownMenu's own "goo" filter
- * so this reads as the same family of flyout, not a different one.
+ * The overflow list. Portaled to <body> with fixed, viewport-clamped
+ * coordinates rather than CSS-anchored, because the group is often inside a
+ * clipped or scrollable ancestor that would cut the panel off. Reuses
+ * DropdownMenu's "goo" open transition so both read as the same family.
  */
 function OverflowFlyout({ hidden, triggerClassName, triggerStyle, children }: OverflowFlyoutProps) {
   const [open, setOpen] = useState(false)
@@ -196,13 +187,9 @@ function OverflowFlyout({ hidden, triggerClassName, triggerStyle, children }: Ov
   const panelId = useId()
   const reduceMotion = useReducedMotion()
 
-  // The panel is portaled to <body>, physically separate from the trigger —
-  // moving the cursor between them crosses a real gap, so a plain
-  // mouseleave-closes-immediately handler flickers shut mid-transit, then
-  // reopens and recomputes position from scratch, reading as a sideways
-  // jump. A short close delay, cancelled by either element's mouseenter,
-  // is the standard hover-intent fix — same idea as a click-away timer,
-  // just short enough nobody perceives it as lag.
+  // The panel is portaled, so the cursor crosses a real gap on its way there
+  // and an immediate mouseleave-close flickers shut mid-transit. A short close
+  // delay, cancelled by either element's mouseenter, covers the gap.
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const show = () => {
     if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null }
@@ -225,9 +212,8 @@ function OverflowFlyout({ hidden, triggerClassName, triggerStyle, children }: Ov
     setPos({ top: r.bottom + 8, left: r.left + r.width / 2 })
   }, [open])
 
-  // Pass 2: now that the panel has real dimensions, flip above the trigger
-  // if it would overflow the viewport bottom, and clamp horizontally —
-  // this is the actual "aware of the space available" fix, not a z-index bump.
+  // Pass 2: with real dimensions known, flip above the trigger if the panel
+  // would overflow the viewport bottom, and clamp horizontally.
   useLayoutEffect(() => {
     if (!open || !pos) return
     const p = panelRef.current?.getBoundingClientRect()
@@ -286,7 +272,7 @@ function OverflowFlyout({ hidden, triggerClassName, triggerStyle, children }: Ov
             >
               <Surface
                 radius={16}
-                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
                 className="bg-white p-3 shadow-[0_4px_16px_-4px_rgba(0,0,0,0.12),0_2px_6px_-2px_rgba(0,0,0,0.06)] dark:bg-zinc-800 dark:shadow-[0_10px_30px_-6px_rgba(0,0,0,0.6)]"
               >
                 <div className="flex flex-col gap-2.5 py-0.5">
@@ -310,11 +296,10 @@ function OverflowFlyout({ hidden, triggerClassName, triggerStyle, children }: Ov
 }
 
 /**
- * Overlapping stack — a ring in the page's own background color punches a
- * clean gap between avatars where they overlap, and each avatar lifts
- * slightly and comes forward on hover (naming itself via its own built-in
- * Tooltip). Hovering the overflow pill opens a flyout listing everyone it's
- * hiding. The optional + button at the end is the invite entry point.
+ * Overlapping stack. A ring in the page background colour separates avatars
+ * where they overlap, and each lifts forward on hover. Hovering the overflow
+ * pill opens a flyout listing the rest. The optional + button is the invite
+ * entry point.
  */
 export function AvatarGroup({ avatars, max = 5, size = 'default', onAdd, className }: AvatarGroupProps) {
   const { rem, text } = SIZE[size]

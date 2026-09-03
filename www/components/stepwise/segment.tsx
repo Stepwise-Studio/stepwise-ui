@@ -95,7 +95,7 @@ export function Segment<T extends string = string>({
     control = (
       <Surface
         radius={100}
-        lisse={{ middleBorder: { width: 1, opacity: 0.625, color: 'var(--ui-border)' } }}
+        lisse={{ middleBorder: { width: 1, opacity: 0.625, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         className="flex w-fit items-center gap-px bg-zinc-100 p-[3px] dark:bg-zinc-800/60"
       >
         {options.map(opt => {

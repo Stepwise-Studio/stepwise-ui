@@ -24,7 +24,7 @@ function fmt(s: number) {
   return `${m}:${sec.toString().padStart(2, '0')}`
 }
 
-// Cross-fades between two HugeIcons glyphs in the same slot — used by play/
+// Cross-fades between two HugeIcons glyphs in the same slot - used by play/
 // pause, the fullscreen toggle, and the volume level indicator so every
 // control-icon swap reads with the same craft.
 function IconSwap({ id, icon, size = 16, strokeWidth = 1.8, filled, reduce }: {
@@ -41,7 +41,7 @@ function IconSwap({ id, icon, size = 16, strokeWidth = 1.8, filled, reduce }: {
           exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.25, filter: 'blur(4px)' }}
           transition={reduce ? { duration: 0.1 } : ICON_SWAP_TRANSITION}
         >
-          {/* Paths carry no fill of their own (pure stroke glyphs) — setting
+          {/* Paths carry no fill of their own (pure stroke glyphs) - setting
               fill on the outer <svg> is what they inherit it from, so this is
               how play/pause reads as a solid "primary control" glyph while
               volume/fullscreen stay outline-only secondary controls. */}
@@ -187,19 +187,16 @@ export function VideoPlayer({
     return () => document.removeEventListener('fullscreenchange', onFSChange)
   }, [])
 
-  // `onLoadedMetadata` only fires once, at the moment metadata becomes
-  // available — if that happens before this effect attaches its listener
-  // (a cached/instant-loading source, or a fast-refresh remount finding the
-  // element already primed), the event is missed and duration/progress stay
-  // stuck at 0 forever. Seed it directly whenever the browser already has it.
+  // `onLoadedMetadata` fires once, and a cached source can load before this
+  // effect attaches, leaving duration stuck at 0. Seed it directly whenever the
+  // browser already has metadata.
   useEffect(() => {
     const v = videoRef.current
     if (v && v.readyState >= 1 && isFinite(v.duration)) setDuration(v.duration)
   }, [src])
 
-  // Licht-style ambilight: a tiny copy of the current frame, scaled out and
-  // CSS-blurred behind the squircle. No mask, no punch-out — the blur is what
-  // turns the rectangle into a halo in every direction.
+  // Ambilight: a small copy of the current frame, scaled up and blurred behind
+  // the player. The blur alone turns the rectangle into a halo.
   useEffect(() => {
     if (!ambient || !src) return
     const video = videoRef.current
@@ -219,7 +216,7 @@ export function VideoPlayer({
 
     const paint = () => {
       if (!alive || video.readyState < 2) return
-      try { ctx.drawImage(video, 0, 0, W, H) } catch { /* tainted — skip */ }
+      try { ctx.drawImage(video, 0, 0, W, H) } catch { /* tainted - skip */ }
     }
 
     const loop = () => {
@@ -261,11 +258,11 @@ export function VideoPlayer({
   const togglePlay = () => {
     const v = videoRef.current
     if (!v) return
-    // Read the element, not React state — seeking can fire a spurious pause
+    // Read the element, not React state: seeking can fire a spurious pause
     // event that desyncs `playing` from the real paused flag.
     if (!v.paused) { v.pause(); return }
-    // play() returns a promise that rejects if the source can't be decoded /
-    // loaded — swallow it so a bad src never throws an unhandled runtime error.
+    // play() rejects if the source cannot be decoded, so swallow it rather than
+    // throwing an unhandled rejection on a bad src.
     const p = v.play()
     if (p && typeof p.catch === 'function') p.catch(() => {})
   }
@@ -310,17 +307,14 @@ export function VideoPlayer({
     }
   }
 
-  // Pointer capture (not separate click/mousemove handlers) is what lets the
-  // scrub continue tracking the cursor even once it drifts outside the thin
-  // track — the same technique the Slider component uses for its own thumb.
-  // preventDefault stops the following click from hitting the play overlay
-  // and pausing the video after a scrub.
+  // Pointer capture keeps the scrub tracking the cursor once it leaves the thin
+  // track, the same way Slider handles its thumb. preventDefault stops the
+  // following click from reaching the play overlay and pausing the video.
   const onSeekPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    // preventDefault (needed above) also suppresses the browser's normal
-    // click-to-focus, so a mouse scrub would otherwise leave the slider
-    // keyboard-inert until a Tab visited it first.
+    // preventDefault also suppresses the browser's click-to-focus, so focus has
+    // to be set manually or the slider stays keyboard-inert after a mouse scrub.
     e.currentTarget.focus()
     skipOverlayClick.current = true
     const v = videoRef.current
@@ -379,7 +373,7 @@ export function VideoPlayer({
         />
       )}
 
-      {/* Player — squircle-clipped. Own inset box so the frame always fills
+      {/* Player - squircle-clipped. Own inset box so the frame always fills
           the aspect-ratio wrapper even when SmoothCorners sizes to the video. */}
       <div className="absolute inset-0 z-[1] [&>div]:h-full [&>div]:w-full">
       <SmoothCorners corners={{ radius, smoothing: 0.6 }} className="block h-full w-full overflow-hidden bg-black">
@@ -428,9 +422,9 @@ export function VideoPlayer({
         </div>
       )}
 
-      {/* Center play button — frosted, appears while paused. initial={false}
+      {/* Center play button - frosted, appears while paused. initial={false}
           keeps it from popping in on first mount when the player starts
-          paused — the pop is reserved for actual play↔pause transitions. */}
+          paused - the pop is reserved for actual play↔pause transitions. */}
       <AnimatePresence initial={false}>
         {src && !playing && (
           <motion.button
@@ -447,7 +441,7 @@ export function VideoPlayer({
               style={{ background: 'rgba(18,18,20,0.32)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
             >
               {/* HugeIcons' PlayIcon path is already balanced inside its own
-                  24×24 box (roughly x:5→18.9, y:4.6→19.4 — centroid ~12,12),
+                  24×24 box (roughly x:5→18.9, y:4.6→19.4 - centroid ~12,12),
                   so it sits centered here with no manual nudge. */}
               <HugeiconsIcon icon={PlayIcon} size={26} strokeWidth={1.8} color="currentColor" fill="currentColor" />
             </span>
@@ -455,7 +449,7 @@ export function VideoPlayer({
         )}
       </AnimatePresence>
 
-      {/* Controls — fade in with a light bottom veil, no frosted tray */}
+      {/* Controls - fade in with a light bottom veil, no frosted tray */}
       <AnimatePresence>
         {showCtrl && src && (
           <motion.div
@@ -500,9 +494,8 @@ export function VideoPlayer({
               {showTip && (
                 <div
                   className="pointer-events-none absolute bottom-full mb-1.5 -translate-x-1/2 rounded-md bg-black/80 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-white shadow-sm"
-                  // Clamped inset from the track's edges (not 0%/100%) so the
-                  // centered tooltip's own width never pokes past the frame
-                  // when scrubbing to the very start or end.
+                  // Clamped inside the track's edges so the centred tooltip never
+                  // pokes past the frame at the very start or end.
                   style={{ left: `clamp(22px, ${tipPct * 100}%, calc(100% - 22px))` }}
                 >
                   {fmt(tipPct * duration)}

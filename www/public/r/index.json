@@ -16,25 +16,15 @@
     ],
     "registryDependencies": [
       "typography"
-    ]
-  },
-  {
-    "name": "animated-gradient",
-    "description": "A colorful gradient sweeps across the text on a loop, playing only while it's in view.",
-    "category": "components",
-    "dependencies": [
-      "clsx",
-      "motion",
-      "tailwind-merge"
     ],
-    "peerDependencies": [
-      "react"
+    "exports": [
+      "Accordion"
     ],
-    "registryDependencies": []
+    "example": "import { Accordion } from '@/components/stepwise/accordion'\n\nconst items = [\n  { id: 'q1', title: 'Why does this exist?', content: 'Because we rebuilt the same…' },\n  { id: 'q2', title: 'How long did this take?', content: 'Longer than planned…' },\n]\n\n<Accordion items={items} />"
   },
   {
     "name": "apple-select",
-    "description": "An iOS-style text highlight — a fixed span the author chooses, with a translucent accent band and a lollipop handle at each end.",
+    "description": "An iOS-style text highlight with a translucent band and a lollipop handle at each end.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -43,11 +33,16 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "APPLE_ACCENTS",
+      "AppleSelect"
+    ],
+    "example": "import { AppleSelect } from '@/components/stepwise/apple-select'\n\n// the author picks the highlighted range - it's fixed, not draggable\n<AppleSelect\n  text=\"Introduced with iOS 3 in June 2009 was the ability to select…\"\n  selection={[43, 60]}\n/>"
   },
   {
     "name": "arc-carousel",
-    "description": "Photographs riding a shallow arc.",
+    "description": "A continuously drifting strip of photographs riding a shallow arc.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -59,32 +54,53 @@
     ],
     "registryDependencies": [
       "frame"
-    ]
+    ],
+    "exports": [
+      "ArcCarousel"
+    ],
+    "example": "import { ArcCarousel } from '@/components/stepwise/arc-carousel'\n\n<ArcCarousel items={photos} />"
   },
   {
     "name": "avatar",
-    "description": "Circular user representation in three variants — a soft white-topped gradient with initials, a single-letter tint, and a photo.",
+    "description": "Circular user representation in two variants - a neutral-fill initial, or a photo.",
     "category": "components",
     "dependencies": [
       "@lisse/react",
       "clsx",
+      "motion",
       "tailwind-merge"
     ],
     "peerDependencies": [
-      "react"
+      "react",
+      "react-dom"
     ],
-    "registryDependencies": []
+    "registryDependencies": [
+      "fade-text",
+      "tooltip"
+    ],
+    "exports": [
+      "Avatar",
+      "AvatarGroup"
+    ],
+    "example": "import { Avatar } from '@/components/stepwise/avatar'\n\n<Avatar name=\"Asta\" />                    // default\n<Avatar name=\"Asta\" src=\"/photo.jpg\" />   // image"
   },
   {
     "name": "breadcrumbs",
-    "description": "Accessible navigation trail.",
+    "description": "A navigation trail that collapses its middle into a menu once the path gets deep.",
     "category": "components",
     "dependencies": [
       "clsx",
+      "motion",
       "tailwind-merge"
     ],
     "peerDependencies": [],
-    "registryDependencies": []
+    "registryDependencies": [
+      "dropdown-menu"
+    ],
+    "exports": [
+      "Breadcrumbs"
+    ],
+    "example": "import { Breadcrumbs } from '@/components/stepwise/breadcrumbs'\n\n// \\"
   },
   {
     "name": "button",
@@ -100,7 +116,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Button"
+    ],
+    "example": "import { Button } from '@/components/stepwise/button'\n\n<Button variant=\"solid\">solid</Button>\n<Button variant=\"outline\">outline</Button>\n<Button variant=\"ghost\">ghost</Button>\n<Button variant=\"soft\">soft</Button>\n<Button variant=\"destructive\">destructive</Button>"
   },
   {
     "name": "calendar",
@@ -115,7 +135,12 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Calendar",
+      "CalendarRange"
+    ],
+    "example": "import { Calendar, CalendarRange } from '@/components/stepwise/calendar'\n\n// Single date - uncontrolled\n<Calendar defaultSelected={new Date()} />\n\n// Single date - controlled\nconst [date, setDate] = useState<Date | null>(null)\n<Calendar selected={date} onSelect={setDate} />\n\n// Date range - controlled\nconst [from, setFrom] = useState<Date | null>(null)\nconst [to,   setTo]   = useState<Date | null>(null)\n<CalendarRange\n  from={from}\n  to={to}\n  onRangeChange={(f, t) => { setFrom(f); setTo(t) }}\n/>"
   },
   {
     "name": "checkbox",
@@ -129,11 +154,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Checkbox"
+    ],
+    "example": "import { Checkbox } from '@/components/stepwise/checkbox'\n\n<Checkbox label=\"Unchecked\" />\n<Checkbox label=\"Checked\" defaultChecked />\n<Checkbox label=\"Indeterminate\" indeterminate />"
   },
   {
     "name": "chip",
-    "description": "Pill-shaped label in six semantic colors and three variants — soft, solid, and outline.",
+    "description": "Pill-shaped label in six semantic colors and three variants - soft, solid, and outline.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -142,7 +171,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Chip"
+    ],
+    "example": "<Chip color=\"danger\"  variant=\"soft\">Danger</Chip>\n<Chip color=\"warning\" variant=\"soft\">Warning</Chip>\n<Chip color=\"success\" variant=\"soft\">Success</Chip>\n<Chip color=\"info\"    variant=\"soft\">Info</Chip>\n<Chip color=\"magical\" variant=\"soft\">Magical</Chip>\n<Chip color=\"idle\"    variant=\"soft\">Idle</Chip>"
   },
   {
     "name": "circle-annotation",
@@ -157,11 +190,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "CircleAnnotation"
+    ],
+    "example": "import { CircleAnnotation } from '@/components/stepwise/circle-annotation'\n\n// Scribbles a hand-drawn circle around the text when in view\nEvery detail is <CircleAnnotation color=\"#e11d48\">intentional</CircleAnnotation>.\n\n// More breathing room + slower draw\n<CircleAnnotation color=\"#0284c7\" padding={18} duration={1.4} delay={0.3}>\n  reviewed\n</CircleAnnotation>"
   },
   {
     "name": "color-picker",
-    "description": "A big saturation/value swatch up front, a plain hue rail underneath — drag either to dial in a colour, or sample one straight off the screen with the eyedropper.",
+    "description": "A saturation and value field over a hue rail, with an eyedropper for sampling colours already on the page.",
     "category": "components",
     "dependencies": [
       "@hugeicons/core-free-icons",
@@ -175,11 +212,15 @@
       "react",
       "react-dom"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "ColorPicker"
+    ],
+    "example": "import { ColorPicker } from '@/components/stepwise/color-picker'\n\nconst [color, setColor] = useState('#3b82f6')\n\n<ColorPicker value={color} onChange={setColor} />"
   },
   {
     "name": "color-swatch",
-    "description": "A row of color circles with a single active selection — the ring springs between swatches as you pick.",
+    "description": "A row of color circles with a single active selection - the ring springs between swatches as you pick.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -188,7 +229,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "ColorSwatch"
+    ],
+    "example": "import { ColorSwatch } from '@/components/stepwise/color-swatch'\n\nconst [color, setColor] = useState('#3b82f6')\n\n<ColorSwatch\n  colors={['#ef4444', '#f59e0b', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899']}\n  value={color}\n  onChange={setColor}\n/>"
   },
   {
     "name": "combobox",
@@ -208,7 +253,11 @@
     ],
     "registryDependencies": [
       "scroll-area"
-    ]
+    ],
+    "exports": [
+      "Combobox"
+    ],
+    "example": "import { Combobox } from '@/components/stepwise/combobox'\n\nconst options = [\n  { value: 'next',  label: 'Next.js', description: 'The React framework for the web' },\n  { value: 'remix', label: 'Remix',   description: 'Full stack web framework' },\n]\n\n<Combobox\n  label=\"Framework\"\n  options={options}\n  value={value}\n  onChange={setValue}\n  placeholder=\"Search frameworks…\"\n/>"
   },
   {
     "name": "command",
@@ -227,11 +276,15 @@
     "registryDependencies": [
       "kbd",
       "scroll-area"
-    ]
+    ],
+    "exports": [
+      "CommandPalette"
+    ],
+    "example": "import { CommandPalette } from '@/components/stepwise/command'\n\nconst groups = [\n  { heading: 'Navigation', items: [\n    { id: 'home', label: 'Go to Home', icon: <HomeIcon />, shortcut: ['G', 'H'] },\n    { id: 'docs', label: 'Go to Docs', keywords: 'guides', shortcut: ['G', 'D'] },\n  ]},\n  { heading: 'Actions', items: [\n    { id: 'new',   label: 'Create new project', shortcut: ['⌘', 'N'], onSelect: create },\n    { id: 'theme', label: 'Toggle theme', keywords: 'dark light' },\n  ]},\n]\n\n// ⌘K / Ctrl+K opens it automatically (hotkey defaults to true)\n<CommandPalette open={open} onOpenChange={setOpen} groups={groups} />"
   },
   {
     "name": "conversation-timeline",
-    "description": "At rest, a dense rail of thin marks — one per message, tightly packed.",
+    "description": "A dense rail of thin marks, one per message, that expands into a labelled list on hover.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -241,7 +294,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "ConversationTimeline"
+    ],
+    "example": "import { ConversationTimeline } from '@/components/stepwise/conversation-timeline'\n\nconst checkpoints = [\n  { id: '1', role: 'system',    label: 'System prompt' },\n  { id: '2', role: 'user',      label: 'Can you help me set up auth?' },\n  { id: '3', role: 'assistant', label: 'Of course - let me walk you through it' },\n]\n\nconst [activeId, setActiveId] = useState('2')\n\n<ConversationTimeline\n  checkpoints={checkpoints}\n  activeId={activeId}\n  onSelect={setActiveId}\n/>"
   },
   {
     "name": "date-picker",
@@ -260,23 +317,11 @@
     ],
     "registryDependencies": [
       "calendar"
-    ]
-  },
-  {
-    "name": "deck-carousel",
-    "description": "A fanned hand of cards — the front one square on, its neighbours falling away to either side.",
-    "category": "components",
-    "dependencies": [
-      "clsx",
-      "motion",
-      "tailwind-merge"
     ],
-    "peerDependencies": [
-      "react"
+    "exports": [
+      "DatePicker"
     ],
-    "registryDependencies": [
-      "frame"
-    ]
+    "example": "import { DatePicker } from '@/components/stepwise/date-picker'\n\n// Single date\nconst [date, setDate] = useState<Date | null>(null)\n<DatePicker variant=\"date\" label=\"Date\" value={date} onChange={setDate} />\n\n// Date range\nconst [from, setFrom] = useState<Date | null>(null)\nconst [to,   setTo]   = useState<Date | null>(null)\n<DatePicker\n  variant=\"range\"\n  label=\"Date range\"\n  from={from}\n  to={to}\n  onRangeChange={(f, t) => { setFrom(f); setTo(t) }}\n/>\n\n// Typed date (DD/MM/YYYY) - also has a calendar icon to open the picker\nconst [dob, setDob] = useState<Date | null>(null)\n<DatePicker variant=\"text\" label=\"Date of birth\" value={dob} onChange={setDob} />"
   },
   {
     "name": "diagonal-lines",
@@ -289,11 +334,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "DiagonalLines"
+    ],
+    "example": "import { DiagonalLines } from '@/components/stepwise/diagonal-lines'\n\n<div className=\"relative h-64\">\n  <DiagonalLines />\n</div>"
   },
   {
     "name": "dot-grid-loader",
-    "description": "A 3×3 grid of dots with four personalities.",
+    "description": "A 3×3 grid of animated dots, in four rhythms.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -301,7 +350,11 @@
       "tailwind-merge"
     ],
     "peerDependencies": [],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "DotGridLoader"
+    ],
+    "example": "import { DotGridLoader } from '@/components/stepwise/dot-grid-loader'\n\n<DotGridLoader pattern=\"wave\" />"
   },
   {
     "name": "dotted-grid",
@@ -314,11 +367,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "DottedGrid"
+    ],
+    "example": "import { DottedGrid } from '@/components/stepwise/dotted-grid'\n\n<div className=\"relative h-64\">\n  <DottedGrid />\n</div>"
   },
   {
     "name": "dotted-spotlight",
-    "description": "A dot grid with a mouse-follow flashlight — dots brighten near the cursor.",
+    "description": "A dot grid with a mouse-follow flashlight - dots brighten near the cursor.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -328,7 +385,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "DottedSpotlight"
+    ],
+    "example": "import { DottedSpotlight } from '@/components/stepwise/dotted-spotlight'\n\n<div className=\"relative h-64\">\n  <DottedSpotlight />\n</div>"
   },
   {
     "name": "drawer",
@@ -344,7 +405,11 @@
       "react",
       "react-dom"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Drawer"
+    ],
+    "example": "import { Drawer } from '@/components/stepwise/drawer'\n\nconst [open, setOpen] = useState(false)\n\n<Drawer open={open} onClose={() => setOpen(false)} side=\"right\" title=\"Settings\">\n  <p>Drawer content here.</p>\n</Drawer>"
   },
   {
     "name": "dropdown-menu",
@@ -364,11 +429,17 @@
     ],
     "registryDependencies": [
       "separator"
-    ]
+    ],
+    "exports": [
+      "DROPDOWN_PANEL_CLASS",
+      "DropdownMenu",
+      "DropdownMenuList"
+    ],
+    "example": "import { DropdownMenu } from '@/components/stepwise/dropdown-menu'\n\n<DropdownMenu\n  trigger={<Button size=\"sm\">Actions</Button>}\n  items={[\n    { heading: 'Manage' },\n    { label: 'Edit', icon: <EditIcon />, shortcut: '⌘E' },\n    { label: 'Duplicate', icon: <CopyIcon />, shortcut: '⌘D' },\n    { separator: true },\n    { label: 'Delete', icon: <TrashIcon />, destructive: true },\n  ]}\n/>"
   },
   {
     "name": "fade-text",
-    "description": "Splits into words (or characters) and staggers each chunk with a blurred rise on enter and a softer, smaller exit — following the split-and-stagger and subtle-exit principles.",
+    "description": "Fades text in and out, word by word or character by character.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -376,11 +447,15 @@
       "tailwind-merge"
     ],
     "peerDependencies": [],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "FadeText"
+    ],
+    "example": "import { FadeText } from '@/components/stepwise/fade-text'\n\n// Fades in word by word on mount (blurred rise, staggered)\n<FadeText>Ship delightful interfaces faster</FadeText>\n\n// Toggle \\"
   },
   {
     "name": "file-uploader",
-    "description": "Two variants for picking and displaying files.",
+    "description": "A file picker with drag-and-drop, in a dropzone variant and a compact one.",
     "category": "components",
     "dependencies": [
       "@hugeicons/core-free-icons",
@@ -397,11 +472,15 @@
       "button",
       "folder",
       "modal"
-    ]
+    ],
+    "exports": [
+      "FileUploader"
+    ],
+    "example": "import { FileUploader, type FileEntry } from '@/components/stepwise/file-uploader'\n\nconst [files, setFiles] = useState<FileEntry[]>([])\n\nconst onFiles = (incoming: File[]) => {\n  setFiles(prev => [\n    ...prev,\n    ...incoming.map(f => ({ id: crypto.randomUUID(), file: f })),\n  ])\n}\n\n// default variant - a real Folder as the drop target. Drag files onto it\n// or click \"Select\" to browse; it tilts open on hover and shows progress\n// both on the pocket and on each file's own card as it peeks out. Hovering\n// a card shows its name - click the × on one to remove it (confirmed via\n// the Modal component before it's actually gone).\n<FileUploader\n  files={files}\n  onFiles={onFiles}\n  onRemove={id => setFiles(prev => prev.filter(f => f.id !== id))}\n  maxMB={10}\n/>"
   },
   {
     "name": "folder",
-    "description": "A tactile folder — unified skeleton cards (or your own photos) tuck behind a frosted-glass front pocket.",
+    "description": "A tactile folder - unified skeleton cards (or your own photos) tuck behind a frosted-glass front pocket.",
     "category": "components",
     "dependencies": [
       "@hugeicons/core-free-icons",
@@ -416,11 +495,16 @@
     ],
     "registryDependencies": [
       "tooltip"
-    ]
+    ],
+    "exports": [
+      "Folder",
+      "SkeletonCard"
+    ],
+    "example": "import { Folder } from '@/components/stepwise/folder'\nimport { Image02Icon } from '@hugeicons/core-free-icons'\n\n// peek={0} → an empty folder; peek={3} (default) → filled\n<Folder label=\"Japan 2024\" count=\"83 photos\" icon={Image02Icon} peek={3} />"
   },
   {
     "name": "frame",
-    "description": "The raw, unopinionated content container — the base every other card builds on.",
+    "description": "The raw, unopinionated content container - the base every other card builds on.",
     "category": "components",
     "dependencies": [
       "@lisse/react",
@@ -430,25 +514,20 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Frame",
+      "FrameContent",
+      "FrameDescription",
+      "FrameFooter",
+      "FrameHeader",
+      "FrameTitle"
+    ],
+    "example": "import { Frame } from '@/components/stepwise/frame'\n\n// raw building block - reach for it when nothing else fits: settings rows,\n// list items, one-off content blocks. For a pre-built shape, use Profile\n// Card, Product Card, Pricing Card, or Stat Card instead.\n<Frame className=\"p-5\">\n  Whatever you want goes here.\n</Frame>"
   },
   {
     "name": "glow-button",
-    "description": "A single-purpose CTA button — a rainbow color field glows from inside the pill along its bottom edge, never as an outside shadow, its hues drifting smoothly on a loop.",
-    "category": "components",
-    "dependencies": [
-      "@lisse/react",
-      "clsx",
-      "tailwind-merge"
-    ],
-    "peerDependencies": [
-      "react"
-    ],
-    "registryDependencies": []
-  },
-  {
-    "name": "infinite-canvas",
-    "description": "A draggable plane that never ends.",
+    "description": "A CTA button with a rainbow glow drifting along the inside of its bottom edge.",
     "category": "components",
     "dependencies": [
       "@lisse/react",
@@ -459,13 +538,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": [
-      "toggle"
-    ]
+    "registryDependencies": [],
+    "exports": [
+      "GlowButton"
+    ],
+    "example": "import { GlowButton } from '@/components/stepwise/glow-button'\n\n<GlowButton>Install on Figma</GlowButton>"
   },
   {
     "name": "input",
-    "description": "A text field with five built-in variants — name, email, username, password, and plain text.",
+    "description": "A text field with five built-in variants - name, email, username, password, and plain text.",
     "category": "components",
     "dependencies": [
       "@hugeicons/core-free-icons",
@@ -478,7 +559,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Input"
+    ],
+    "example": "import { Input } from '@/components/stepwise/input'\n\n// Basic - each variant ships with a sensible default label and placeholder\n<Input variant=\"name\" />\n<Input variant=\"email\" />\n<Input variant=\"username\" />\n<Input variant=\"password\" />\n<Input variant=\"text\" label=\"Bio\" placeholder=\"Tell us about yourself\" />\n\n// Custom label\n<Input variant=\"email\" label=\"Work Email\" />\n\n// Custom placeholder\n<Input variant=\"name\" placeholder=\"First name only\" />\n\n// Icon control - suppress or move the icon\n<Input variant=\"name\" showIcon={false} />\n<Input variant=\"email\" iconSide=\"right\" />\n\n// External error (server / form library)\n<Input variant=\"email\" error=\"That email is already taken.\" />\n\n// Hint text\n<Input variant=\"username\" hint=\"Letters, numbers, and underscores only.\" />\n\n// Disabled\n<Input variant=\"name\" defaultValue=\"Ada Lovelace\" disabled />"
   },
   {
     "name": "kbd",
@@ -492,11 +577,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Kbd"
+    ],
+    "example": "import { Kbd } from '@/components/stepwise/kbd'\n\n<Kbd keys={['⌘', 'K']} />\n<Kbd keys={['⌘', '⇧', 'P']} />\n<Kbd>Esc</Kbd>"
   },
   {
     "name": "lens-carousel",
-    "description": "Photographs sized as if bounded by an ellipse laid over the row — tallest at the centre, tapering toward a shared height at either rim, rather than moving up or down.",
+    "description": "Photographs pinched by a lens across the row: full size at either rim, smallest through the middle.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -508,7 +597,11 @@
     ],
     "registryDependencies": [
       "frame"
-    ]
+    ],
+    "exports": [
+      "LensCarousel"
+    ],
+    "example": "import { LensCarousel } from '@/components/stepwise/lens-carousel'\n\n<LensCarousel items={photos} />"
   },
   {
     "name": "modal",
@@ -527,7 +620,11 @@
     ],
     "registryDependencies": [
       "button"
-    ]
+    ],
+    "exports": [
+      "Modal"
+    ],
+    "example": "import { Modal } from '@/components/stepwise/modal'\n\nconst [open, setOpen] = useState(false)\n\n<Modal\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  description=\"Saving will update your published content immediately.\"\n  confirmLabel=\"Save changes\"\n  onConfirm={() => { /* ... */ setOpen(false) }}\n/>"
   },
   {
     "name": "multiselect",
@@ -547,7 +644,11 @@
     ],
     "registryDependencies": [
       "scroll-area"
-    ]
+    ],
+    "exports": [
+      "Multiselect"
+    ],
+    "example": "import { Multiselect } from '@/components/stepwise/multiselect'\n\nconst options = [\n  { value: 'vanilla',   label: 'Vanilla' },\n  { value: 'chocolate', label: 'Chocolate' },\n  { value: 'pistachio', label: 'Pistachio' },\n]\n\n<Multiselect options={options} placeholder=\"Choose flavors\" />"
   },
   {
     "name": "otp-input",
@@ -561,7 +662,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "OtpInput"
+    ],
+    "example": "import { OtpInput } from '@/components/stepwise/otp-input'\n\nconst [otp, setOtp] = useState('')\n\n<OtpInput length={6} value={otp} onChange={setOtp} />"
   },
   {
     "name": "pagination",
@@ -575,11 +680,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Pagination"
+    ],
+    "example": "import { Pagination } from '@/components/stepwise/pagination'\n\nconst [page, setPage] = useState(1)\n\n<Pagination page={page} totalPages={12} onChange={setPage} />"
   },
   {
     "name": "popover",
-    "description": "A generic floating panel anchored to a trigger — put any content inside.",
+    "description": "A generic floating panel anchored to a trigger - put any content inside.",
     "category": "components",
     "dependencies": [
       "@lisse/react",
@@ -590,13 +699,19 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Popover"
+    ],
+    "example": "import { Popover } from '@/components/stepwise/popover'\n\n<Popover trigger={<Button>Open popover</Button>}>\n  <div className=\"flex flex-col gap-3\">\n    <Input label=\"\" aria-label=\"Project name\" placeholder=\"stepwise-ui\" />\n    <Button size=\"sm\" fullWidth>Save</Button>\n  </div>\n</Popover>"
   },
   {
     "name": "pricing-card",
-    "description": "A subscription tier card — plan name, price, a feature checklist (excluded items strike through), and a CTA.",
+    "description": "A subscription tier card with a gradient price and a tick/dash feature list.",
     "category": "components",
     "dependencies": [
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
       "@lisse/react",
       "clsx",
       "tailwind-merge"
@@ -605,12 +720,18 @@
       "react"
     ],
     "registryDependencies": [
-      "button"
-    ]
+      "button",
+      "chip",
+      "glow-button"
+    ],
+    "exports": [
+      "PricingCard"
+    ],
+    "example": "import { PricingCard } from '@/components/stepwise/pricing-card'\n\n<PricingCard\n  planName=\"Solo\"\n  description=\"Perfect for individuals looking to get started!\"\n  price={25}\n  features={[\n    { label: 'User Management' },\n    { label: 'Analytics Dashboard' },\n    { label: 'Automated Reporting' },\n    { label: 'Custom API Development', included: false },\n  ]}\n/>"
   },
   {
     "name": "product-card",
-    "description": "A flexible e-commerce product card.",
+    "description": "An e-commerce product card with an image carousel, colour swatches, size selector and a price footer.",
     "category": "components",
     "dependencies": [
       "@hugeicons/core-free-icons",
@@ -626,11 +747,15 @@
     "registryDependencies": [
       "button",
       "color-swatch"
-    ]
+    ],
+    "exports": [
+      "ProductCard"
+    ],
+    "example": "import { ProductCard } from '@/components/stepwise/product-card'\n\n<ProductCard\n  images={['/book.jpg']}\n  // or, with no photo on hand yet:\n  previewIcon={<span className=\"text-[64px]\">📕</span>}\n  name=\"Hardcover Novel\"\n  tag={{ label: 'New', color: 'sky' }}\n  // shown behind a \"View Details\" toggle, not up front\n  description=\"Cloth-bound hardcover with a ribbon marker and matte-laminated jacket.\"\n  price={24}\n  showWishlist\n  ctaLabel=\"Add to Cart\"\n  onAddToCart={() => console.log('added')}\n/>"
   },
   {
     "name": "profile-card",
-    "description": "An agent or user profile card.",
+    "description": "A profile card for a person or an agent, in a full banner variant and a compact row.",
     "category": "components",
     "dependencies": [
       "@hugeicons/core-free-icons",
@@ -638,11 +763,18 @@
       "clsx",
       "tailwind-merge"
     ],
-    "peerDependencies": [],
+    "peerDependencies": [
+      "react"
+    ],
     "registryDependencies": [
+      "avatar",
       "button",
       "frame"
-    ]
+    ],
+    "exports": [
+      "ProfileCard"
+    ],
+    "example": "import { ProfileCard } from '@/components/stepwise/profile-card'\n\n<ProfileCard\n  variant=\"default\"\n  bannerSrc=\"/banner.jpg\"\n  avatarSrc=\"/your-photo.jpg\"\n  name=\"Snoofy Ackerman\"\n  verified\n  role=\"Marketing Agent\"\n  bio=\"Snoofy is a digital assistant…\"\n  stats={[\n    { label: 'Client Works',  value: '5'   },\n    { label: 'Posts Drafted', value: '100' },\n    { label: 'Ongoing Tasks', value: '20'  },\n  ]}\n  ctaLabel=\"Get in touch\"\n/>"
   },
   {
     "name": "progress",
@@ -655,7 +787,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Progress"
+    ],
+    "example": "import { Progress } from '@/components/stepwise/progress'\n\n// animates the fill on value change - pass aria-label (or label) when\n// nothing else on the page already says what's loading\n<Progress value={progress} aria-label=\"Loading\" />"
   },
   {
     "name": "qty-input",
@@ -670,7 +806,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "QtyInput"
+    ],
+    "example": "import { QtyInput } from '@/components/stepwise/qty-input'\n\nconst [qty, setQty] = useState(1)\n\n<QtyInput value={qty} onChange={setQty} min={1} max={99} />"
   },
   {
     "name": "radio",
@@ -684,11 +824,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Radio"
+    ],
+    "example": "import { Radio } from '@/components/stepwise/radio'\n\n<Radio label=\"Unchecked\" />\n<Radio label=\"Checked\" defaultChecked />"
   },
   {
-    "name": "retro-typewriter",
-    "description": "A vintage typewriter you actually type on.",
+    "name": "scale",
+    "description": "A ruler-tick strip - diagonal hairlines at a fixed pitch.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -697,22 +841,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
-  },
-  {
-    "name": "scale",
-    "description": "A ruler-tick strip — diagonal hairlines at a fixed pitch.",
-    "category": "components",
-    "dependencies": [
-      "clsx",
-      "tailwind-merge"
+    "registryDependencies": [],
+    "exports": [
+      "Scale"
     ],
-    "peerDependencies": [],
-    "registryDependencies": []
+    "example": "import { Scale } from '@/components/stepwise/scale'\n\n// --pattern controls the line color, thickness controls the strip's height in px\n<Scale orientation=\"horizontal\" thickness={24} style={{ '--pattern': 'var(--ui-border)' }} />"
   },
   {
     "name": "scramble-text",
-    "description": "Each character scrambles together first, then letters lock in one-by-one from left to right while the rest keep churning until the last one settles.",
+    "description": "A scramble reveal: every character churns at once, then locks in from left to right while the rest keep going until the last one settles.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -722,11 +859,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "ScrambleText"
+    ],
+    "example": "import { ScrambleText } from '@/components/stepwise/scramble-text'\n\n// Default - a softer letter decode (intensity 0.45)\n<ScrambleText>Stepwise Interface Kit</ScrambleText>\n\n// Dial up the chaos, or slow the resolve\n<ScrambleText intensity={0.9} speed={42}>\n  Stepwise Interface Kit\n</ScrambleText>\n\n// Binary glyph pool + replay each time it re-enters the viewport\n<ScrambleText charset=\"01\" intensity={0.7} replayInView>\n  10110101\n</ScrambleText>"
   },
   {
     "name": "scroll-area",
-    "description": "Scrolls with no visible scrollbar by default.",
+    "description": "A scroll container that hides the scrollbar by default, or renders a slim custom one.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -735,11 +876,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "ScrollArea"
+    ],
+    "example": "import { ScrollArea } from '@/components/stepwise/scroll-area'\n\n<ScrollArea maxHeight={220} showScrollbar className=\"w-[240px] …\">\n  {items.map(item => <Row key={item} />)}\n</ScrollArea>"
   },
   {
     "name": "segment",
-    "description": "A segmented control for switching between mutually exclusive options — the active indicator slides with a spring.",
+    "description": "A segmented control for switching between mutually exclusive options - the active indicator slides with a spring.",
     "category": "components",
     "dependencies": [
       "@lisse/react",
@@ -750,7 +895,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Segment"
+    ],
+    "example": "<Segment variant=\"underline\" options={options} value={v} onChange={setV} />"
   },
   {
     "name": "select",
@@ -769,11 +918,15 @@
     ],
     "registryDependencies": [
       "scroll-area"
-    ]
+    ],
+    "exports": [
+      "Select"
+    ],
+    "example": "import { Select } from '@/components/stepwise/select'\n\nconst options = [\n  { value: 'next',    label: 'Next.js' },\n  { value: 'remix',   label: 'Remix' },\n  { value: 'astro',   label: 'Astro' },\n]\n\n<Select options={options} placeholder=\"Choose a framework\" />"
   },
   {
     "name": "selection-frame",
-    "description": "That box Figma draws around a selected frame — corner handles and a crisp accent stroke.",
+    "description": "That box Figma draws around a selected frame - corner handles and a crisp accent stroke.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -783,7 +936,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "SelectionFrame"
+    ],
+    "example": "import { SelectionFrame } from '@/components/stepwise/selection-frame'\n\n<SelectionFrame padding={6}>\n  <span className=\"text-[28px] font-semibold\">Consistent by Default</span>\n</SelectionFrame>"
   },
   {
     "name": "separator",
@@ -796,22 +953,32 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Separator"
+    ],
+    "example": "import { Separator } from '@/components/stepwise/separator'\n\n<Separator />"
   },
   {
     "name": "shimmer-text",
-    "description": "The loading shimmer every AI-native app reaches for.",
+    "description": "A CSS-only shimmer for thinking and loading states.",
     "category": "components",
     "dependencies": [
       "clsx",
       "tailwind-merge"
     ],
-    "peerDependencies": [],
-    "registryDependencies": []
+    "peerDependencies": [
+      "react"
+    ],
+    "registryDependencies": [],
+    "exports": [
+      "ShimmerText"
+    ],
+    "example": "import { ShimmerText } from '@/components/stepwise/shimmer-text'\n\n// The AI \"thinking / generating\" label - a highlight band\n// sweeps across muted text on an infinite loop. Pure CSS.\n<ShimmerText>Generating response…</ShimmerText>\n\n// Tune the sweep speed (seconds)\n<ShimmerText duration={1.4}>Summarizing sources</ShimmerText>"
   },
   {
     "name": "slider",
-    "description": "An inline field slider — a labelled, squircle row with a thin handle and the live value, matching the Input field's corner radius and smoothing.",
+    "description": "An inline field slider: a labelled squircle row with a thin handle and the live value, matching Input's corner radius and smoothing.",
     "category": "components",
     "dependencies": [
       "@lisse/react",
@@ -822,11 +989,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Slider"
+    ],
+    "example": "import { Slider } from '@/components/stepwise/slider'\n\nconst [width, setWidth] = useState(40)\n\n<Slider label=\"Width\" value={width} onChange={setWidth} min={0} max={100} />"
   },
   {
     "name": "spinner",
-    "description": "An honest circular spinner that resolves into its own answer.",
+    "description": "A circular spinner that resolves into a tick or a cross when it finishes.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -834,7 +1005,12 @@
       "tailwind-merge"
     ],
     "peerDependencies": [],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "SPINNER_ARC_DURATION",
+      "Spinner"
+    ],
+    "example": "import { Spinner } from '@/components/stepwise/spinner'\n\n// \"arc\" is the default - a general-purpose spinner for any surface\n<Spinner size=\"sm\" />\n<Spinner size=\"default\" />\n<Spinner size=\"lg\" />"
   },
   {
     "name": "squiggly-underline",
@@ -848,7 +1024,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "SquigglyUnderline"
+    ],
+    "example": "import { SquigglyUnderline } from '@/components/stepwise/squiggly-underline'\n\n// Draws a wavy underline on when it scrolls into view - color tints text + stroke\nThe <SquigglyUnderline color=\"#e11d48\">most important</SquigglyUnderline> detail.\n\n// Tune the wave + draw speed (wave metrics scale from font size by default)\n<SquigglyUnderline duration={1.2} delay={0.25} replayInView>\n  emphasis\n</SquigglyUnderline>"
   },
   {
     "name": "table",
@@ -867,7 +1047,11 @@
     ],
     "registryDependencies": [
       "separator"
-    ]
+    ],
+    "exports": [
+      "Table"
+    ],
+    "example": "import { Table, type TableColumn } from '@/components/stepwise/table'\n\ntype User = { name: string; role: string; status: string }\n\nconst columns: TableColumn<User>[] = [\n  { key: 'name',   header: 'Name',   width: '1fr' },\n  { key: 'role',   header: 'Role',   width: '120px' },\n  {\n    key: 'status', header: 'Status', width: '120px',\n    render: (v) => <StatusBadge status={v} />,\n  },\n]\n\n<Table columns={columns} rows={data} getKey={r => r.name} />"
   },
   {
     "name": "theme-toggle",
@@ -884,7 +1068,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "ThemeToggle"
+    ],
+    "example": "import { ThemeToggle } from '@/components/stepwise/theme-toggle'\n\nexport default function MyLayout({ children }) {\n  return (\n    <header className=\"flex items-center justify-between px-4 h-14\">\n      <Logo />\n      <ThemeToggle />\n    </header>\n  )\n}"
   },
   {
     "name": "time-picker",
@@ -903,11 +1091,15 @@
     ],
     "registryDependencies": [
       "segment"
-    ]
+    ],
+    "exports": [
+      "TimePicker"
+    ],
+    "example": "import { TimePicker } from '@/components/stepwise/time-picker'\n\nconst [time, setTime] = useState('09:30')\n\n// value is always 24h \"HH:mm\", whatever the display format\n<TimePicker label=\"Start time\" value={time} onChange={setTime} />"
   },
   {
     "name": "toast",
-    "description": "Global notification toasts in four types — success, warning, error, and info.",
+    "description": "Global notification toasts in four types - success, warning, error, and info.",
     "category": "components",
     "dependencies": [
       "iconsax-react",
@@ -917,11 +1109,16 @@
       "react",
       "react-dom"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Toaster",
+      "toast"
+    ],
+    "example": "// Add <Toaster /> once at your app root (e.g. layout.tsx)\nimport { Toaster } from '@/components/stepwise/toast'\n\nexport default function Layout({ children }) {\n  return (\n    <>\n      {children}\n      <Toaster />\n    </>\n  )\n}"
   },
   {
     "name": "toggle",
-    "description": "A switch with some weight to it — the knob stretches along its direction of travel and settles on a spring, so the flip feels thrown rather than snapped.",
+    "description": "A switch with some weight to it.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -931,7 +1128,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Toggle"
+    ],
+    "example": "import { Toggle } from '@/components/stepwise/toggle'\n\nconst [on, setOn] = useState(true)\n\n// no visible label - needs ariaLabel so screen readers know what it does\n<Toggle checked={on} onChange={setOn} ariaLabel=\"Toggle\" />"
   },
   {
     "name": "tooltip",
@@ -947,11 +1148,15 @@
       "react",
       "react-dom"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Tooltip"
+    ],
+    "example": "import { Tooltip } from '@/components/stepwise/tooltip'\n\n// Basic - top by default\n<Tooltip content=\"Save to cloud\">\n  <button>Save</button>\n</Tooltip>\n\n// Explicit side\n<Tooltip content=\"Opens settings panel\" side=\"right\">\n  <IconButton icon={<Settings />} />\n</Tooltip>\n\n// Flips automatically near viewport edges\n<Tooltip content=\"Left-aligned but flips right near the edge\" side=\"left\">\n  <button>Hover me</button>\n</Tooltip>\n\n// Rich content\n<Tooltip content={<span>Press <kbd>⌘K</kbd> to open</span>} side=\"bottom\">\n  <button>Keyboard shortcut</button>\n</Tooltip>"
   },
   {
     "name": "typewriter",
-    "description": "Types a string on character by character with a blinking caret.",
+    "description": "Types a string out character by character with a blinking caret.",
     "category": "components",
     "dependencies": [
       "clsx",
@@ -961,11 +1166,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Typewriter"
+    ],
+    "example": "import { Typewriter } from '@/components/stepwise/typewriter'\n\n// Cycle a list: type → hold → backspace → next (loops)\nWe build{' '}\n<Typewriter words={['design systems', 'component libraries', 'delightful UIs']} />\n\n// A single string types once and holds, caret keeps blinking\n<Typewriter words=\"Hello, world\" />"
   },
   {
     "name": "typography",
-    "description": "22 semantic variants built on Inter Display.",
+    "description": "A semantic type scale built on Inter Display.",
     "category": "foundations",
     "dependencies": [
       "class-variance-authority",
@@ -975,11 +1184,15 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "Text"
+    ],
+    "example": "import { Text } from '@/components/stepwise/typography'"
   },
   {
     "name": "video-player",
-    "description": "A fully custom HTML5 video player with a live edge ambilight — colours along the frame’s perimeter bloom out behind the squircle, shifting with the picture.",
+    "description": "A fully custom HTML5 video player with a live edge ambilight - colours along the frame’s perimeter bloom out behind the squircle, shifting with the picture.",
     "category": "components",
     "dependencies": [
       "@hugeicons/core-free-icons",
@@ -992,7 +1205,11 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "VideoPlayer"
+    ],
+    "example": "import { VideoPlayer } from '@/components/stepwise/video-player'\n\n<VideoPlayer\n  src=\"/your-video.mp4\"\n  className=\"w-full max-w-xl\"\n/>"
   },
   {
     "name": "zigzag-lines",
@@ -1005,6 +1222,10 @@
     "peerDependencies": [
       "react"
     ],
-    "registryDependencies": []
+    "registryDependencies": [],
+    "exports": [
+      "ZigzagLines"
+    ],
+    "example": "import { ZigzagLines } from '@/components/stepwise/zigzag-lines'\n\n<div className=\"relative h-64\">\n  <ZigzagLines />\n</div>"
   }
 ]

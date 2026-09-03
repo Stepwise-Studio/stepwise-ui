@@ -19,7 +19,7 @@ export const APPLE_ACCENTS: Record<AppleAccent, string> = {
 export interface AppleSelectProps {
   /** The full text. */
   text          : string
-  /** The highlighted range as [start, end] character offsets — fixed; visitors can't drag it. */
+  /** The highlighted range as [start, end] character offsets - fixed; visitors can't drag it. */
   selection?    : [number, number]
   /** Handle + highlight colour. Default iOS blue. */
   accent?       : string
@@ -39,9 +39,9 @@ function hexToRgba(hex: string, a: number): string {
 }
 
 /**
- * iOS-style text highlight — a fixed, non-draggable selection the author sets
- * via `selection`. A translucent accent band sits under the range with a
- * lollipop handle at each end, exactly like a settled iPhone selection.
+ * An iOS-style text highlight: a fixed, non-draggable selection set through
+ * `selection`. A translucent band sits under the range with a lollipop handle
+ * at each end, like a settled selection on iPhone.
  */
 export function AppleSelect({
   text,
@@ -56,7 +56,7 @@ export function AppleSelect({
 
   const [start, end] = selection ?? defaultWordRange(text)
 
-  // ── Measure every character box relative to the container ──
+  // Measure every character box relative to the container.
   const measure = useCallback(() => {
     const node = textRef.current?.firstChild
     const container = containerRef.current
@@ -93,7 +93,7 @@ export function AppleSelect({
     return () => { ro.disconnect(); window.removeEventListener('resize', measure) }
   }, [measure])
 
-  // ── Derive highlight line-rects from geometry, padded a touch on each edge ──
+  // Derive the highlight rects from that geometry, padded slightly per edge.
   const pad = edgePadding
   const lines: { top: number; bottom: number; left: number; right: number }[] = []
   for (let i = start; i < end && i < geom.length; i++) {
@@ -132,15 +132,15 @@ export function AppleSelect({
         <span ref={textRef}>{text}</span>
       </p>
 
-      {/* start handle — dot above the line, bar pushed out by the edge padding */}
+      {/* start handle - dot above the line, bar pushed out by the edge padding */}
       {startBox && <Handle which="start" accent={accent} barX={startBox.left - pad} top={startBox.top} height={startBox.bottom - startBox.top} />}
-      {/* end handle — dot below the line */}
+      {/* end handle - dot below the line */}
       {endBox && <Handle which="end" accent={accent} barX={endBox.right + pad} top={endBox.top} height={endBox.bottom - endBox.top} />}
     </div>
   )
 }
 
-// ── Lollipop handle: a bar the height of the line with a dot on one end (static) ──
+// Lollipop handle: a bar the height of the line with a dot on one end.
 function Handle({ which, accent, barX, top, height }: { which: 'start' | 'end'; accent: string; barX: number; top: number; height: number }) {
   const isStart = which === 'start'
   const DOT = 11

@@ -13,7 +13,7 @@ type Side = 'top' | 'bottom' | 'left' | 'right'
 type Phase = 'closed' | 'measuring' | 'open' | 'closing'
 
 const OPPOSITE: Record<Side, Side> = { top: 'bottom', bottom: 'top', left: 'right', right: 'left' }
-// Same constant on every side — this is the entire visible gap between
+// Same constant on every side - this is the entire visible gap between
 // trigger and tooltip now that there's no arrow adding its own protrusion,
 // so the distance reads identically regardless of which side it lands on.
 const GAP    = 10   // px between trigger edge and tooltip body
@@ -29,12 +29,10 @@ interface Placement {
 
 function computePlacement(
   trigger: DOMRect,
-  // Only width/height are read below — deliberately not a DOMRect. Measuring
-  // via getBoundingClientRect() while the enter transform's `scale(0.95)` is
-  // still applied (true during the whole "measuring" phase, since it's only
-  // ever *not* `open`) shrinks the reported size by 5%, and that error scales
-  // with the tooltip's own dimensions — a wide tooltip drifts further off
-  // than a narrow one. offsetWidth/offsetHeight ignore transforms entirely.
+  // Width and height only, not a DOMRect. getBoundingClientRect() reports the
+  // transformed size, and the enter transform's scale(0.95) is still applied
+  // while measuring, so every tooltip would sit 5% off. offsetWidth and
+  // offsetHeight ignore transforms.
   tooltip: { width: number; height: number },
   preferred: Side,
   bounds: Bounds,
@@ -90,10 +88,8 @@ export interface TooltipProps {
   children: ReactElement<HTMLAttributes<HTMLElement>>
   side?: Side
   /**
-   * Boundary element for collision detection.
-   * Defaults to the viewport when omitted.
-   * Pass a ref to a container to constrain the tooltip within that element —
-   * useful for demos or scroll containers.
+   * Boundary for collision detection. Defaults to the viewport. Pass a ref to
+   * keep the tooltip inside a specific container, e.g. a scroll area.
    */
   boundary?: React.RefObject<Element | null>
   className?: string
@@ -192,8 +188,8 @@ export function Tooltip({ content, children, side: preferred = 'top', boundary, 
           <Surface
             radius={10}
             className={cn(
-              // leading-snug gives the font its natural ascender/descender room,
-              // preventing the optical "text sits too high" effect that leading-none causes.
+              // leading-snug leaves room for ascenders and descenders, which
+              // leading-none removes and makes the text sit optically high.
               'flex items-center px-3 py-[7px] max-w-[220px]',
               'bg-zinc-900 dark:bg-zinc-100',
               'text-zinc-50 dark:text-zinc-900',

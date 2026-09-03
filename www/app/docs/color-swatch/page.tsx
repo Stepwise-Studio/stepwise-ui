@@ -31,8 +31,8 @@ export default function ColorSwatchPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Color Swatch</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            A row of color circles with a single active selection — the ring springs between
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A row of color circles with a single active selection - the ring springs between
             swatches as you pick. Controlled or uncontrolled.
           </Text>
         </div>

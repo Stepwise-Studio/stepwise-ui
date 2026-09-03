@@ -36,7 +36,7 @@ export default function TimePickerPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Time Picker</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A field that matches Input, opening a split readout with snap columns and a sliding
             AM/PM control. Scroll, tap, or type digits. The value is always 24-hour{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">"HH:mm"</code>.
@@ -50,7 +50,7 @@ export default function TimePickerPage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Click a number or type into the underlined hour and minute. Arrow keys step; scroll or drag the wheels.
           </Text>
           <PreviewCode
@@ -63,7 +63,7 @@ export default function TimePickerPage() {
 
         <section id="h24" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">24-hour</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Drop AM/PM with{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">use12Hour={'{false}'}</code>
             {' '}and set the minute increment with{' '}

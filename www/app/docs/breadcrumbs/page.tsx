@@ -3,11 +3,15 @@ import { CodeBlock, InlineInstall } from '@/components/stepwise/docs/code-block'
 import { PreviewCode } from '@/components/stepwise/docs/preview-code'
 import { OnThisPage } from '@/components/stepwise/docs/on-this-page'
 import { PropsTable } from '@/components/stepwise/docs/props-table'
-import { BreadcrumbsSlashPreview, BreadcrumbsChevronPreview, BreadcrumbsOverflowPreview } from '@/components/stepwise/docs/breadcrumbs-preview'
+import {
+  BreadcrumbsSlashPreview,
+  BreadcrumbsChevronPreview,
+  BreadcrumbsOverflowPreview,
+} from '@/components/stepwise/docs/breadcrumbs-preview'
 
 const basicCode = `import { Breadcrumbs } from '@/components/stepwise/breadcrumbs'
 
-// \`onNavigate\` intercepts the click and prevents the href navigation —
+// \`onNavigate\` intercepts the click and prevents the href navigation -
 // drive the trail from state (or your router) instead of a page load.
 <Breadcrumbs
   items={trail}
@@ -23,7 +27,7 @@ const chevronCode = `<Breadcrumbs
   ]}
 />`
 
-const overflowCode = `// Past \`maxItems\` the middle collapses to an expandable "…"
+const overflowCode = `// Past \`maxItems\` the middle collapses to a "…" menu
 <Breadcrumbs
   maxItems={4}      // default
   itemsBefore={1}   // crumbs kept at the head
@@ -53,8 +57,8 @@ export default function BreadcrumbsPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Breadcrumbs</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Accessible navigation trail. The last item is always the current page (non-link).
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A navigation trail that collapses its middle into a menu once the path gets deep. The last item is always the current page (non-link).
             Choose between a slash or chevron separator.
           </Text>
         </div>
@@ -84,11 +88,11 @@ export default function BreadcrumbsPage() {
 
         <section id="overflow" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Overflow</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Past <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">maxItems</code> the
-            middle collapses to an expandable <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">…</code> so
-            the trail stays on one line however deep the hierarchy gets. The head and the current
-            page always survive.
+            middle collapses to a <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">…</code> that
+            opens a menu of the hidden crumbs - picking one jumps straight there, the row
+            itself never expands. The head and the current page always survive.
           </Text>
           <PreviewCode
             minHeight={140}

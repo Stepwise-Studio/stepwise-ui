@@ -28,9 +28,9 @@ export default function DiagonalLinesPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Diagonal Lines</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Diagonal hairlines for section backgrounds, leaning left or right. Absolutely
-            positioned to fill its nearest positioned ancestor — give the parent{' '}
+            positioned to fill its nearest positioned ancestor - give the parent{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">relative</code>{' '}
             and a height.
           </Text>
@@ -43,7 +43,7 @@ export default function DiagonalLinesPage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Leans right.
           </Text>
           <PreviewCode
@@ -54,7 +54,7 @@ export default function DiagonalLinesPage() {
 
         <section id="left" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Left</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">variant="left"</code>{' '}
             to lean the other way.
           </Text>

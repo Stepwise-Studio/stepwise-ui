@@ -7,7 +7,7 @@ export type SpinnerStatus = 'loading' | 'success' | 'error'
 export type SpinnerSize = 'sm' | 'default' | 'lg'
 export type SpinnerVariant = 'arc' | 'dots'
 
-/** One arc rotation, seconds — exported so callers can time a resolve to land on a full spin. */
+/** One arc rotation, seconds - exported so callers can time a resolve to land on a full spin. */
 export const SPINNER_ARC_DURATION = 0.7
 
 export interface SpinnerProps {
@@ -15,7 +15,7 @@ export interface SpinnerProps {
   status?   : SpinnerStatus
   /** "sm" (16px) / "default" (24px) / "lg" (32px), or an exact px diameter. Default "default". */
   size?     : SpinnerSize | number
-  /** "arc" — a single sweeping stroke, the general-purpose default. "dots" — eight
+  /** "arc" - a single sweeping stroke, the general-purpose default. "dots" - eight
    *  fading dots, the iOS/macOS activity-indicator look. Default "arc". */
   variant?  : SpinnerVariant
   className?: string
@@ -23,7 +23,7 @@ export interface SpinnerProps {
 
 const SIZE_MAP: Record<SpinnerSize, number> = { sm: 16, default: 24, lg: 32 }
 const DOTS = 8
-// Glyphs sit well inside the r=11 disc — a tick that reaches the rim reads as
+// Glyphs sit well inside the r=11 disc - a tick that reaches the rim reads as
 // cramped at 16px and heavy at 32px.
 const TICK  = 'M7.9 12.3 L10.7 15.1 L16.1 9.4'
 const CROSS = 'M9.3 9.3 L14.7 14.7 M14.7 9.3 L9.3 14.7'
@@ -35,11 +35,10 @@ const DISC_SPRING = { type: 'spring' as const, stiffness: 300, damping: 30, mass
 const FADE = { duration: 0.18, ease: [0.22, 1, 0.36, 1] as const }
 
 /**
- * The loading indicator, and the moment after it. Give it a `status` and it
- * resolves into a filled disc, then the tick (or cross) draws itself on with
- * a spring — so the resolve reads as one gesture instead of a swap. Loading
- * and resolved states share one AnimatePresence so the crossfade is a single
- * synced transition, not two independently-timed ones.
+ * A loading indicator that resolves into its own result. Give it a `status`
+ * and it fills into a disc, then draws the tick or cross on, so the resolve
+ * reads as one gesture rather than a swap. Both states share one
+ * AnimatePresence so the crossfade stays a single synced transition.
  */
 export function Spinner({ status = 'loading', size = 'default', variant = 'arc', className }: SpinnerProps) {
   const reduce = useReducedMotion()
@@ -80,7 +79,7 @@ export function Spinner({ status = 'loading', size = 'default', variant = 'arc',
                 fill="none" strokeWidth={stroke}
                 className="stroke-zinc-200 dark:stroke-zinc-800"
               />
-              {/* one clean arc that just spins — plain CSS animation, not a
+              {/* one clean arc that just spins - plain CSS animation, not a
                   Framer `rotate` value: nested inside the crossfade's
                   motion.svg, a framer-driven rotate here silently no-ops
                   (it's not the direct AnimatePresence child, so its
@@ -146,8 +145,8 @@ export function Spinner({ status = 'loading', size = 'default', variant = 'arc',
               d={status === 'success' ? TICK : CROSS}
               fill="none" stroke="#fff" strokeWidth={2.1}
               strokeLinecap="round" strokeLinejoin="round"
-              // Opacity rides along with the draw so the first frame isn't a
-              // stray dot sitting on the disc before the stroke has length.
+              // Opacity animates with the draw, so the first frame isn't a stray
+              // dot on the disc before the stroke has any length.
               initial={reduce ? { pathLength: 1, opacity: 1 } : { pathLength: 0, opacity: 0 }}
               animate={{ pathLength: 1, opacity: 1 }}
               transition={{

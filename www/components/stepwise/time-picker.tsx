@@ -10,7 +10,7 @@ import { useTheme } from '@/lib/theme'
 import { cn } from '@/lib/utils/cn'
 
 export interface TimePickerProps {
-  /** "HH:mm" in 24h — display format is presentational only. */
+  /** "HH:mm" in 24h - display format is presentational only. */
   value?     : string
   onChange?  : (value: string) => void
   label?     : string
@@ -21,11 +21,11 @@ export interface TimePickerProps {
   step?      : number
   disabled?  : boolean
   className? : string
-  /** Fires when the panel opens or closes — lets a parent reserve space. */
+  /** Fires when the panel opens or closes - lets a parent reserve space. */
   onOpenChange?: (open: boolean) => void
 }
 
-const FONT = 'var(--font-inter-display)'
+const FONT = 'var(--font-inter-display, ui-sans-serif, system-ui, sans-serif)'
 const EASE = [0.22, 1, 0.36, 1] as const
 const ITEM_H = 36
 const VISIBLE = 3
@@ -210,7 +210,7 @@ function Drum({
       role="listbox"
       aria-label={label}
       aria-activedescendant={`${label}-${items[Math.round(clampPos(pos))]}`}
-      // min-w/max-w + flex-1 basis-0 instead of a fixed shrink-0 width — the
+      // min-w/max-w + flex-1 basis-0 instead of a fixed shrink-0 width - the
       // cylinder math only depends on ITEM_H (vertical), never on the
       // drum's own width, so it's safe to let this column compress in a
       // narrow trigger instead of forcing the row wider than its panel.
@@ -327,7 +327,7 @@ function DigitSlot({
 
 /**
  * Time field matching DatePicker chrome. Split readout, sliding AM/PM,
- * and 3D snap drums (wheel or drag — no scrollbar). Value is always 24h "HH:mm".
+ * and 3D snap drums (wheel or drag - no scrollbar). Value is always 24h "HH:mm".
  */
 export function TimePicker({
   value,
@@ -601,7 +601,7 @@ export function TimePicker({
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 z-10"
-                  style={{ borderRadius: 20, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border)' }}
+                  style={{ borderRadius: 20, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border, rgb(138 138 141 / 0.23))' }}
                 />
                 <Surface
                   radius={20}

@@ -20,7 +20,7 @@ export interface DatePickerProps {
   from?: Date | null
   to?: Date | null
   onRangeChange?: (from: Date | null, to: Date | null) => void
-  /** Fires whenever the calendar popover opens or closes — lets a parent reserve space for it. */
+  /** Fires whenever the calendar popover opens or closes - lets a parent reserve space for it. */
   onOpenChange?: (open: boolean) => void
   className?: string
 }
@@ -31,8 +31,8 @@ function fmtDate(d: Date | null) {
 
 function fmtRange(f: Date | null, t: Date | null) {
   if (!f && !t) return ''
-  const a = f ? f.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—'
-  const b = t ? t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—'
+  const a = f ? f.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '-'
+  const b = t ? t.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '-'
   return `${a}  →  ${b}`
 }
 
@@ -116,7 +116,7 @@ export function DatePicker({
     else if (!masked) onChange?.(null)
   }
 
-  // Fire only when `open` actually changes — not on every render (the callback
+  // Fire only when `open` actually changes - not on every render (the callback
   // identity churns), which would let sibling pickers clobber each other's state.
   const onOpenChangeRef = useRef(onOpenChange)
   onOpenChangeRef.current = onOpenChange
@@ -247,7 +247,7 @@ export function DatePicker({
           }}
         />
 
-        {/* Calendar — absolute below the input, clipped by the parent overflow container */}
+        {/* Calendar - absolute below the input, clipped by the parent overflow container */}
         <AnimatePresence initial={false}>
           {open && (
             <>

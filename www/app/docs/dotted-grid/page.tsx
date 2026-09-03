@@ -23,9 +23,9 @@ export default function DottedGridPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Dotted Grid</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A static dot grid for section backgrounds. Absolutely positioned to fill its
-            nearest positioned ancestor — give the parent{' '}
+            nearest positioned ancestor - give the parent{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">relative</code>{' '}
             and a height. Looking for the mouse-follow version?{' '}
             <a href="/docs/dotted-spotlight" className="underline decoration-zinc-300 underline-offset-2 hover:text-zinc-700 dark:hover:text-zinc-200">Dotted Spotlight</a>{' '}

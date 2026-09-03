@@ -37,48 +37,48 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(({
   }
 
   return (
-    <label
-      htmlFor={id}
-      onClick={handleClick}
-      className={cn('inline-flex items-center gap-2 cursor-pointer select-none', disabled && 'opacity-40 pointer-events-none', className)}
-    >
-      <input
-        id={id} ref={ref} type="radio" className="sr-only" checked={visual}
-        onChange={e => { if (!isControlled) setLocal(e.target.checked); onChange?.(e) }}
-        disabled={disabled} {...props}
-      />
-      <span
-        className={cn(
-          'shrink-0 inline-flex items-center justify-center rounded-full transition-colors duration-150',
-          visual
-            ? 'bg-zinc-900 dark:bg-white'
-            : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border)]',
-        )}
-        style={{ width: s.sq, height: s.sq }}
-      >
-        <AnimatePresence>
-          {visual && (
-            <motion.span
-              key="dot"
-              className="rounded-full bg-white dark:bg-zinc-900 block shrink-0"
-              style={{ width: s.dot, height: s.dot }}
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            />
-          )}
-        </AnimatePresence>
-      </span>
-      {label && (
-        <span className={cn(
-          s.label, 'font-medium leading-none transition-colors duration-200',
-          visual ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-zinc-400',
-        )}>
-          {label}
-        </span>
+  <label
+    htmlFor={id}
+    onClick={handleClick}
+    className={cn('inline-flex items-center gap-2 cursor-pointer select-none', disabled && 'opacity-40 pointer-events-none', className)}
+  >
+    <input
+      id={id} ref={ref} type="radio" className="sr-only" checked={visual}
+      onChange={e => { if (!isControlled) setLocal(e.target.checked); onChange?.(e) }}
+      disabled={disabled} {...props}
+    />
+    <span
+      className={cn(
+        'shrink-0 inline-flex items-center justify-center rounded-full transition-colors duration-150',
+        visual
+          ? 'bg-zinc-900 dark:bg-white'
+          : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border,rgb(138_138_141_/_0.23))]',
       )}
-    </label>
+      style={{ width: s.sq, height: s.sq }}
+    >
+      <AnimatePresence>
+        {visual && (
+          <motion.span
+            key="dot"
+            className="rounded-full bg-white dark:bg-zinc-900 block shrink-0"
+            style={{ width: s.dot, height: s.dot }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          />
+        )}
+      </AnimatePresence>
+    </span>
+    {label && (
+      <span className={cn(
+        s.label, 'font-medium leading-none transition-colors duration-200',
+        visual ? 'text-zinc-900 dark:text-white' : 'text-zinc-500 dark:text-zinc-400',
+      )}>
+        {label}
+      </span>
+    )}
+  </label>
   )
 })
 Radio.displayName = 'Radio'

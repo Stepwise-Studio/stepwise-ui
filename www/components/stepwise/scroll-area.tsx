@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils/cn'
 export interface ScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
   /** Cap the height and scroll vertically past it. */
   maxHeight?: number | string
-  /** Cap the width and scroll horizontally past it — for axis="x" or "both". */
+  /** Cap the width and scroll horizontally past it - for axis="x" or "both". */
   maxWidth?: number | string
   /** Scroll axis. Default 'y'. */
   axis?: 'y' | 'x' | 'both'
@@ -14,18 +14,15 @@ export interface ScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
   showScrollbar?: boolean
 }
 
-// Fixed pixel clearance between the thumb and the parent's rounded corner —
-// independent of content padding, so raising it never adds visible gap
-// around the content itself (a margin-based inset couldn't do this: shrinking
-// the scrolling box just stacked a second gap on top of the content's own
-// padding). Track/thumb geometry below.
+// Fixed clearance between the thumb and the parent's rounded corner. Kept
+// independent of content padding, so raising it never adds visible gap around
+// the content itself.
 const INSET = 4
 const THICKNESS = 5
 const MIN_THUMB = 24
-// The visible bar stays THICKNESS wide, but its pointer hit area is padded
-// out to this on the cross-axis — a 5px target fails the 24px minimum hit
-// area, and it's an author-drawn control so the native-scrollbar exemption
-// doesn't apply.
+// The bar stays THICKNESS wide but its hit area is padded out to this. A 5px
+// target fails the 24px minimum, and an author-drawn control does not get the
+// native-scrollbar exemption.
 const HIT_THICKNESS = 24
 
 type Track = { size: number; pos: number; visible: boolean }
@@ -42,17 +39,13 @@ function mergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
 }
 
 /**
- * A scroll container. Scrolls with no visible scrollbar by default; pass
- * showScrollbar to render Stepwise's minimal scrollbar — a slim, fully-rounded
- * thumb that darkens on hover and while dragged. It's a custom-rendered
- * overlay (native scrollbars hidden), not the browser's own: a real
- * scrollbar's track always spans its box corner to corner, so on a
- * squircle-clipped parent it visually clips into the curve at either scroll
- * extreme. A custom thumb can be inset from the corner by a fixed pixel
- * amount that's completely decoupled from content padding — clearance
- * without adding any visible gap around the content. Actual scrolling stays
- * fully native (wheel, touch, keyboard, drag-select) — only the indicator is
- * custom. Theme-aware and self-contained via the .ax-scroll token fallbacks.
+ * A scroll container. Hides the scrollbar by default; pass `showScrollbar` for
+ * a slim rounded thumb that darkens on hover and drag.
+ *
+ * The indicator is drawn rather than native because a real scrollbar's track
+ * spans its box corner to corner, which clips into the curve on a
+ * squircle-clipped parent. A custom thumb can be inset by a fixed amount that
+ * is decoupled from content padding. Scrolling itself stays fully native.
  */
 export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(function ScrollArea(
   { maxHeight, maxWidth, axis = 'y', showScrollbar, className, style, children, ...props }, ref,
@@ -104,10 +97,9 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(function S
     return () => { ro.disconnect(); el.removeEventListener('scroll', measure) }
   }, [measure, showScrollbar, children])
 
-  // Listeners are attached here, imperatively, at the moment the drag
-  // starts — not inside a useEffect keyed off track size. A ref mutation
-  // (the old approach) doesn't trigger React to re-run effects, so those
-  // listeners never actually attached and the drag axis never got cleared.
+  // Listeners are attached imperatively when the drag starts rather than in an
+  // effect: the drag axis lives in a ref, and mutating a ref does not re-run
+  // effects, so an effect-based version would never attach them.
   const startDrag = (axisKey: 'x' | 'y') => (e: React.PointerEvent) => {
     e.preventDefault()
     const el = innerRef.current
@@ -156,7 +148,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(function S
         style={{ maxHeight, maxWidth, ...style }}
         {...props}
       >
-        {/* padding lives on this inner wrapper, not the scrolling element —
+        {/* padding lives on this inner wrapper, not the scrolling element -
             browsers drop an overflow element's own trailing padding from
             scrollWidth, so a right/bottom pad applied directly here would
             show at the start but vanish at the scrolled-to-end edge. On the

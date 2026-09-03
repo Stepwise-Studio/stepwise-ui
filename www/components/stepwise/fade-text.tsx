@@ -31,16 +31,16 @@ const chunk: Variants = {
   exit:    { opacity: 0, y: -4, filter: 'blur(3px)', transition: { duration: 0.2, ease: [0.4, 0, 1, 1] } },
 }
 
-/** Words plus whitespace runs — keeps double spaces intact. */
+/** Words plus whitespace runs - keeps double spaces intact. */
 function splitParts(text: string, by: 'word' | 'char') {
   if (by === 'char') return text.split('')
   return text.split(/(\s+)/).filter(part => part.length > 0)
 }
 
 /**
- * Fade-in / fade-out text. Splits into words (or characters) and staggers each
- * chunk with a blurred rise on enter and a softer, smaller exit — per the
- * split-and-stagger + subtle-exit principles. Toggle `show` to play either way.
+ * Fades text in and out. Splits into words or characters and staggers each
+ * chunk, with a blurred rise on enter and a softer, smaller exit. Toggle
+ * `show` to play it in either direction.
  */
 export function FadeText({ children, by = 'word', show = true, stagger = 0.05, className }: FadeTextProps) {
   const reduce = useReducedMotion()

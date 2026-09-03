@@ -13,9 +13,9 @@ export interface DottedGridProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * A static dot grid for section backgrounds. Absolutely positioned to fill
- * its nearest positioned ancestor — give the parent `relative` and a height.
- * For the mouse-follow version, see `DottedSpotlight`.
+ * A static dot grid for section backgrounds. Fills its nearest positioned
+ * ancestor, so give the parent `relative` and a height. For the mouse-follow
+ * version see `DottedSpotlight`.
  */
 export const DottedGrid = React.forwardRef<HTMLDivElement, DottedGridProps>(
   ({ className, style, size = 24, dotSize = 1.5, faded = true, ...props }, ref) => {

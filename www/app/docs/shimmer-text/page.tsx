@@ -7,7 +7,7 @@ import { ShimmerPreview } from '@/components/stepwise/docs/text-effects-preview'
 
 const usageCode = `import { ShimmerText } from '@/components/stepwise/shimmer-text'
 
-// The AI "thinking / generating" label — a highlight band
+// The AI "thinking / generating" label - a highlight band
 // sweeps across muted text on an infinite loop. Pure CSS.
 <ShimmerText>Generating response…</ShimmerText>
 
@@ -26,9 +26,9 @@ export default function ShimmerTextPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Shimmer Text</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            The loading shimmer every AI-native app reaches for. A highlight band sweeps
-            across muted text on an endless loop — a "thinking" state that feels alive
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            A CSS-only shimmer for thinking and loading states. A highlight band sweeps
+            across muted text on an endless loop - a "thinking" state that feels alive
             without a spinner. Pure CSS, so it costs nothing to run.
           </Text>
         </div>

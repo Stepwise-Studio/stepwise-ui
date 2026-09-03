@@ -20,23 +20,16 @@ const range = (start: number, end: number) =>
   Array.from({ length: Math.max(0, end - start + 1) }, (_, i) => start + i)
 
 /**
- * Builds a slot list whose LENGTH never changes while `totalPages` is large
- * enough to fill it — the whole point of the exercise.
+ * Builds a slot list whose length stays constant while `totalPages` is large
+ * enough to fill it, so the pager never changes width as you page through.
  *
- * The naive version (`clamp(page ± siblings)`) silently loses slots near
- * either end: on page 1 there is nothing to the left to render, so the row
- * collapses by two slots, then grows back as you walk inward. That is the
- * width jitter — the row is literally a different number of buttons wide on
- * every page.
+ * Clamping the sibling window (`page ± siblings`) would drop slots near either
+ * end, since there is nothing to the left of page 1 to render. Instead the
+ * window slides inward so it always emits its full width. An ellipsis is also
+ * never a spacer: where exactly one page sits between a boundary and the
+ * window, that number is rendered in place of the ellipsis.
  *
- * The fix is to slide the sibling window instead of clipping it: when the
- * current page is close to an end, the window is pushed inward so it still
- * emits its full width. The ellipsis is not a spacer either — where a single
- * page number sits between the boundary and the window, that number is
- * rendered instead of "…", so the slot is still occupied. Same algorithm
- * MUI's `usePagination` uses, and the reason its pager never reflows.
- *
- * Total slots = 2·boundaries + 2·siblings + 3 (current + two joiners).
+ * Total slots = 2·boundaries + 2·siblings + 3 (current plus two joiners).
  */
 function buildSlots(page: number, total: number, siblings: number, boundaries: number): Slot[] {
   const slotCount = 2 * boundaries + 2 * siblings + 3
@@ -58,7 +51,7 @@ function buildSlots(page: number, total: number, siblings: number, boundaries: n
 
   return [
     ...startPages,
-    // A gap of exactly one page is filled with that page, not an ellipsis —
+    // A gap of exactly one page is filled with that page, not an ellipsis -
     // "1 … 3" hides nothing and costs the same width as "1 2 3".
     ...(windowStart > boundaries + 2
       ? (['start-ellipsis'] as Slot[])
@@ -106,9 +99,9 @@ export function Pagination({
         onClick={() => onChange(page - 1)}
         disabled={page <= 1}
         aria-label="Previous page"
-        // A circle needs no corner smoothing — squircle correction only has
+        // A circle needs no corner smoothing - squircle correction only has
         // anything to do at a radius smaller than half the box.
-        className={cn(CELL, GHOST, RING, 'cursor-pointer rounded-full transition-colors duration-150 disabled:pointer-events-none disabled:opacity-30')}
+        className={cn(CELL, GHOST, RING, 'cursor-pointer rounded-full transition-colors duration-150 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-30')}
       >
         <Arrow dir="prev" />
       </button>
@@ -132,7 +125,7 @@ export function Pagination({
             <button
               onClick={() => onChange(slot)}
               aria-label={`Go to page ${slot}`}
-              className={cn(CELL, GHOST, RING, 'cursor-pointer transition-colors duration-150')}
+              className={cn(CELL, GHOST, RING, 'cursor-pointer active:scale-[0.96] transition-[color,transform] duration-150')}
             >
               {slot}
             </button>
@@ -144,7 +137,7 @@ export function Pagination({
         onClick={() => onChange(page + 1)}
         disabled={page >= totalPages}
         aria-label="Next page"
-        className={cn(CELL, GHOST, RING, 'cursor-pointer rounded-full transition-colors duration-150 disabled:pointer-events-none disabled:opacity-30')}
+        className={cn(CELL, GHOST, RING, 'cursor-pointer rounded-full transition-colors duration-150 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-30')}
       >
         <Arrow dir="next" />
       </button>

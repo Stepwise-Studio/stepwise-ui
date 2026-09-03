@@ -16,10 +16,9 @@ export interface DottedSpotlightProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 /**
- * A dot grid with a mouse-follow flashlight — dots brighten near the
- * cursor. Absolutely positioned to fill its nearest positioned ancestor —
- * give the parent `relative` and a height. For the static version, see
- * `DottedGrid`.
+ * A dot grid with a flashlight that follows the cursor, brightening nearby
+ * dots. Fills its nearest positioned ancestor, so give the parent `relative`
+ * and a height. For the static version see `DottedGrid`.
  */
 export const DottedSpotlight = React.forwardRef<HTMLDivElement, DottedSpotlightProps>(
   ({ className, style, size = 24, dotSize = 1.5, faded = true, radius = 400, ...props }, ref) => {
@@ -33,8 +32,7 @@ export const DottedSpotlight = React.forwardRef<HTMLDivElement, DottedSpotlightP
     const cy = size / 2
 
     React.useEffect(() => {
-      // Reduced motion: skip tracking entirely and let the flashlight layer
-      // render at its plain, unmasked opacity instead — no listener needed.
+      // Reduced motion: no tracking, and the flashlight renders unmasked.
       if (reduce) return
       const handleMouseMove = (e: MouseEvent) => {
         const el = containerRef.current
@@ -42,13 +40,10 @@ export const DottedSpotlight = React.forwardRef<HTMLDivElement, DottedSpotlightP
         const rect = el.getBoundingClientRect()
         const x = e.clientX - rect.left
         const y = e.clientY - rect.top
-        // The listener is on `window` (not the container) because this
-        // element is pointer-events:none — it can never be the hit-test
-        // target for its own mousemove, so a container-scoped listener
-        // would just never fire. That means this handler runs on every
-        // mouse move anywhere on the page; skip the state update (and the
-        // re-render + layout read it would trigger) once the cursor is
-        // outside the container, where the flashlight can't be visible.
+        // The listener is on `window` because this element is
+        // pointer-events:none and can never be its own hit-test target. That
+        // means it fires for the whole page, so bail out once the cursor is
+        // outside the container and skip the re-render.
         if (x < 0 || y < 0 || x > rect.width || y > rect.height) return
         setMousePos({ x, y })
       }
@@ -80,7 +75,7 @@ export const DottedSpotlight = React.forwardRef<HTMLDivElement, DottedSpotlightP
         style={{ ...maskStyle, ...style }}
         {...props}
       >
-        {/* Base Layer — dim dots, always visible */}
+        {/* Base Layer - dim dots, always visible */}
         <svg className="absolute inset-0 h-full w-full text-zinc-300/60 dark:text-zinc-700/50">
           <defs>
             <pattern id={basePatternId} width={size} height={size} patternUnits="userSpaceOnUse">
@@ -90,9 +85,9 @@ export const DottedSpotlight = React.forwardRef<HTMLDivElement, DottedSpotlightP
           <rect width="100%" height="100%" fill={`url(#${basePatternId})`} />
         </svg>
 
-        {/* Flashlight Layer — brighter dots, masked to the cursor. Under
+        {/* Flashlight Layer - brighter dots, masked to the cursor. Under
             reduced motion there's no tracking to mask against, so it's left
-            fully visible rather than hidden — a brighter static grid instead
+            fully visible rather than hidden - a brighter static grid instead
             of a cursor-chasing one. */}
         <svg
           className="absolute inset-0 h-full w-full text-zinc-400 transition-opacity duration-300 dark:text-zinc-500"

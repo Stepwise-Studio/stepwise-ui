@@ -16,14 +16,35 @@ interface NavSection {
   items: NavItem[]
 }
 
-export function SidebarNav({ sections }: { sections: NavSection[] }) {
+/** Split a label on the query so the match can be emphasised - same
+ *  technique and styling as `Combobox`'s own `highlight`, used here by
+ *  `MobileBottomNav`'s in-sheet search. */
+function highlight(label: string, query: string) {
+  if (!query) return <>{label}</>
+  const i = label.toLowerCase().indexOf(query.toLowerCase())
+  if (i === -1) return <>{label}</>
+  return (
+    <>
+      {label.slice(0, i)}
+      <mark className="bg-transparent text-sky-600 dark:text-sky-400 font-semibold">
+        {label.slice(i, i + query.length)}
+      </mark>
+      {label.slice(i + query.length)}
+    </>
+  )
+}
+
+export function SidebarNav({ sections, query }: { sections: NavSection[]; query?: string }) {
   const pathname = usePathname()
 
   return (
     <nav className="flex flex-col gap-6">
       {sections.map(section => (
         <div key={section.label}>
-          <Text variant="h6" as="p" className="text-zinc-500 dark:text-zinc-400 mb-2 px-2">
+          {/* Deliberately a step stronger than the items below it
+              (zinc-500/400): at the same colour, weight and size alone were
+              not enough separation to read as a heading. */}
+          <Text variant="h6" as="p" className="text-zinc-800 dark:text-zinc-200 mb-2 px-2">
             {section.label}
           </Text>
           <ul className="flex flex-col gap-0.5">
@@ -42,11 +63,11 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
                     )}
                   >
                     {/* Independent fade per item instead of one shared pill
-                        sliding/morphing across the list (layoutId) — the old
+                        sliding/morphing across the list (layoutId) - the old
                         active item's highlight fades out on its own while
                         the new one fades in on its own, no cross-item motion.
                         A small scale overshoot on entrance only (never on
-                        exit — a bouncy close reads wrong) gives it some life
+                        exit - a bouncy close reads wrong) gives it some life
                         instead of a flat fade. */}
                     <AnimatePresence>
                       {active && (
@@ -70,7 +91,7 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
                           : 'text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100',
                       )}
                     >
-                      {item.label}
+                      {query ? highlight(item.label, query) : item.label}
                     </Text>
                   </Link>
                 </li>

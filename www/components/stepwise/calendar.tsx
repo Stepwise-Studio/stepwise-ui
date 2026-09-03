@@ -54,7 +54,7 @@ const slideVariants = {
   exit:  (dir: number) => ({ x: -dir * 28, opacity: 0, filter: 'blur(4px)' }),
 }
 
-// Text slides in the direction of navigation — next month slides up, prev slides down.
+// Text slides in the direction of navigation - next month slides up, prev slides down.
 // Gentle distance + light blur keeps the swap buttery rather than snappy.
 const textVariants = {
   enter: (dir: number) => ({ y: dir * 8, opacity: 0, filter: 'blur(2px)' }),
@@ -79,7 +79,7 @@ function NavBtn({ delta, onClick }: { delta: -1 | 1; onClick: () => void }) {
       aria-label={delta === -1 ? 'Previous' : 'Next'}
       className="cursor-pointer p-[6px] -m-[6px]"
     >
-      <Surface radius={100} lisse={{ middleBorder: { width: 1, opacity: 0.625, color: 'var(--ui-border)' } }}
+      <Surface radius={100} lisse={{ middleBorder: { width: 1, opacity: 0.625, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         className={cn(
           'size-[30px] flex items-center justify-center',
           'text-zinc-400 dark:text-zinc-500',
@@ -105,10 +105,10 @@ function CalHeader({ viewYear, viewMonth, direction, pickerOpen, onToggle, onNav
       {/* One pill = one dropdown. The whole thing highlights on hover so it never reads
           as "only the month is changeable". */}
       <button onClick={onToggle} className="group cursor-pointer" aria-expanded={pickerOpen} aria-label="Open month and year picker">
-        <Surface radius={100} lisse={{ middleBorder: { width: 1, opacity: 0.625, color: 'var(--ui-border)' } }}
+        <Surface radius={100} lisse={{ middleBorder: { width: 1, opacity: 0.625, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
           className="flex items-stretch overflow-hidden"
         >
-          {/* Year section — active-looking (not faded), keyed on the year so it only
+          {/* Year section - active-looking (not faded), keyed on the year so it only
               animates when the year actually changes */}
           <div className="flex items-center px-3 py-[7px] self-stretch overflow-hidden bg-zinc-200/70 dark:bg-zinc-800/80 group-hover:bg-zinc-200 dark:group-hover:bg-zinc-700/80 transition-colors duration-150">
             <AnimatePresence mode="popLayout" initial={false} custom={direction}>
@@ -118,7 +118,7 @@ function CalHeader({ viewYear, viewMonth, direction, pickerOpen, onToggle, onNav
               >{viewYear}</motion.span>
             </AnimatePresence>
           </div>
-          {/* Month section — keyed on the month alone so a year change no longer re-animates it */}
+          {/* Month section - keyed on the month alone so a year change no longer re-animates it */}
           <div className="flex items-center gap-[5px] px-3 py-[7px] overflow-hidden group-hover:bg-zinc-100 dark:group-hover:bg-zinc-800/50 transition-colors duration-150">
             <AnimatePresence mode="popLayout" initial={false} custom={direction}>
               <motion.span key={viewMonth} custom={direction} variants={textVariants} initial="enter" animate="center" exit="exit"
@@ -201,11 +201,11 @@ interface PickerPanelProps {
 function MonthYearPanel({ viewYear, viewMonth, onPick, onYearSet }: PickerPanelProps) {
   return (
     <div className="w-full">
-      <Surface radius={18} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle)' } }}
+      <Surface radius={18} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle, rgb(151 151 154 / 0.106))' } }}
         className="w-full bg-zinc-50 dark:bg-zinc-900/80 overflow-hidden"
       >
         <div className="flex">
-          {/* Year scroller — left column */}
+          {/* Year scroller - left column */}
           <div className="w-[76px] shrink-0 border-r border-zinc-200/80 dark:border-zinc-800/80 px-1 py-1 relative">
             {/* Fade masks top/bottom */}
             <div className="pointer-events-none absolute top-0 inset-x-0 h-12 z-10 bg-gradient-to-b from-zinc-50 dark:from-zinc-900 to-transparent" />
@@ -213,7 +213,7 @@ function MonthYearPanel({ viewYear, viewMonth, onPick, onYearSet }: PickerPanelP
             <YearScroller viewYear={viewYear} onPick={onYearSet} />
           </div>
 
-          {/* Month grid — right column */}
+          {/* Month grid - right column */}
           <div className="flex-1 p-3">
             <div className="grid grid-cols-3 gap-1.5">
               {MONTHS_SHORT.map((m, i) => {
@@ -263,7 +263,7 @@ function DayGrid({ days, gridKey, direction, selected, rangeFrom, rangeTo, hover
 
   return (
     <div className="w-full">
-      <Surface radius={20} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle)' } }}
+      <Surface radius={20} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle, rgb(151 151 154 / 0.106))' } }}
         className="w-full px-2 pt-2 pb-3 bg-zinc-50 dark:bg-zinc-900/80"
       >
         {/* Day headers */}
@@ -291,7 +291,7 @@ function DayGrid({ days, gridKey, direction, selected, rangeFrom, rangeTo, hover
                 // Inclusive band: fills every cell from the start date THROUGH the end
                 // date (or the hovered end mid-selection). Only the true outer ends get a
                 // rounded cap matching the selection circle; interior cells stay square so
-                // they tile seamlessly — including across row wraps.
+                // they tile seamlessly - including across row wraps.
                 const rangeLo     = rangeFrom ?? null
                 const rangeHi     = effectiveTo
                 const inRange     = isRangeMode && !!rangeLo && !!rangeHi &&
@@ -311,7 +311,7 @@ function DayGrid({ days, gridKey, direction, selected, rangeFrom, rangeTo, hover
                       !d.isCurrentMonth && 'pointer-events-none',
                     )}
                   >
-                    {/* Range band — sits behind the circle */}
+                    {/* Range band - sits behind the circle */}
                     {showBand && (
                       <div className={cn(
                         'absolute inset-y-[2px] z-0 bg-zinc-200/70 dark:bg-zinc-700/40',
@@ -371,7 +371,7 @@ export function Calendar({ defaultSelected, selected: ctrl, onSelect, className 
   const [internal, setInternal] = useState<Date | null>(defaultSelected ?? null)
   const selected = ctrl !== undefined ? ctrl : internal
 
-  // Open on the selected date's own month, not always today's — otherwise a
+  // Open on the selected date's own month, not always today's - otherwise a
   // `defaultSelected` far from the current month renders with nothing
   // visible and no indication the calendar even has a selection.
   const [viewYear,  setViewYear]  = useState((defaultSelected ?? today).getFullYear())
@@ -405,7 +405,7 @@ export function Calendar({ defaultSelected, selected: ctrl, onSelect, className 
       'dark:[filter:drop-shadow(0_2px_50px_rgba(0,0,0,0.28))_drop-shadow(0_1px_4px_rgba(0,0,0,0.18))]',
       'w-[350px] max-w-full',
     )}>
-      <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+      <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         className={cn('flex flex-col gap-3 px-3 pt-4 pb-3.5 bg-zinc-100 dark:bg-zinc-950', className)}
       >
         <CalHeader viewYear={viewYear} viewMonth={viewMonth} direction={direction}
@@ -493,7 +493,7 @@ export function CalendarRange({ from: ctrlFrom, to: ctrlTo, onRangeChange, class
       'dark:[filter:drop-shadow(0_2px_50px_rgba(0,0,0,0.28))_drop-shadow(0_1px_4px_rgba(0,0,0,0.18))]',
       'w-[350px] max-w-full',
     )}>
-      <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+      <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         className={cn('flex flex-col gap-3 px-3 pt-4 pb-3.5 bg-zinc-100 dark:bg-zinc-950', className)}
       >
         <CalHeader viewYear={viewYear} viewMonth={viewMonth} direction={direction}
@@ -536,14 +536,14 @@ export function CalendarRange({ from: ctrlFrom, to: ctrlTo, onRangeChange, class
               <div className="flex-1 flex flex-col items-center gap-0.5">
                 <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-600 tracking-[0.02em]">From</span>
                 <span className="text-[13px] font-semibold text-zinc-800 dark:text-zinc-100 tabular-nums">
-                  {from ? from.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—'}
+                  {from ? from.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '-'}
                 </span>
               </div>
               <span className="text-zinc-300 dark:text-zinc-700 text-[13px]">→</span>
               <div className="flex-1 flex flex-col items-center gap-0.5">
                 <span className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-600 tracking-[0.02em]">To</span>
                 <span className="text-[13px] font-semibold text-zinc-800 dark:text-zinc-100 tabular-nums">
-                  {to ? to.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—'}
+                  {to ? to.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '-'}
                 </span>
               </div>
             </motion.div>

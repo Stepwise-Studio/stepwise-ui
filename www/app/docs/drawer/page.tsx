@@ -37,9 +37,9 @@ export default function DrawerPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Drawer</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A panel that slides in from any edge of the screen. Left, right, and bottom
-            variants — each with spring-eased entry, backdrop blur, scroll-lock, and
+            variants - each with spring-eased entry, backdrop blur, scroll-lock, and
             Escape to close. The bottom drawer includes a drag handle and works great
             for action sheets and verification flows.
           </Text>
@@ -61,8 +61,8 @@ export default function DrawerPage() {
 
         <section id="bottom" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Bottom drawer</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Slides up from the bottom edge — a natural fit for action sheets, filters, or
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Slides up from the bottom edge - a natural fit for action sheets, filters, or
             (paired with <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">OtpInput</code>) verification flows.
           </Text>
           <PreviewCode

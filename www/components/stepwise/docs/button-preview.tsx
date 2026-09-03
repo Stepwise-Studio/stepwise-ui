@@ -93,7 +93,7 @@ export function ButtonSlidePreview() {
 export function ButtonIconOnlyPreview() {
   return (
     <div className="flex flex-col items-center gap-8">
-      {/* iconsax-react — all outline so the icon style difference is the only variable */}
+      {/* iconsax-react - all outline so the icon style difference is the only variable */}
       <div className="flex flex-col items-center gap-2.5">
         <span className="text-[11px] text-zinc-400 dark:text-zinc-500 tracking-[0.02em]">iconsax-react</span>
         <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export function ButtonIconOnlyPreview() {
         </div>
       </div>
 
-      {/* @hugeicons/react — same concepts, same variant */}
+      {/* @hugeicons/react - same concepts, same variant */}
       <div className="flex flex-col items-center gap-2.5">
         <span className="text-[11px] text-zinc-400 dark:text-zinc-500 tracking-[0.02em]">@hugeicons/react</span>
         <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ export function ButtonFullWidthPreview() {
       {/* Phone frame */}
       <div className="bg-zinc-100 dark:bg-zinc-800 rounded-[44px] p-[6px] shadow-xl border border-zinc-200 dark:border-zinc-700" style={{ width: 360 }}>
         <div className="bg-white dark:bg-zinc-950 rounded-[38px] overflow-hidden flex flex-col" style={{ height: 260 }}>
-          {/* Buttons — flex-1 + justify-center = true vertical center */}
+          {/* Buttons - flex-1 + justify-center = true vertical center */}
           <div className="flex-1 flex flex-col justify-center px-5 gap-3">
             <Button fullWidth variant="solid">
               Create account
@@ -185,7 +185,7 @@ export function ButtonLoadingPreview() {
           Deleting
         </Button>
       </div>
-      {/* without one, the spinner centres over a faded label — width stays put */}
+      {/* without one, the spinner centres over a faded label - width stays put */}
       <div className="flex flex-wrap items-center gap-2.5">
         <Button loading variant="solid">Submit</Button>
         <Button loading variant="soft">Refresh</Button>

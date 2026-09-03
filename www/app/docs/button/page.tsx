@@ -51,7 +51,7 @@ const iconsCode = `import { Add, ArrowRight, Trash } from 'iconsax-react'
 
 const slideCode = `import { ArrowRight } from 'iconsax-react'
 
-// icon hides on desktop until hover — always visible on touch
+// icon hides on desktop until hover - always visible on touch
 <Button
   icon={<ArrowRight size={16} variant="Linear" color="currentColor" />}
   iconPosition="right"
@@ -64,14 +64,14 @@ const iconOnlyCode = `import { Add } from 'iconsax-react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon } from '@hugeicons/core-free-icons'
 
-// iconsax-react — always add aria-label
+// iconsax-react - always add aria-label
 <Button
   iconOnly
   icon={<Add size={16} variant="Linear" color="currentColor" />}
   aria-label="Add"
 />
 
-// @hugeicons/react — same slot, different import
+// @hugeicons/react - same slot, different import
 <Button
   iconOnly
   icon={<HugeiconsIcon icon={PlusSignIcon} size={16} strokeWidth={1.5} color="currentColor" />}
@@ -106,10 +106,10 @@ const disabledCode = `// disabled prop applies 45% opacity and blocks all intera
 // works on icon-only too
 <Button disabled iconOnly icon={<Add size={16} variant="Linear" color="currentColor" />} aria-label="Add" />`
 
-const loadingCode = `// with an icon — the spinner takes the icon's slot, label never moves
+const loadingCode = `// with an icon - the spinner takes the icon's slot, label never moves
 <Button loading icon={<ImportSquare />}>Saving</Button>
 
-// without one — the spinner centres over a faded label, width stays put
+// without one - the spinner centres over a faded label, width stays put
 <Button loading>Submit</Button>
 <Button loading iconOnly icon={<Add />} aria-label="Adding" />`
 
@@ -155,7 +155,7 @@ export default async function ButtonPage() {
         {/* Header */}
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Button</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Squircle button in three sizes and five variants. Supports left and right icons,
             a slide-in hover animation for right-side icons, icon-only mode, full-width layout,
             social login presets, and a loading state. Works with both{' '}
@@ -183,7 +183,7 @@ export default async function ButtonPage() {
         {/* With icons */}
         <section id="icons" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">With icons</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass any icon element to <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">icon</code> and
             control placement with <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">iconPosition</code>.
           </Text>
@@ -197,7 +197,7 @@ export default async function ButtonPage() {
         {/* Slide icon */}
         <section id="slide" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Slide icon</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">slideIcon</code>{' '}
             hides the icon on desktop until hover, sliding in from whichever side{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">iconPosition</code>{' '}
@@ -215,7 +215,7 @@ export default async function ButtonPage() {
         {/* Icon only */}
         <section id="icon-only" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Icon only</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">iconOnly</code> renders
             a square button (width = height). Always add{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">aria-label</code>.
@@ -232,7 +232,7 @@ export default async function ButtonPage() {
         {/* Full width */}
         <section id="full-width" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Full width</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">fullWidth</code> stretches
             the button to 100% of its parent container. Useful for forms, cards, and mobile layouts.
           </Text>
@@ -246,7 +246,7 @@ export default async function ButtonPage() {
         {/* Social login */}
         <section id="social" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Social login</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">SocialButton</code> wraps{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">Button</code> with the brand logo and
             a sensible default label. Override <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">label</code> to
@@ -262,7 +262,7 @@ export default async function ButtonPage() {
         {/* Disabled */}
         <section id="disabled" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Disabled</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             The <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">disabled</code> prop
             applies 45% opacity, flattens the elevation, and blocks all pointer events.
             Works across every variant and size.
@@ -276,7 +276,7 @@ export default async function ButtonPage() {
 
         <section id="loading" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Loading</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             The label always stays put. With an icon the spinner takes the icon&apos;s slot;
             without one it centres over a faded label, so the button never changes width
             mid-request and its accessible name survives. Sets{' '}
@@ -291,7 +291,7 @@ export default async function ButtonPage() {
 
         <section id="custom-fill" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Custom fill</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Defaults stay on the design tokens. Pass Tailwind on{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">className</code>{' '}
             to restyle one instance.{' '}
@@ -311,10 +311,10 @@ export default async function ButtonPage() {
           />
         </section>
 
-        {/* Sizes — at the end, no duplicate props table */}
+        {/* Sizes - at the end, no duplicate props table */}
         <section id="sizes" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Sizes</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Three sizes with fully-rounded corners (radius = height ÷ 2) and squircle smoothing at 0.6.
           </Text>
           <PreviewCode
@@ -330,7 +330,7 @@ export default async function ButtonPage() {
           <PropsTable rows={[
             { name: 'variant',      type: '"solid" | "outline" | "ghost" | "soft" | "destructive"', desc: 'Visual style. Default: "solid".' },
             { name: 'size',         type: '"sm" | "default" | "lg"',                                desc: '28 / 36 / 40 px. Default: "default" (36 px).' },
-            { name: 'icon',         type: 'React.ReactNode',                                         desc: 'Icon element — iconsax-react or @hugeicons/react.' },
+            { name: 'icon',         type: 'React.ReactNode',                                         desc: 'Icon element - iconsax-react or @hugeicons/react.' },
             { name: 'iconPosition', type: '"left" | "right"',                                        desc: 'Side the icon renders on. Default: "left".' },
             { name: 'iconOnly',     type: 'boolean',                                                 desc: 'Square icon-only button. Requires aria-label.' },
             { name: 'slideIcon',    type: 'boolean',                                                 desc: 'Icon hides until hover, from either side. Always visible on touch.' },
@@ -343,10 +343,10 @@ export default async function ButtonPage() {
 
           <Text variant="h4" className="text-zinc-900 dark:text-white mt-4">SocialButton props</Text>
           <PropsTable rows={[
-            { name: 'provider',   type: '"google" | "github" | "apple"', desc: 'Brand to render — sets the logo and default label.' },
+            { name: 'provider',   type: '"google" | "github" | "apple"', desc: 'Brand to render - sets the logo and default label.' },
             { name: 'label',      type: 'string',                        desc: 'Override the default "Continue with …" label.' },
             { name: 'size',       type: 'ButtonSize',                    desc: 'Inherits Button sizes. Default: "default".' },
-            { name: 'fullWidth',  type: 'boolean',                       desc: 'Defaults to true — typical for auth forms.' },
+            { name: 'fullWidth',  type: 'boolean',                       desc: 'Defaults to true - typical for auth forms.' },
           ]} />
         </section>
 

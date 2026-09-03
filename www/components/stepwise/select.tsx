@@ -20,13 +20,13 @@ export interface SelectProps {
   placeholder? : string
   label?       : string
   disabled?    : boolean
-  /** Render open on mount and ignore outside clicks/Escape — for showcases
+  /** Render open on mount and ignore outside clicks/Escape - for showcases
    *  and screenshots that don't want to fight the panel's own space. */
   defaultOpen? : boolean
   className?   : string
 }
 
-const FONT = 'var(--font-inter-display)'
+const FONT = 'var(--font-inter-display, ui-sans-serif, system-ui, sans-serif)'
 const TRACKING = { letterSpacing: '-0.03em' }
 
 export function Select({
@@ -86,7 +86,7 @@ export function Select({
     setIsOpen(o => !o)
   }
 
-  // Focus never leaves the trigger — the roving highlight is tracked in
+  // Focus never leaves the trigger - the roving highlight is tracked in
   // `active` and exposed via aria-activedescendant, the same pattern native
   // comboboxes use. That sidesteps focus-restore-on-close entirely (nothing
   // else was ever focused), and keeps the trigger as the only tab stop.
@@ -113,7 +113,7 @@ export function Select({
     }
   }
 
-  // Border tokens — idle matches Input; open steps up one notch like Input's
+  // Border tokens - idle matches Input; open steps up one notch like Input's
   // own focus state (zinc-400/500), not a near-black/near-white ring.
   const idleBorder = dark ? '#27272a' : '#e4e4e7'
   const openBorder = dark ? '#71717a' : '#a1a1aa'
@@ -135,7 +135,7 @@ export function Select({
         </label>
       )}
 
-      {/* trigger — stays mounted; styled exactly like an Input field */}
+      {/* trigger - stays mounted; styled exactly like an Input field */}
       <div className="relative h-11 w-full">
         <Surface radius={18} lisse={{ middleBorder }} className="relative h-11 w-full bg-white dark:bg-zinc-900">
           <button
@@ -170,7 +170,7 @@ export function Select({
         </Surface>
       </div>
 
-      {/* panel — floats below the trigger, matches Combobox's dropdown */}
+      {/* panel - floats below the trigger, matches Combobox's dropdown */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -183,7 +183,7 @@ export function Select({
           >
             <Surface
               radius={18}
-              lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border)' } }}
+              lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
               className="w-full bg-white dark:bg-zinc-900 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.18),0_2px_8px_rgba(0,0,0,0.06)]"
             >
               <ScrollArea
@@ -220,7 +220,7 @@ export function Select({
                           'flex shrink-0 items-center justify-center rounded-full transition-colors duration-150',
                           isSelected
                             ? 'bg-zinc-900 dark:bg-white'
-                            : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border)]',
+                            : 'bg-white dark:bg-zinc-900 border border-[var(--ui-border,rgb(138_138_141_/_0.23))]',
                         )}
                         style={{ width: 16, height: 16 }}
                       >

@@ -37,7 +37,7 @@ const outlineCode = `<Chip color="danger">Danger</Chip>
 const iconCode = `<Chip color="success" variant="soft"    icon={<CloudSunny />}>Clear</Chip>
 <Chip color="danger"  variant="outline" icon={<Warning2   />}>Blocked</Chip>`
 
-const dotCode = `// only the dot is colored — body always uses neutral styling
+const dotCode = `// only the dot is colored - body always uses neutral styling
 <Chip color="success" variant="soft"    dot>Live</Chip>
 <Chip color="info"    variant="outline" dot>Syncing</Chip>
 <Chip color="warning" variant="soft"    dot>Pending</Chip>
@@ -71,8 +71,8 @@ export default function ChipPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Chip</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Pill-shaped label in six semantic colors and three variants — soft, solid, and outline.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Pill-shaped label in six semantic colors and three variants - soft, solid, and outline.
             Add a leading <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">dot</code>{' '}
             for Live / Pending / Error-style statuses, or an{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">icon</code>{' '}
@@ -87,8 +87,8 @@ export default function ChipPage() {
 
         <section id="soft" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Soft</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Tinted fill with coloured text — the default choice for inline status labels.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Tinted fill with coloured text - the default choice for inline status labels.
           </Text>
           <PreviewCode
             minHeight={100}
@@ -99,8 +99,8 @@ export default function ChipPage() {
 
         <section id="solid" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Solid</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Saturated fill with white text — use for high-emphasis labels that need to stand out.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Saturated fill with white text - use for high-emphasis labels that need to stand out.
           </Text>
           <PreviewCode
             minHeight={100}
@@ -111,8 +111,8 @@ export default function ChipPage() {
 
         <section id="outline" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Outline</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            Transparent fill with a subtle hue-matched border — the lightest option.
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            Transparent fill with a subtle hue-matched border - the lightest option.
           </Text>
           <PreviewCode
             minHeight={100}
@@ -123,7 +123,7 @@ export default function ChipPage() {
 
         <section id="icon" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">With icon</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             The{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">icon</code>{' '}
             prop accepts any React node and renders it to the left of the label.
@@ -137,9 +137,9 @@ export default function ChipPage() {
 
         <section id="dot" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Dot</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">dot</code> for a leading status dot.
-            Only the dot carries the semantic color — the chip body stays neutral so the dot reads as a pure signal.
+            Only the dot carries the semantic color - the chip body stays neutral so the dot reads as a pure signal.
           </Text>
           <PreviewCode
             minHeight={100}
@@ -150,7 +150,7 @@ export default function ChipPage() {
 
         <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Common use case: status indicators in a list or table row.
           </Text>
           <PreviewCode
@@ -162,7 +162,7 @@ export default function ChipPage() {
 
         <section id="sizes" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Sizes</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Three sizes: sm, default, and lg.
           </Text>
           <PreviewCode

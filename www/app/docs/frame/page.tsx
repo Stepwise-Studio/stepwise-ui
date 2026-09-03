@@ -7,7 +7,7 @@ import { FrameBasicPreview } from '@/components/stepwise/docs/frame-preview'
 
 const basicCode = `import { Frame } from '@/components/stepwise/frame'
 
-// raw building block — reach for it when nothing else fits: settings rows,
+// raw building block - reach for it when nothing else fits: settings rows,
 // list items, one-off content blocks. For a pre-built shape, use Profile
 // Card, Product Card, Pricing Card, or Stat Card instead.
 <Frame className="p-5">
@@ -26,10 +26,10 @@ export default function FramePage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Frame</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            The raw, unopinionated content container — the base every other card builds on. Default
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            The raw, unopinionated content container - the base every other card builds on. Default
             corner radius and squircle smoothing, a theme-aware border, and a quiet resting shadow
-            out of the box. Nothing else — put whatever you want inside and style it yourself.
+            out of the box. Nothing else - put whatever you want inside and style it yourself.
           </Text>
         </div>
 
@@ -48,7 +48,7 @@ export default function FramePage() {
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">
-          <Text variant="h3" className="text-zinc-900 dark:text-white">Props — Frame</Text>
+          <Text variant="h3" className="text-zinc-900 dark:text-white">Props - Frame</Text>
           <PropsTable rows={[
             { name: 'radius',        type: 'number',  desc: 'Corner radius in px. Default 20.' },
             { name: 'borderWidth',   type: 'number',  desc: 'Border stroke width in px. Default 1.' },
@@ -56,9 +56,9 @@ export default function FramePage() {
             { name: 'borderOpacity', type: 'number',  desc: 'Border opacity, 0–1. Default 0.7.' },
             { name: 'className',     type: 'string',  desc: 'Merged onto the surface.' },
           ]} />
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mt-2">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 mt-2 text-pretty">
             FrameHeader, FrameTitle, FrameDescription, FrameContent, and FrameFooter are optional
-            composition helpers — each accepts standard div/heading/paragraph props plus className.
+            composition helpers - each accepts standard div/heading/paragraph props plus className.
           </Text>
         </section>
 

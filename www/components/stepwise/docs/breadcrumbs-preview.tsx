@@ -12,7 +12,7 @@ const FULL_TRAIL: BreadcrumbItem[] = [
 ]
 
 /**
- * Interactive, but never actually navigates — `onNavigate` intercepts the
+ * Interactive, but never actually navigates - `onNavigate` intercepts the
  * click and drives the trail from state, which is also how you'd wire this
  * into a real router.
  */
@@ -72,11 +72,17 @@ const DEEP_TRAIL: BreadcrumbItem[] = [
 ]
 
 export function BreadcrumbsOverflowPreview() {
+  const [depth, setDepth] = useState(DEEP_TRAIL.length)
+  const trail = DEEP_TRAIL.slice(0, depth)
+
   return (
     <div className="flex flex-col items-center gap-4">
-      <Breadcrumbs items={DEEP_TRAIL} />
+      <Breadcrumbs items={trail} onNavigate={(_, i) => setDepth(i + 1)} />
+      <Button size="sm" variant="ghost" disabled={depth >= DEEP_TRAIL.length} onClick={() => setDepth(DEEP_TRAIL.length)}>
+        Reset
+      </Button>
       <span className="text-[12px] text-zinc-400 dark:text-zinc-500">
-        7 crumbs, collapsed to 4 — click the … to expand
+        7 crumbs, collapsed to 4 - pick a hidden crumb from the … to jump straight there
       </span>
     </div>
   )

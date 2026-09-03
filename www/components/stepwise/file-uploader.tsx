@@ -29,7 +29,7 @@ export interface FileUploaderProps {
   /** Controlled file list (with optional progress). */
   files?    : FileEntry[]
   onRemove? : (id: string) => void
-  /** Dropzone variant only — the folder's body colour. Default the same
+  /** Dropzone variant only - the folder's body colour. Default the same
    *  amber swatch Folder's own docs page shows first. */
   color?    : string
   className?: string
@@ -114,7 +114,7 @@ export function FileUploader({
   const inputRef   = useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = useState(false)
   const reduce = useReducedMotion()
-  // The confirmation is a separate step from the click — the click just
+  // The confirmation is a separate step from the click - the click just
   // names a candidate, nothing is removed until Modal's own onConfirm fires.
   const [pendingRemoveId, setPendingRemoveId] = useState<string | null>(null)
 
@@ -162,7 +162,7 @@ export function FileUploader({
     return (
       <div className={cn('flex w-full flex-col items-center gap-4', className)}>
         {input}
-        {/* One drop target, not two widgets glued together — the dashed box
+        {/* One drop target, not two widgets glued together - the dashed box
             IS the folder's own hit area. Dragging anywhere in the box (not
             just the folder's own small footprint) tilts it open. Sized well
             down from the folder's own 260px default: the fanned-out cards'
@@ -192,7 +192,7 @@ export function FileUploader({
             color={color}
             icon={Upload03Icon}
             files={peek}
-            // No `files` means no items — a synthetic 3-skeleton peek (the
+            // No `files` means no items - a synthetic 3-skeleton peek (the
             // "nothing given yet" default meant for showcasing the component)
             // otherwise kicks in and makes an empty uploader look pre-filled.
             peek={0}
@@ -200,11 +200,9 @@ export function FileUploader({
             progress={overall}
             showLabel={false}
             showCount={false}
-            // the dropzone around it already owns the click (browse files) —
-            // the folder must not also claim it as a fan toggle. It still
-            // needs to be reachable by keyboard, though — `focusable` puts it
-            // in the tab order and reveals the fan on focus without letting
-            // a tap toggle it (that's what `toggleOnClick` is for).
+            // The dropzone already owns the click, so the folder must not also
+            // treat it as a fan toggle. `focusable` keeps the fan reachable by
+            // keyboard without claiming the tap.
             toggleOnClick={false}
             focusable
             onRemoveFile={index => {
@@ -214,7 +212,7 @@ export function FileUploader({
           />
           <p className="mt-4 text-center text-[13px] text-zinc-500 dark:text-zinc-400">
             {files.length
-              ? <>{files.length} file{files.length > 1 ? 's' : ''} — hover to view, drag more, or{' '}</>
+              ? <>{files.length} file{files.length > 1 ? 's' : ''} - hover to view, drag more, or{' '}</>
               : <>Drag &amp; drop files, or{' '}</>}
             <button
               type="button"
@@ -252,7 +250,7 @@ export function FileUploader({
       className={cn('flex flex-col items-start gap-3', className)}
     >
       {input}
-      {/* The real slideIcon button, not a lookalike — left-side icon tucked
+      {/* The real slideIcon button, not a lookalike - left-side icon tucked
           away until hover/touch reveals it. Button owns that reveal
           animation itself now that slideIcon works on either side; no
           custom wrapper needed here. Drag-over is a real state change, so it

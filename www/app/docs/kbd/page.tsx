@@ -26,7 +26,7 @@ export default function KbdPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Kbd</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A keyboard key cap. Pass a single child, or a{' '}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">keys</code>{' '}
             array to render a multi-key chord.
@@ -52,7 +52,7 @@ export default function KbdPage() {
           <Text variant="h3" className="text-zinc-900 dark:text-white">Props</Text>
           <PropsTable rows={[
             { name: 'keys',      type: 'string[]', desc: 'Render each key in its own cap with a thin gap.' },
-            { name: 'children',  type: 'ReactNode', desc: 'A single key — used when keys is omitted.' },
+            { name: 'children',  type: 'ReactNode', desc: 'A single key - used when keys is omitted.' },
             { name: 'className', type: 'string',   desc: 'Merged onto the cap (or wrapper for keys).' },
           ]} />
         </section>

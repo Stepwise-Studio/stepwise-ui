@@ -10,7 +10,7 @@ import {
 
 const basicCode = `import { AppleSelect } from '@/components/stepwise/apple-select'
 
-// the author picks the highlighted range — it's fixed, not draggable
+// the author picks the highlighted range - it's fixed, not draggable
 <AppleSelect
   text="Introduced with iOS 3 in June 2009 was the ability to select…"
   selection={[43, 60]}
@@ -34,9 +34,9 @@ export default function AppleSelectPage() {
 
         <div className="flex flex-col gap-3">
           <Text variant="headline" className="text-zinc-900 dark:text-white">Apple Select</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
-            An iOS-style text highlight — a fixed span the author chooses, with a translucent accent
-            band and a lollipop handle at each end. It's a presentational highlight, not a draggable
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
+            An iOS-style text highlight with a translucent band and a lollipop handle at each end.
+            The span is fixed by the author rather than dragged. It's a presentational highlight, not a draggable
             control, so it always reads the way you set it.
           </Text>
         </div>
@@ -48,7 +48,7 @@ export default function AppleSelectPage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             Pass the highlighted range as{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">[start, end]</code>{' '}
             character offsets. The band and handles get a little edge padding so they never sit on the glyphs.
@@ -62,10 +62,10 @@ export default function AppleSelectPage() {
 
         <section id="accents" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Accents</Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             The handles and highlight both follow{' '}
             <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">accent</code>{' '}
-            — one of the bundled system tints or any hex value. Pick one with the ColorSwatch below.
+            - one of the bundled system tints or any hex value. Pick one with the ColorSwatch below.
           </Text>
           <PreviewCode
             minHeight={280}

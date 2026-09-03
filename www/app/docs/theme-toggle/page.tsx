@@ -18,61 +18,6 @@ export default function MyLayout({ children }) {
   )
 }`
 
-const componentCode = `'use client'
-
-import { AnimatePresence, motion } from 'motion/react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Moon02Icon, Sun01Icon } from '@hugeicons/core-free-icons'
-import { useTheme } from '@/lib/theme'
-
-const iconVariants = {
-  initial: { scale: 0.4, opacity: 0, filter: 'blur(4px)' },
-  animate: { scale: 1,   opacity: 1, filter: 'blur(0px)' },
-  exit:    { scale: 0.4, opacity: 0, filter: 'blur(4px)' },
-}
-
-const spring = { type: 'spring', duration: 0.2, bounce: 0 } as const
-
-export function ThemeToggle() {
-  const { theme, toggle } = useTheme()
-
-  return (
-    <button
-      onClick={toggle}
-      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="flex items-center justify-center w-9 h-9 rounded-[13px] transition-colors
-        duration-150 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200
-        hover:bg-zinc-100 dark:hover:bg-zinc-800"
-    >
-      <span className="relative flex items-center justify-center w-[18px] h-[18px]">
-        <AnimatePresence mode="wait" initial={false}>
-          {theme === 'dark' ? (
-            <motion.span
-              key="moon"
-              className="absolute inset-0 flex items-center justify-center"
-              variants={iconVariants}
-              initial="initial" animate="animate" exit="exit"
-              transition={spring}
-            >
-              <HugeiconsIcon icon={Moon02Icon} size={18} strokeWidth={2} color="currentColor" />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="sun"
-              className="absolute inset-0 flex items-center justify-center"
-              variants={iconVariants}
-              initial="initial" animate="animate" exit="exit"
-              transition={spring}
-            >
-              <HugeiconsIcon icon={Sun01Icon} size={18} strokeWidth={2} color="currentColor" />
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </span>
-    </button>
-  )
-}`
-
 /* ─── page sections ─────────────────────────────────────────────────────── */
 
 const tocItems = [
@@ -93,7 +38,7 @@ export default async function ThemeTogglePage() {
           <Text variant="headline" className="text-zinc-900 dark:text-white">
             Theme Toggle
           </Text>
-          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400">
+          <Text variant="h5-soft" className="text-zinc-500 dark:text-zinc-400 text-pretty">
             A button that switches between light and dark mode with a circular expand
             view-transition animation and cross-fading icon swap.
           </Text>
@@ -118,13 +63,12 @@ export default async function ThemeTogglePage() {
               </div>
             }
             code={
-              <CodeBlock code={componentCode} className="rounded-none" flat />
+              <CodeBlock code={usageCode} className="rounded-none" flat />
             }
           />
         </section>
 
-        {/* Usage — distinct from the Preview's code tab, which shows the
-            component's own source rather than how to drop it into a layout */}
+        {/* Usage */}
         <section id="usage" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Usage</Text>
           <CodeBlock code={usageCode} lang="tsx" />
@@ -172,7 +116,7 @@ export default async function ThemeTogglePage() {
 
       </div>
 
-      {/* On this page — hidden until xl breakpoint */}
+      {/* On this page - hidden until xl breakpoint */}
       <aside className="hidden w-44 shrink-0 xl:block">
         <OnThisPage items={tocItems} />
       </aside>

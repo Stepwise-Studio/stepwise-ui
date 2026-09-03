@@ -9,11 +9,11 @@ import { Tooltip } from '@/components/stepwise/tooltip'
 import { cn } from '@/lib/utils/cn'
 
 export interface FolderFile {
-  /** Optional image thumbnail URL — shown as a photo peeking out. */
+  /** Optional image thumbnail URL - shown as a photo peeking out. */
   thumb?: string
   /** 0–100 upload progress for this item. */
   progress?: number
-  /** File name — shown in a tooltip on hover so people know what they named it. */
+  /** File name - shown in a tooltip on hover so people know what they named it. */
   name?: string
 }
 
@@ -30,15 +30,15 @@ export interface FolderProps {
   blur?: number
   /** Folder width in px. Height derives from it. Default 260. */
   size?: number
-  /** The items peeking out — { thumb } for photos, otherwise a unified skeleton card. */
+  /** The items peeking out - { thumb } for photos, otherwise a unified skeleton card. */
   files?: FolderFile[]
   /** How many skeleton cards to show when no files are given. Default 3. */
   peek?: number
-  /** Force-open — fans the cards out. Omit to let hover / drag drive it. */
+  /** Force-open - fans the cards out. Omit to let hover / drag drive it. */
   open?: boolean
-  /** Overall upload progress 0–100 — drives the bar across the pocket. */
+  /** Overall upload progress 0–100 - drives the bar across the pocket. */
   progress?: number
-  /** Extra decoration on the pocket (emoji, etc.) — sits under the icon. */
+  /** Extra decoration on the pocket (emoji, etc.) - sits under the icon. */
   stickers?: ReactNode
   /** Show the title. Default true. */
   showLabel?: boolean
@@ -46,18 +46,14 @@ export interface FolderProps {
   showCount?: boolean
   /** Enable drag-and-drop + click-to-browse. */
   interactive?: boolean
-  /** Let a tap toggle the fan — the touch/keyboard path to a hover-only reveal.
+  /** Let a tap toggle the fan - the touch/keyboard path to a hover-only reveal.
    *  Turn it off when an ancestor already owns the click (see File Uploader's
    *  `folder` variant), so the two don't fight over the same tap. Defaults to
    *  on whenever the folder isn't `interactive`. */
   toggleOnClick?: boolean
-  /** Join the tab order and reveal the fan on focus, without also making a
-   *  tap toggle it (that's `toggleOnClick`) or giving the folder its own file
-   *  input (that's `interactive`). Only needed when `toggleOnClick` is `false`
-   *  — with it left on, tapping already puts the folder in the tab order, so
-   *  this is off by default and only exists for the ancestor-owns-the-click
-   *  case, where the hover-only reveal would otherwise be entirely
-   *  unreachable by keyboard. */
+  /** Join the tab order and open the fan on focus, without a tap toggling it.
+   *  Only needed when `toggleOnClick` is false and an ancestor owns the click,
+   *  which would otherwise leave the fan unreachable by keyboard. */
   focusable?: boolean
   accept?: string
   multiple?: boolean
@@ -68,11 +64,11 @@ export interface FolderProps {
   className?: string
 }
 
-/** Surface open/close — one spring for every part of the folder so the tilt,
+/** Surface open/close - one spring for every part of the folder so the tilt,
  *  the lift and the ground shadow all settle on the same beat. */
 const SPRING = { type: 'spring', stiffness: 260, damping: 24 } as const
 /** Cards travel further than the pocket tilts, so they get a slightly softer,
- *  heavier spring — snappy enough to feel direct, damped enough not to wobble. */
+ *  heavier spring - snappy enough to feel direct, damped enough not to wobble. */
 const CARD_SPRING = { type: 'spring', stiffness: 230, damping: 26, mass: 0.9 } as const
 
 /** How many cards the fan shows at once before paging kicks in. */
@@ -83,24 +79,16 @@ type Vertex = { x: number; y: number; r: number }
 /**
  * One continuous rounded path through `pts`, closed.
  *
- * The back panel used to be two overlapping elements — a `clip-path`'d tab on
- * top of a `SmoothCorners` body. That is what produced the notch on the left
- * edge: the body's top-left corner starts curving inward ~`r * 1.6` from the
- * edge, but the tab's straight left edge stopped dead at `y = tabH`, so the
- * two silhouettes simply did not meet. No clip-path can fix that, because the
- * fillet has to straddle a boundary between two separate boxes — and for the
- * same reason the tab's slant corners could never be rounded either.
+ * The folder's back panel is drawn as a single path so the tab and the body
+ * share one silhouette. Two stacked elements cannot do this: a fillet where
+ * the tab meets the body would have to straddle the boundary between them, so
+ * the join always shows a notch and the slant corners can never round.
  *
- * Drawing the whole silhouette as a single path removes the seam by
- * construction and lets every corner, slant included, carry a real fillet.
- *
- * `smoothing` follows the squircle convention used everywhere else in the
- * library (0 = a plain circular fillet, 0.6 = the project default): the
- * tangent points slide further out along each edge while the control points
- * stay at their circular distance from the corner, so curvature ramps in
- * gradually instead of jumping from straight to full-radius arc. Convex and
- * concave corners are handled by the same math — the curve just bends the
- * other way — which is what lets the slant's inner corner round off too.
+ * `smoothing` follows the squircle convention used across the library (0 is a
+ * plain circular fillet, 0.6 is the default): tangent points slide outward
+ * along each edge while control points stay at their circular distance, so
+ * curvature ramps in gradually. Convex and concave corners use the same math,
+ * which is what lets the slant's inner corner round too.
  */
 function roundedPolygon(pts: Vertex[], smoothing = 0.6) {
   const n = pts.length
@@ -149,7 +137,7 @@ function roundedPolygon(pts: Vertex[], smoothing = 0.6) {
   return `${d.join(' ')} Z`
 }
 
-/* one unified minimal "document" card — thumbnail + title + body lines.
+/* one unified minimal "document" card - thumbnail + title + body lines.
  * Exported so anything showing a "pretend file" (e.g. a drag-and-drop demo)
  * uses the exact same placeholder language as the folder's own peeking
  * cards, instead of inventing a second one. */
@@ -180,33 +168,22 @@ function FanNav({
     <motion.button
       type="button"
       aria-label={dir === 'prev' ? 'Previous files' : 'Next files'}
-      // the fan lives inside the folder's own click target (browse files) —
+      // the fan lives inside the folder's own click target (browse files) -
       // paging must not also open the file picker
       onClick={e => {
         e.stopPropagation()
         onClick()
-        // A mouse click leaves the button focused, and the folder's own
-        // onFocus/onBlur wiring (there so a keyboard user tabbing to this
-        // exact button keeps the fan open) then keeps the fan pinned open
-        // forever afterward — hovering out no longer closes it, only
-        // clicking elsewhere does, because focus never left the subtree.
-        // `detail` is 0 only for a keyboard-triggered click (Enter/Space via
-        // the browser's own activation, not a real pointer event), so a real
-        // mouse click blurs itself right back out and keyboard users are
-        // untouched.
+        // A mouse click leaves the button focused, which the folder's
+        // focus wiring reads as "keep the fan open", so hovering out stops
+        // closing it. `detail` is 0 only for keyboard activation, so a real
+        // mouse click blurs itself and keyboard users are unaffected.
         if (e.detail !== 0) e.currentTarget.blur()
       }}
-      // The nav buttons sit right at the edge of the 40px hover-catch
-      // buffer, and a real cursor doesn't travel in a perfectly straight
-      // line to reach one — a slightly wide approach can graze just
-      // outside that buffer for a frame, firing onMouseLeave a beat
-      // before the click lands. That collapses the fan mid-click, so the
-      // click either misses (button already gone) or lands on a card
-      // that's mid-exit-animation from the collapse, which is what read
-      // as "a card stuck sitting in the folder". `onEngage` re-asserts
-      // hover the instant a press starts on either button — before that
-      // race has any window to run — independent of whether the physical
-      // cursor position still reads as "inside" the buffer.
+      // The nav buttons sit at the edge of the 40px hover buffer, so a wide
+      // cursor approach can leave it for a frame and fire onMouseLeave just
+      // before the click lands, collapsing the fan mid-click. `onEngage`
+      // re-asserts hover as soon as a press starts, regardless of where the
+      // pointer currently reads.
       onPointerDown={e => { e.stopPropagation(); onEngage() }}
       className={cn(
         'absolute flex h-7 w-7 items-center justify-center rounded-full',
@@ -262,19 +239,9 @@ export function Folder({
     if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null }
     setHovered(true)
   }
-  // Guards against paging faster than a card's own exit animation (~0.16s):
-  // firing a second page() while the previous one's outgoing card is still
-  // mid-exit re-adds that same rawKey to AnimatePresence while it's still
-  // classified as exiting, which can leave it stuck at its exit's mid-fade
-  // values instead of restarting a proper enter — it reads as a card frozen
-  // half-faded "sitting in the folder" instead of sliding back into place.
-  const lastPageAtRef = useRef(0)
-  const page = (dir: 1 | -1) => {
-    const now = performance.now()
-    if (now - lastPageAtRef.current < 180) return
-    lastPageAtRef.current = now
-    setFanStart(s => s + dir)
-  }
+  // No rate limit. Cards have no exit animation for a fast second page to
+  // interrupt, so holding an arrow pages as fast as the springs follow.
+  const page = (dir: 1 | -1) => setFanStart(s => s + dir)
   const reduce = useReducedMotion()
 
   const items: FolderFile[] = files?.length ? files : Array.from({ length: peek }, () => ({}))
@@ -310,7 +277,7 @@ export function Folder({
   /* ── fan geometry ────────────────────────────────────────────────────── */
   const cardW = w * 0.56
   const cardH = h * 0.56
-  // resting height of the peeking cards — sitting a little lower than they
+  // resting height of the peeking cards - sitting a little lower than they
   // used to, so their tops read as tucked into the folder rather than
   // floating above the back panel
   const topBase = h * 0.2
@@ -318,13 +285,11 @@ export function Folder({
   const fanArc = h * 0.09
   const fanScale = 0.94
 
-  // The fan reaches well past the folder's own box, so it has to answer to the
-  // room it actually has rather than to `size` alone: tighten the gap first,
-  // and only drop a card once the cards would start burying each other. The
-  // "room it actually has" is the nearest ancestor that would actually clip
-  // or scroll the overflow — not just the immediate parent, which is
-  // routinely a shrink-to-fit flex column (sized to the folder itself, or to
-  // a caption below it) and would report a width no wider than the folder.
+  // The fan reaches past the folder's own box, so it sizes to the room
+  // available: tighten the gap first, drop a card only once they would bury
+  // each other. "Available" means the nearest ancestor that would actually
+  // clip or scroll, not the immediate parent, which is often a shrink-to-fit
+  // column no wider than the folder itself.
   const [avail, setAvail] = useState<number | null>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -355,23 +320,15 @@ export function Folder({
   while (fanCount > floorCount && gapThatFits(fanCount) < minGap) fanCount--
   const fanGap = Math.max(0, Math.min(idealGap, gapThatFits(fanCount)))
 
-  // Circular window: paging never runs out — index n-1 → 0 → 1 → ... — so
-  // there's always something to browse to on either side, and the arrows
-  // never need a disabled state.
+  // Circular window, so paging never runs out and the arrows never need a
+  // disabled state.
   //
-  // Slot *identity* (the React key, which drives mount/unmount and thus the
-  // enter/exit animation) and slot *content* (which file's data renders
-  // there) are deliberately different numbers. Keying by the wrapped file
-  // index broke exactly when every file already fit in the fan (items ≤
-  // fanCount): a full rotation reassigns each index to a slot one turn away,
-  // but the two indices at the seam jump the *entire width of the fan* in
-  // one spring — and because z-index can't animate smoothly, the card
-  // visually ducked behind its neighbors mid-flight instead of just sliding
-  // over. Keying by the raw, unbounded `fanStart + i` instead means every
-  // page action shifts existing keys by exactly one slot and only ever
-  // mounts/unmounts the one key at the seam — identical to the many-files
-  // case, where that new key genuinely is a new file. Here it's the same
-  // file reappearing, but the animation doesn't need to know that.
+  // The React key and the file index are deliberately different numbers.
+  // Keying by the wrapped file index means a full rotation moves the seam
+  // cards the entire width of the fan in one spring, and since z-index cannot
+  // animate they duck behind their neighbours mid-flight. Keying by the
+  // unbounded `fanStart + i` shifts every key by exactly one slot per page and
+  // only mounts or unmounts the one at the seam.
   const n = items.length
   const slots = Array.from({ length: fanCount }, (_, i) => {
     const rawKey = fanStart + i
@@ -379,6 +336,10 @@ export function Folder({
     return { rawKey, idx, file: items[idx] }
   })
   const windowed = slots.map(s => s.file)
+
+  // Suppresses the enter animation on first paint only.
+  const firstPaint = useRef(true)
+  useEffect(() => { firstPaint.current = false }, [])
 
   // Cards ripple in at 40ms apart the first time a batch appears. Only a real
   // batch staggers: paging brings in a single card, and making that one wait
@@ -392,7 +353,7 @@ export function Folder({
     slots.forEach(s => seen.current.add(s.rawKey))
   })
 
-  // Arrows show whenever there's something else to bring into view — even a
+  // Arrows show whenever there's something else to bring into view - even a
   // folder with just 2 files benefits from a way to swap which one is front
   // and center.
   const canPage = n > 1
@@ -401,15 +362,11 @@ export function Folder({
 
   const cardAt = (i: number) => {
     if (!fanned) {
-      // Tucked: a tight stack, front-and-center card straight, anything
-      // behind it peeking out tilted to either side. The stack has to
-      // adapt to how many cards are actually showing right now — a fixed
-      // 3-slot array indexed by position (as this used to be) put a single
-      // lone card in the "back-left" slot (tilted -5°) instead of front-
-      // center, since index 0 was always the back-left card in the
-      // 3-card layout. The front slot is always the LAST index, not a
-      // fixed position, so 1 card is straight, 2 cards are straight + one
-      // tilted behind, and 3+ reproduces the original stack exactly.
+      // Tucked: a tight stack with the front card straight and the ones behind
+      // it tilted out to either side. The front slot is the last index rather
+      // than a fixed position, so the stack adapts to how many cards are
+      // showing: one card sits straight, two add a tilt behind it, and three or
+      // more fill the full stack.
       const front = windowed.length - 1
       if (i === front) return { x: 0, y: 0, rot: 0, z: 3, op: 1 }
       const left = i % 2 === 0
@@ -419,7 +376,7 @@ export function Folder({
     const t = mid === 0 ? 0 : off / mid
     return {
       x: off * fanGap,
-      // parabolic rise — the middle card sits highest, the outer ones ease down
+      // Parabolic rise: the middle card sits highest, the outer ones ease down.
       y: fanLift - (1 - t * t) * fanArc,
       rot: off * 8,
       z: 10 - Math.abs(off),
@@ -443,7 +400,7 @@ export function Folder({
   const metaText = count ?? (dragging ? 'Drop to add' : files?.length ? `${files.length} item${files.length > 1 ? 's' : ''}` : interactive ? 'Drop files or click' : undefined)
 
   // Tint the peeking skeleton cards to match `color` instead of leaving them
-  // on the fixed light/dark tokens — same OKLCH-relative approach as the
+  // on the fixed light/dark tokens - same OKLCH-relative approach as the
   // pocket/icon, applied as custom-property overrides so SkeletonCard
   // doesn't need to know about `color` at all.
   const cardVars = color ? {
@@ -456,19 +413,14 @@ export function Folder({
       <div
         {...dropHandlers}
         onMouseEnter={engage}
-        // A short grace period, not an immediate close — the nav buttons
-        // sit right at the edge of the hover-catch buffer, and a real
-        // cursor doesn't travel in a perfectly straight line to reach one.
-        // A momentary graze just outside that buffer used to close the fan
-        // mid-click, so the click either missed (button already gone) or
-        // landed on a card mid-exit from the collapse — read as "a card
-        // stuck sitting in the folder". Any genuine re-entry (including
-        // the nav buttons' own onEngage) cancels this before it fires.
+        // A short grace period rather than an immediate close. The nav buttons
+        // sit at the edge of the hover buffer, so a wide cursor approach can
+        // leave it for a moment and collapse the fan mid-click. Any genuine
+        // re-entry, including the buttons' own onEngage, cancels this.
         onMouseLeave={() => {
           closeTimerRef.current = setTimeout(() => setHovered(false), 220)
         }}
-        // focus anywhere inside (the folder itself or a paging arrow) keeps
-        // the fan open; leaving the subtree entirely closes it
+        // Focus anywhere inside keeps the fan open; leaving the subtree closes it.
         onFocus={() => setFocusedIn(true)}
         onBlur={e => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setFocusedIn(false) }}
         {...(tappable && {
@@ -485,7 +437,7 @@ export function Folder({
         )}
         style={{ width: w, height: h, perspective: 900 }}
         role={interactive || tappable ? 'button' : undefined}
-        aria-label={interactive ? 'Upload files' : tappable ? (label ? `${label} — show files` : 'Show files') : focusable ? (label ? `${label} — files` : 'Files') : undefined}
+        aria-label={interactive ? 'Upload files' : tappable ? (label ? `${label} - show files` : 'Show files') : focusable ? (label ? `${label} - files` : 'Files') : undefined}
         aria-expanded={(tappable || focusable) ? fanned : undefined}
       >
         {interactive && (
@@ -497,7 +449,7 @@ export function Folder({
             extension is a DOM child, so the pointer staying anywhere over the
             fanned cards (or the gaps between them) still counts as hovering
             the folder and the fan doesn't flicker shut. It sits BELOW the
-            cards (zIndex 2) — above it, a card's own hover (and its name
+            cards (zIndex 2) - above it, a card's own hover (and its name
             tooltip) would never be reachable, since this div would catch
             every pointer event over the whole fan region first. */}
         {fanned && (
@@ -518,7 +470,7 @@ export function Folder({
           animate={{ x: '-50%', scale: reduce ? 1 : (open ? 1.1 : 1), opacity: open ? 0.9 : 0.6 }}
           transition={reduce ? { duration: 0.15 } : SPRING} />
 
-        {/* back panel + tab — one continuous silhouette, no seam to notch */}
+        {/* back panel + tab - one continuous silhouette, no seam to notch */}
         <svg
           width={w} height={h} viewBox={`0 0 ${w} ${h}`}
           className="absolute inset-0"
@@ -528,10 +480,31 @@ export function Folder({
           <path d={backPath} style={{ fill: body }} />
         </svg>
 
-        {/* the cards — below the pocket at rest, lifted clear of it when fanned */}
+        {/* the cards - below the pocket at rest, lifted clear of it when fanned */}
         <div className="absolute inset-0" style={{ zIndex: 2 }}>
-          <AnimatePresence initial={false}>
-            {slots.map(({ rawKey, idx, file: f }, i) => {
+          {/* Deliberately NOT wrapped in AnimatePresence.
+              AnimatePresence keeps an exiting child rendered by splicing it
+              back into the new child array at the index it used to occupy:
+
+                  nextChildren.splice(i, 0, child)   // i = its OLD index
+
+              Paging right removes the FIRST key (old index 0), so the splice
+              lands at the head and every surviving card keeps its position.
+              Paging left removes the LAST key (old index fanCount-1), and
+              that same splice inserts the exiting node *before* the final
+              surviving card - reordering it. React then moves that card's
+              DOM node, and it ends up stranded at the tucked-stack transform
+              it held before the page, never animating to its fan slot: the
+              card that visibly "drops into the folder". It reproduced on
+              every left click and never on a right one, which is exactly
+              what this asymmetry predicts.
+
+              Reordering the children can't fix it - it only moves the bug to
+              the other button. Cards therefore mount/unmount plainly: `initial`
+              still gives each new card its enter animation, and the one card
+              leaving at the far edge of the fan pops rather than fading. That
+              is a far smaller cost than a permanently broken card. */}
+          {slots.map(({ rawKey, idx, file: f }, i) => {
               const c = cardAt(i)
               const off = i - mid
               const cardUploading = f.progress !== undefined && f.progress < 100
@@ -543,7 +516,7 @@ export function Folder({
                   ) : (
                     <SkeletonCard />
                   )}
-                  {/* per-file progress — same bar language as the pocket's
+                  {/* per-file progress - same bar language as the pocket's
                       overall one, just small enough to sit on a peeking card */}
                   {cardUploading && (
                     <div className="absolute inset-x-[10%] bottom-[8%] h-[2.5px] overflow-hidden rounded-full bg-black/15 dark:bg-white/15">
@@ -552,7 +525,7 @@ export function Folder({
                         transition={{ ease: 'linear', duration: reduce ? 0 : 0.3 }} />
                     </div>
                   )}
-                  {/* remove — only once the fan is open (a tucked stack has no
+                  {/* remove - only once the fan is open (a tucked stack has no
                       room to show it, and it'd be too easy to hit by accident).
                       Inset rather than overhung off the corner: the card's own
                       overflow-hidden (needed to clip the thumb/skeleton to its
@@ -568,7 +541,7 @@ export function Folder({
                       }}
                       onPointerDown={e => e.stopPropagation()}
                       // Visible badge stays a small 20px circle so it doesn't
-                      // overwhelm a ~76px card — the actual hit target is
+                      // overwhelm a ~76px card - the actual hit target is
                       // widened to the 24px WCAG minimum with an invisible
                       // ::after rather than growing the badge itself.
                       className="absolute right-1 top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur-sm transition-colors duration-150 hover:bg-black/65 after:absolute after:-inset-0.5 after:content-['']"
@@ -579,12 +552,12 @@ export function Folder({
                 </div>
               )
               // Dragging any fanned card left/right pages the whole fan,
-              // same as the chevrons — same `page()` (and its debounce), so
+              // same as the chevrons - same `page()` (and its debounce), so
               // a fast flick can't hit the same exit/re-enter race the
               // chevrons could. No `dragConstraints`: the card is free to
               // follow the pointer, and once released, `animate.x` (still
               // targeting `c.x`) pulls it straight back with the same
-              // spring — there's no separate "snap back" to write.
+              // spring - there's no separate "snap back" to write.
               const dragProps = (!reduce && fanned && canPage) ? {
                 drag: 'x' as const,
                 dragMomentum: false,
@@ -609,7 +582,7 @@ export function Folder({
                     boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.04), 0 5px 16px -6px rgba(0,0,0,0.28)',
                     cursor: fanned && canPage ? 'grab' : undefined,
                   }}
-                  initial={reduce
+                  initial={firstPaint.current ? false : reduce
                     ? { opacity: 0, x: c.x, y: topBase + c.y, rotate: c.rot, scale: 1 }
                     : { opacity: 0, x: c.x, y: topBase + c.y + h * 0.14, rotate: c.rot, scale: 0.86 }}
                   animate={{
@@ -619,11 +592,10 @@ export function Folder({
                     rotate: c.rot,
                     scale: fanned ? fanScale : 1,
                   }}
-                  exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.88, transition: { duration: 0.16, ease: [0.22, 1, 0.36, 1] } }}
                   transition={reduce ? { duration: 0 } : {
                     ...CARD_SPRING,
                     // a fresh batch ripples in per-item; opening spreads
-                    // outward from the middle; a close never waits —
+                    // outward from the middle; a close never waits -
                     // dismissal has to feel immediate
                     delay: entryDelay(rawKey) ?? (fanned ? Math.abs(off) * 0.03 : 0),
                   }}
@@ -636,11 +608,10 @@ export function Folder({
                   ) : cardEl}
                 </motion.div>
               )
-            })}
-          </AnimatePresence>
+          })}
         </div>
 
-        {/* paging — always available once there's more than one file to
+        {/* paging - always available once there's more than one file to
             browse; the window wraps, so the arrows never disable */}
         <AnimatePresence>
           {fanned && canPage && (
@@ -661,7 +632,7 @@ export function Folder({
           )}
         </AnimatePresence>
 
-        {/* front pocket — frosted glass, tilts open, sits ABOVE the files */}
+        {/* front pocket - frosted glass, tilts open, sits ABOVE the files */}
         <motion.div
           className="absolute inset-x-0 bottom-0 origin-bottom"
           style={{ height: pocketH, transformStyle: 'preserve-3d', zIndex: 5 }}
@@ -675,7 +646,7 @@ export function Folder({
             style={{
               width: w, height: pocketH,
               // Relative OKLCH lightness (not a color-mix toward white) so
-              // the bump is perceptually consistent for every base color —
+              // the bump is perceptually consistent for every base color -
               // mixing a fixed % of white lightens a near-black color far
               // more than a near-white one, which is why only dark colors
               // used to end up looking translucent/mismatched against their
@@ -690,7 +661,7 @@ export function Folder({
               <div
                 className="absolute inset-0 flex flex-col items-center justify-center gap-2"
                 // Same relative-lightness reasoning as the pocket background
-                // — darkening by a fixed OKLCH amount instead of mixing a
+                // - darkening by a fixed OKLCH amount instead of mixing a
                 // fixed % of black, so an already-dark color doesn't get
                 // crushed toward unreadable near-black.
                 style={{ color: color ? `oklch(from ${color} calc(l - 0.22) c h)` : 'var(--folder-icon)' }}
