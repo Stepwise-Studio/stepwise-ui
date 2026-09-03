@@ -162,13 +162,20 @@ export default function RootLayout({
       className={`${interDisplay.variable} ${geistMono.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Next's guide puts JSON-LD in the body, and Google reads it there
+            fine - but several agent crawlers only parse <head>, so it goes here
+            to be found by both. `<` is escaped per Next's guidance: harmless
+            for these static constants, but the habit is what stops a future
+            dynamic value from becoming an injection. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         {/* Must be first child - runs before paint to apply theme class */}
         <script dangerouslySetInnerHTML={{ __html: noFlashScript }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
         <ThemeProvider>
           {children}
         </ThemeProvider>
