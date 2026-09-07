@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
@@ -11,7 +11,22 @@ import { GlowButton } from '@/components/stepwise/glow-button'
 import { ThemeToggle } from '@/components/stepwise/theme-toggle'
 import { useTheme } from '@/lib/theme'
 
-const WORDS = 'The interface is part of the product. Make it count.'.split(' ')
+/**
+ * The headline breaks at different words per breakpoint, so the segments are
+ * written out and the breaks between them are toggled by media query rather
+ * than left to the line breaker:
+ *
+ *   phone   The interface is part / of the product. / Make it count.
+ *   desktop The interface is part of the / product. Make it count.
+ *
+ * Every gap is a real space, so if a segment still does not fit it wraps
+ * normally on top of these breaks. That matters: the words used to be
+ * `inline-block` spans joined by NBSP, and the atomic-inline boundaries were
+ * quietly the only thing giving the line breaker anywhere to wrap. Collapsing
+ * them into one fade removed every wrap opportunity and the headline
+ * overflowed the viewport on mobile. Real spaces cannot regress that way.
+ */
+const HEADLINE = ['The interface is part', 'of the', 'product.', 'Make it count.'] as const
 
 /* An even curve, because these are pure opacity fades with no travel.
  * The previous [0.22, 1, 0.36, 1] was picked for the slide-up: it front-loads
@@ -232,12 +247,13 @@ export function HomeHero() {
               different, worse-looking break. A fixed break reads the same
               everywhere; each half still wraps normally on narrow screens
               where even that half doesn't fit on one line. */}
-          {WORDS.map((w, i) => (
-            <Fragment key={i}>
-              {w}
-              {i === 5 ? <br /> : '\u00a0'}
-            </Fragment>
-          ))}
+          {HEADLINE[0]}{' '}
+          <br className="md:hidden" />
+          {HEADLINE[1]}{' '}
+          <br className="hidden md:inline" />
+          {HEADLINE[2]}{' '}
+          <br className="md:hidden" />
+          {HEADLINE[3]}
         </motion.h1>
 
         <motion.p
