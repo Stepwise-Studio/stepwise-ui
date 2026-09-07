@@ -96,6 +96,10 @@ export function LensCarousel({
   const rootRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const imgRefs = useRef<(HTMLImageElement | null)[]>([])
+  /** Which item each card is currently showing, so `apply` only touches the
+   *  DOM on the frame a card actually wraps onto a new one. */
+  const cardItemRef = useRef<number[]>([])
   /** Strip offset the cards are currently painted at - see `apply`. */
   const lastPosRef = useRef(NaN)
   /** Whether the strip is on screen. Starts true so the first frame paints
@@ -191,6 +195,34 @@ export function LensCarousel({
       const s = (((i - pos + count / 2) % count) + count) % count - count / 2
       const x = xOf(s)
       el.style.transform = `translate(-50%,-50%) translateX(${x.toFixed(2)}px) scale(${scaleAt(x).toFixed(4)})`
+
+      /*
+       * The card's picture follows the slot it has wrapped onto, not its
+       * fixed index. `pos + s` is the card's absolute position on the endless
+       * strip (it lands on an integer, because s is derived from pos), so
+       * wrapping that into the item list is the image that belongs there.
+       *
+       * Binding by index instead - `items[i % n]`, as this did - meant a card
+       * kept its picture forever while the ring recycled it. Two failures fell
+       * out of that: with fewer cards than items only the first `count`
+       * pictures were ever seen, and with more cards than items the repeats
+       * landed `count - n` slots apart, which on a wide screen put two copies
+       * of the same picture side by side. Mapping through the slot uses every
+       * item and pushes any unavoidable repeat to the full `n` slots apart.
+       */
+      if (n > 0) {
+        const idx = ((Math.round(pos + s) % n) + n) % n
+        if (cardItemRef.current[i] !== idx) {
+          cardItemRef.current[i] = idx
+          const img = imgRefs.current[i]
+          const it = items[idx]
+          if (img && it) {
+            img.src = it.src
+            img.alt = it.alt ?? ''
+          }
+          el.setAttribute('aria-label', `${idx + 1} of ${n}`)
+        }
+      }
     }
   }
 
@@ -215,6 +247,14 @@ export function LensCarousel({
     // render can change it, so drop the cached position - otherwise a resize
     // that leaves `pos` untouched would keep the cards at their old sizes.
     lastPosRef.current = NaN
+    cardItemRef.current = []
+    // Repaint immediately rather than waiting for a frame. React has just
+    // re-rendered every `<img>` back to its first-paint `items[i % n]`, and
+    // the loop may be stopped (off screen), which would otherwise strand the
+    // wrong pictures until it scrolled back into view. This also lays the
+    // strip out on mount, so a carousel below the fold is positioned before
+    // it is ever scrolled to.
+    apply(posRef.current)
   })
 
   const posRef = useRef(0)
@@ -438,7 +478,11 @@ export function LensCarousel({
                 className="overflow-hidden shadow-[0_2px_4px_rgba(0,0,0,0.05),0_14px_30px_-12px_rgba(0,0,0,0.32)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.4),0_18px_36px_-14px_rgba(0,0,0,0.7)]"
                 style={{ width: itemWidth, height: baseH }}
               >
+                {/* `item` is only the first paint - `apply` re-points this at
+                    the item belonging to whichever slot the card has wrapped
+                    onto, and keeps doing so as it recycles. */}
                 <img
+                  ref={el => { imgRefs.current[i] = el }}
                   src={item.src}
                   alt={item.alt ?? ''}
                   draggable={false}
