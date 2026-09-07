@@ -17,7 +17,7 @@ import { Folder } from '@/components/stepwise/folder'
 import { Image02Icon } from '@hugeicons/core-free-icons'
 
 // peek={0} → an empty folder; peek={3} (default) → filled
-<Folder label="Japan 2024" count="83 photos" icon={Image02Icon} peek={3} />
+<Folder label="Product shots" count="36 photos" color="#bfdbfe" icon={Image02Icon} peek={3} />
 ```
 
 ## What gets written

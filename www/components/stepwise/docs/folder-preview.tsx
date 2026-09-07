@@ -10,14 +10,33 @@ import { ColorSwatch } from '@/components/stepwise/color-swatch'
 import { Segment } from '@/components/stepwise/segment'
 import { cn } from '@/lib/utils/cn'
 
+/* ── Palette ──────────────────────────────────────────────────────────
+ * Declared up here rather than beside the colour picker because all three
+ * previews below tint their folder, and they should agree. */
+
+/** The lavender out of the landing hero's blurred mesh aura - see LIGHT_AURA
+ *  in components/home/hero.tsx. */
+const AURA   = '#ddd6fe'
+/** The exact blue the landing page's own Folder is tinted with - see the
+ *  Folder in components/home/canvas.tsx. */
+const COBALT = '#2563eb'
+/**
+ * The folder every preview on this page opens on. The component's own
+ * untinted default renders near-black in dark mode, which read as a shadow
+ * rather than a folder, so the docs lead with this instead. It is only a
+ * `color` prop - the component default itself is unchanged.
+ */
+const SKY    = '#bfdbfe'
+
 /* ── Showcase - empty ↔ filled toggle ─────────────────────────────── */
 export function FolderShowcasePreview() {
   const [state, setState] = useState<'empty' | 'filled'>('filled')
   return (
     <div className="flex flex-col items-center gap-6">
       <Folder
-        label="Japan 2024"
-        count={state === 'empty' ? 'Empty' : '83 photos'}
+        label="Product shots"
+        count={state === 'empty' ? 'Empty' : '36 photos'}
+        color={SKY}
         icon={Image02Icon}
         peek={state === 'empty' ? 0 : 3}
       />
@@ -45,19 +64,18 @@ const CASE_FILES = [
 
 export function FolderFanPreview() {
   return (
-    <div className="flex flex-col items-center gap-5">
-      <Folder label="Case files" count="8 documents" icon={File01Icon} files={CASE_FILES} />
-      <p className="max-w-[290px] text-center text-[12px] leading-relaxed text-zinc-400 dark:text-zinc-500">
-        Hover, tap, or focus the folder - the files lift out into an arc, and hovering one shows
-        its name (and progress, if it&apos;s still uploading). The arrows always page through,
-        wrapping around at either end.
-      </p>
+    <div className="flex flex-col items-center">
+      <Folder label="Case files" count="8 documents" color={SKY} icon={File01Icon} files={CASE_FILES} />
     </div>
   )
 }
 
 /* ── Colors + icon picker ─────────────────────────────────────────── */
-const SWATCH = ['#dfe1e7', '#26272c', '#f5d98b', '#bfdbfe', '#fbcfe8', '#bbf7d0']
+/* Deliberately no near-white or near-black swatch. This section demonstrates
+ * *tinting* the folder, and both of those read as "no colour applied" rather
+ * than as a choice - the near-white one even had to special-case itself out
+ * of the tint path to avoid looking flatter than its neighbours. */
+const SWATCH = [AURA, COBALT, '#f5d98b', SKY, '#fbcfe8', '#bbf7d0']
 const ICONS: { icon: IconSvgElement; key: string }[] = [
   { icon: File01Icon, key: 'File' },
   { icon: Image02Icon, key: 'Image' },
@@ -68,19 +86,12 @@ const ICONS: { icon: IconSvgElement; key: string }[] = [
 ]
 
 export function FolderColorPreview() {
-  const [color, setColor] = useState(SWATCH[0])
+  const [color, setColor] = useState(SKY)
   const [iconIdx, setIconIdx] = useState(0)
-  // "Neutral" is meant to be the same default look as every other preview -
-  // but its hex happens to just match --folder-body, not the pocket/icon
-  // tokens too. Passing it as `color` still derives those via the OKLCH-
-  // relative math (for any *other* color), producing a visibly flatter
-  // pocket than the hand-tuned defaults. Passing no color at all is the only
-  // way to get the real default back.
-  const isNeutral = color === SWATCH[0]
   return (
     <div className="flex flex-col items-center gap-6">
-      <Folder color={isNeutral ? undefined : color} icon={ICONS[iconIdx].icon} label="Design assets" count="24 files" />
-      <ColorSwatch colors={SWATCH} value={color} onChange={setColor} labels={['Neutral', 'Graphite', 'Amber', 'Sky', 'Rose', 'Mint']} />
+      <Folder color={color} icon={ICONS[iconIdx].icon} label="Design assets" count="24 files" />
+      <ColorSwatch colors={SWATCH} value={color} onChange={setColor} labels={['Aura', 'Cobalt', 'Amber', 'Sky', 'Rose', 'Mint']} />
       <div className="flex items-center gap-2">
         {ICONS.map((it, i) => (
           <button

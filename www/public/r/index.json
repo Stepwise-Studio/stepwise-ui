@@ -500,7 +500,7 @@
       "Folder",
       "SkeletonCard"
     ],
-    "example": "import { Folder } from '@/components/stepwise/folder'\nimport { Image02Icon } from '@hugeicons/core-free-icons'\n\n// peek={0} → an empty folder; peek={3} (default) → filled\n<Folder label=\"Japan 2024\" count=\"83 photos\" icon={Image02Icon} peek={3} />"
+    "example": "import { Folder } from '@/components/stepwise/folder'\nimport { Image02Icon } from '@hugeicons/core-free-icons'\n\n// peek={0} → an empty folder; peek={3} (default) → filled\n<Folder label=\"Product shots\" count=\"36 photos\" color=\"#bfdbfe\" icon={Image02Icon} peek={3} />"
   },
   {
     "name": "frame",

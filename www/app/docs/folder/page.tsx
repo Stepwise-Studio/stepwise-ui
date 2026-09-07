@@ -9,10 +9,10 @@ const showcaseCode = `import { Folder } from '@/components/stepwise/folder'
 import { Image02Icon } from '@hugeicons/core-free-icons'
 
 // peek={0} → an empty folder; peek={3} (default) → filled
-<Folder label="Japan 2024" count="83 photos" icon={Image02Icon} peek={3} />`
+<Folder label="Product shots" count="36 photos" color="#bfdbfe" icon={Image02Icon} peek={3} />`
 
-const colorCode = `const SWATCH = ['#dfe1e7', '#26272c', '#f5d98b', '#bfdbfe', '#fbcfe8', '#bbf7d0']
-const [color, setColor] = useState(SWATCH[0])
+const colorCode = `const SWATCH = ['#ddd6fe', '#2563eb', '#f5d98b', '#bfdbfe', '#fbcfe8', '#bbf7d0']
+const [color, setColor] = useState('#bfdbfe')
 
 // the icon adopts a darker shade of the folder color
 <Folder color={color} icon={icon} label="Design assets" count="24 files" />
@@ -21,7 +21,7 @@ const [color, setColor] = useState(SWATCH[0])
 const fanCode = `// Hovering fans the cards out into an arc above the folder - hovering a
 // card shows its name. Past five, arrows page through and wrap around.
 const files = [{ name: 'Deposition_transcript.pdf' }, { name: 'Exhibit_A_photos.zip' }, /* … */]
-<Folder files={files} label="Case files" icon={File01Icon} />`
+<Folder files={files} label="Case files" color="#bfdbfe" icon={File01Icon} />`
 
 const toc = [
   { id: 'showcase', label: 'Showcase',    child: false },
@@ -60,12 +60,8 @@ export default function FolderPage() {
         <section id="fan" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Fan on hover</Text>
           <Text variant="body" className="text-zinc-500 dark:text-zinc-400 -mt-1">
-            Opening lifts the cards clear of the pocket and spreads them along a shallow arc -
-            the middle card sits highest, the outer ones ease down and tilt away. Hover opens it
-            on a pointer, tap on touch, and keyboard focus works too. Hovering a card shows its
-            name. The fan shows up to five at a time; arrows appear whenever there&apos;s more
-            than one file, and paging wraps around at either end instead of stopping. It tightens
-            the spread - and drops to fewer cards - when there isn&apos;t room for the full fan.
+            Hover, tap, or focus the folder and the cards lift out into a shallow arc. Hovering
+            one shows its name; arrows page through five at a time and wrap around at either end.
           </Text>
           <PreviewCode minHeight={560} preview={<FolderFanPreview />} code={<CodeBlock code={fanCode} lang="tsx" className="rounded-none" flat />} />
         </section>
