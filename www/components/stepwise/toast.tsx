@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
 import { Verify, Warning2, CloseCircle, InfoCircle } from 'iconsax-react'
+import { Surface } from '@/components/stepwise/primitives/surface'
 
 // ── types ──────────────────────────────────────────────────────────────────────
 export type ToastType = 'success' | 'warning' | 'error' | 'info'
@@ -112,6 +113,9 @@ function playToasterSound() {
 }
 
 // ── stack tuning ─────────────────────────────────────────────────────────────
+/** Corner radius of a toast card, shared by the squircle and the elevation
+ *  shadow's wrapper so the two trace the same shape. */
+const RADIUS      = 26
 const MAX_VISIBLE = 3     // toasts kept visible in the collapsed deck
 const PEEK        = 15    // px each stacked toast peeks above the one in front
 const SCALE_STEP  = 0.05  // per-level shrink for the collapsed deck
@@ -160,20 +164,35 @@ function ToastItem({
       animate={{ opacity, y: reduce ? 0 : y, scale: reduce ? 1 : scale }}
       exit={{    opacity: 0, y: reduce ? 0 : 44, scale: reduce ? 1 : 0.9 }}
       transition={reduce ? { duration: 0.15 } : { y: SPRING, scale: SPRING, opacity: { duration: 0.2 } }}
-      style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex, transformOrigin: 'bottom center' }}
+      style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex,
+        transformOrigin: 'bottom center',
+        /* Elevation lives out here, not on the card. An outset box-shadow on a
+           clip-path'd element is clipped away with everything else, so it has
+           to sit on an unclipped wrapper - the radius keeps its shape close to
+           the squircle it is falling behind. */
+        borderRadius: RADIUS,
+        boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)',
+      }}
       className="w-full pointer-events-auto"
     >
-      <div
+      {/* A real squircle rather than `rounded-[20px]`, matching every other
+          surface in the library. The hairline goes through `middleBorder`
+          because a CSS border on a clipped element gets sliced unevenly by the
+          clip-path - `--ui-border` is zinc-300/zinc-700, and 0.7 opacity keeps
+          it as quiet as the zinc-200/70 · zinc-700/60 pair it replaces. */}
+      <Surface
         ref={cardRef}
+        radius={RADIUS}
+        lisse={{ middleBorder: { width: 1, opacity: 0.7, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
         role="status"
         aria-live="polite"
         tabIndex={-1}
-        className="flex items-center justify-between gap-3 p-4 rounded-[20px] overflow-hidden border border-zinc-200/70 dark:border-zinc-700/60 [--toast-bg:#fafafa] dark:[--toast-bg:#1c1c1f]"
+        className="flex items-center justify-between gap-3 p-4 [--toast-bg:#fafafa] dark:[--toast-bg:#1c1c1f]"
         style={{
           // 135deg = top-left → bottom-right, so the tint reads as bleeding
           // in from the corner rather than sweeping across from the side.
           background: `linear-gradient(135deg, ${c.tint} 4%, transparent 30%), var(--toast-bg)`,
-          boxShadow: '0 1px 2px 0 rgba(0,0,0,0.05)',
         }}
       >
         {/* Left: icon + text */}
@@ -211,7 +230,7 @@ function ToastItem({
             </svg>
           </button>
         )}
-      </div>
+      </Surface>
     </motion.div>
   )
 }

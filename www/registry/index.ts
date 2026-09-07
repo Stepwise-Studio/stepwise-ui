@@ -734,11 +734,13 @@ export const registry: RegistryComponent[] = [
     name: 'toast',
     description: "Global notification toasts in four types - success, warning, error, and info.",
     category: 'components',
-    dependencies: ['iconsax-react', 'motion'],
+    dependencies: ['@lisse/react', 'clsx', 'iconsax-react', 'motion', 'tailwind-merge'],
     peerDependencies: ['react', 'react-dom'],
     registryDependencies: [],
     files: [
+      { src: 'components/stepwise/primitives/surface.tsx', dest: 'components/stepwise/primitives/surface.tsx' },
       { src: 'components/stepwise/toast.tsx', dest: 'components/stepwise/toast.tsx' },
+      { src: 'lib/utils/cn.ts', dest: 'lib/utils/cn.ts' },
     ],
   },
   {

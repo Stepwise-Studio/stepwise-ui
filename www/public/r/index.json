@@ -1118,8 +1118,11 @@
     "description": "Global notification toasts in four types - success, warning, error, and info.",
     "category": "components",
     "dependencies": [
+      "@lisse/react",
+      "clsx",
       "iconsax-react",
-      "motion"
+      "motion",
+      "tailwind-merge"
     ],
     "peerDependencies": [
       "react",

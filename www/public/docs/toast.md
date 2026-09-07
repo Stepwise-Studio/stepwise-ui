@@ -28,9 +28,11 @@ export default function Layout({ children }) {
 
 ## What gets written
 
+- `components/stepwise/primitives/surface.tsx`
 - `components/stepwise/toast.tsx`
+- `lib/utils/cn.ts`
 
-npm packages: `iconsax-react`, `motion`
+npm packages: `@lisse/react`, `clsx`, `iconsax-react`, `motion`, `tailwind-merge`
 
 ## Setup this needs
 
