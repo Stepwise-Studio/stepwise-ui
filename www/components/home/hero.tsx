@@ -13,6 +13,63 @@ import { useTheme } from '@/lib/theme'
 
 const WORDS = 'The interface is part of the product. Make it count.'.split(' ')
 
+/* An even curve, because these are pure opacity fades with no travel.
+ * The previous [0.22, 1, 0.36, 1] was picked for the slide-up: it front-loads
+ * hard, covering most of its progress in the first third. That reads as a
+ * flash rather than a fade once there is no movement to carry it. */
+const EASE = [0.33, 0, 0.4, 1] as const
+
+/* ── hero entrance timeline ──────────────────────────────────────────────────
+ * The order is nav → headline → subtext → CTA → showcase, but the steps
+ * OVERLAP rather than queue. Each one starts while the previous is still
+ * settling, so the hero reads as a single cascade falling down the page
+ * instead of a series of discrete blocks switching on one after another -
+ * which is what makes a staged entrance feel like a loading screen.
+ *
+ * `HANDOFF` is the whole rule, and the only number worth tuning. Everything
+ * else is derived from the step before it, so the sequence cannot drift out
+ * of order the way it did when each delay was hand-picked (the subtext used
+ * to start at 0.55s and finish at 1.05s while the headline was still writing
+ * itself until 1.13s - the supporting copy visibly overtook the headline).
+ *
+ * `HERO_DONE` is exported because the showcase's first band chains off it -
+ * see AFTER_HERO in canvas.tsx. */
+
+/**
+ * How far through its own reveal a step is when the next one begins.
+ * `1` would be strictly sequential - every element waiting for the one
+ * before it to fully land, which reads as a mechanical loading queue.
+ * `0.8` keeps the motion continuous: the next element is already moving
+ * while the previous settles, and because it still starts *after* the
+ * previous did, nothing can overtake what came before it.
+ */
+const HANDOFF = 0.8
+
+/**
+ * The nav hands off much sooner than the content steps do. It is page chrome,
+ * not part of the reading cascade - the headline is the first thing anyone is
+ * actually here to read, so making it wait 80% of the nav's fade left a gap
+ * that read as a stall before the page had said anything.
+ */
+const NAV_HANDOFF = 0.3
+
+/** Start of the step following one that begins at `start` and runs `span`. */
+const after = (start: number, span: number, handoff = HANDOFF) => start + span * handoff
+
+const REVEAL_DUR  = 0.4
+const NAV_STAGGER = 0.06   // logo, then the icon cluster beside it
+
+const NAV_IN          = 0
+const NAV_SPAN        = NAV_STAGGER + REVEAL_DUR
+/* The headline fades in as one block. It used to stagger word by word, which
+ * at this size read as a typewriter spelling the sentence out rather than a
+ * headline arriving - so there is no per-word delay any more, and the whole
+ * h1 carries a single fade. */
+const HEADLINE_IN     = after(NAV_IN, NAV_SPAN, NAV_HANDOFF)
+const SUBTEXT_IN      = after(HEADLINE_IN, REVEAL_DUR)
+const CTA_IN          = after(SUBTEXT_IN, REVEAL_DUR)
+export const HERO_DONE = after(CTA_IN, REVEAL_DUR)
+
 const LIGHT_AURA = ['#ffffff', '#7dd3fc', '#bae6fd', '#e0f2fe', '#ddd6fe']
 const DARK_AURA  = ['#09090b', '#0369a1', '#075985', '#155e75', '#1e1b4b']
 const REPO_URL = 'https://github.com/Stepwise-Studio/stepwise-ui'
@@ -55,17 +112,6 @@ function PetalBurst({ burst }: { burst: number }) {
 export function HomeHero() {
   const { theme } = useTheme()
   const dark = theme === 'dark'
-
-  const headlineRef = useRef<HTMLHeadingElement>(null)
-
-  /* See the note on the last word below: motion's leftover blur filter blocks
-   * the headline's background-clip:text. Clearing it once the reveal is done
-   * costs nothing - the animation has already finished with it at blur(0px). */
-  const clearWordFilters = () => {
-    headlineRef.current?.querySelectorAll<HTMLElement>('span').forEach(el => {
-      el.style.filter = ''
-    })
-  }
 
   const [copied, setCopied] = useState(false)
   const [burst, setBurst] = useState(0)
@@ -116,9 +162,9 @@ export function HomeHero() {
       {/* ── nav ── */}
       <nav className="relative z-10 flex h-16 w-full items-center justify-between px-6 sm:px-10 md:px-16">
         <motion.button
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: REVEAL_DUR, delay: NAV_IN, ease: EASE }}
           onClick={onLogoClick}
           className="relative flex cursor-pointer select-none items-center gap-2.5"
         >
@@ -136,9 +182,9 @@ export function HomeHero() {
           <PetalBurst burst={burst} />
         </motion.button>
         <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: REVEAL_DUR, delay: NAV_IN + NAV_STAGGER, ease: EASE }}
           className="flex items-center gap-1"
         >
           <a
@@ -155,20 +201,31 @@ export function HomeHero() {
       </nav>
 
       {/* ── hero ── */}
-      {/* `relative` without a z-index on purpose. `z-10` would make this a
-          stacking context, and the headline's mix-blend-mode only sees
-          backdrops inside its own context - it would blend against nothing and
-          the effect would silently do nothing. Positioned elements paint in DOM
-          order, and this comes after the shader, so it still sits on top. */}
+      {/* No z-index needed: positioned elements paint in DOM order and this
+          comes after the shader, so it sits on top regardless. (This used to
+          carry a note about deliberately avoiding `z-10` so the headline's
+          mix-blend-mode could reach the shader as a backdrop — that blend is
+          gone, so a stacking context here would now be harmless.) */}
       <section className="relative mx-auto flex w-full max-w-[1200px] flex-col items-center px-5 pb-24 pt-24 text-center md:pb-32 md:pt-36">
         {/* hook - words rise in one after another */}
-        {/* The letters are a gradient clipped to the glyphs, then blended with
-            the shader behind them in `luminosity` - the type keeps its own
-            brightness but borrows the aura's hue, so the words sit in the
-            image rather than on top of it. The gradient has to fall to a mid
-            tone: at full white there is no room for a borrowed hue to show.
+        {/* The letters are a gradient clipped to the glyphs (see `.hero-title`
+            in globals.css). The gradient falls to a mid tone so the type gains
+            depth down the second line instead of reading as flat white.
             `pb` because background-clip:text slices descenders. */}
-        <h1 ref={headlineRef} className="hero-title max-w-[22ch] text-[42px] font-semibold leading-[1.05] tracking-[-0.04em] pb-[0.1em] md:max-w-none md:text-[68px]">
+        {/* One fade on the whole headline, not per word. The words each used to
+            carry their own staggered reveal, which at this size read as a
+            typewriter spelling the sentence out rather than a headline
+            arriving. Animating the h1 itself also means nothing is layered
+            over the glyphs: a `filter` on a child rasterises it into its own
+            buffer that `background-clip: text` cannot reach into, and the
+            headline silently renders as nothing - the bug that used to blank
+            it on a theme toggle. Opacity on the parent has no such problem. */}
+        <motion.h1
+          className="hero-title max-w-[22ch] text-[42px] font-semibold leading-[1.05] tracking-[-0.04em] pb-[0.1em] md:max-w-none md:text-[68px]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: REVEAL_DUR, delay: HEADLINE_IN, ease: EASE }}
+        >
           {/* A hard break after "the" (not `text-wrap:balance`) - balance
               recomputes its split against the block's own resolved width,
               which is bigger on a bigger monitor and can land on a
@@ -177,30 +234,16 @@ export function HomeHero() {
               where even that half doesn't fit on one line. */}
           {WORDS.map((w, i) => (
             <Fragment key={i}>
-              <motion.span
-                className="inline-block"
-                initial={{ opacity: 0, y: 18, filter: 'blur(6px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ duration: 0.55, delay: 0.08 + i * 0.055, ease: [0.22, 1, 0.36, 1] }}
-                /* motion leaves `filter: blur(0px)` on the element after the
-                   reveal, and a filtered child rasterises into its own buffer -
-                   which the h1's background-clip:text cannot reach into, so the
-                   gradient letters render as nothing at all. Clearing the filter
-                   on the last word (they finish in order) hands the glyphs back
-                   to the parent's clip. */
-                onAnimationComplete={i === WORDS.length - 1 ? clearWordFilters : undefined}
-              >
-                {w}
-              </motion.span>
+              {w}
               {i === 5 ? <br /> : '\u00a0'}
             </Fragment>
           ))}
-        </h1>
+        </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: REVEAL_DUR, delay: SUBTEXT_IN, ease: EASE }}
           className="mt-6 max-w-[52ch] text-[16px] leading-relaxed text-zinc-600 text-pretty md:text-[18px] dark:text-zinc-400"
         >
           A growing collection of UI components for building modern products without
@@ -209,9 +252,9 @@ export function HomeHero() {
 
         {/* CTA + install line */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: REVEAL_DUR, delay: CTA_IN, ease: EASE }}
           className="mt-9 flex flex-col items-center gap-4"
         >
           <Link href="/docs/introduction">

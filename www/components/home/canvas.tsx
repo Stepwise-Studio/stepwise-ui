@@ -9,6 +9,7 @@ import {
   SparklesIcon, InformationCircleIcon, Share08Icon, Archive02Icon, ArrowRight02Icon,
 } from '@hugeicons/core-free-icons'
 import { Refresh, Ghost } from 'iconsax-react'
+import { HERO_DONE } from '@/components/home/hero'
 import { DotGridLoader } from '@/components/stepwise/dot-grid-loader'
 import { Combobox } from '@/components/stepwise/combobox'
 import { DropdownMenuList, DROPDOWN_PANEL_CLASS, type DropdownEntry } from '@/components/stepwise/dropdown-menu'
@@ -342,10 +343,18 @@ function DropdownMenuLook({ trigger, items, rootId }: { trigger: string; items: 
  * the three multi-column bands, where `staggerChildren` walks the columns in
  * one at a time rather than flashing the whole row at once.
  */
-const EASE = [0.22, 1, 0.36, 1] as const
+/* Matches the hero's fade curve - see the note on EASE in hero.tsx. These are
+ * pure opacity fades with no travel, so the easing has to be even rather than
+ * the front-loaded curve that suited the old slide-up. */
+const EASE = [0.33, 0, 0.4, 1] as const
 
-/** The hero's last word lands at ~1.13s; the first band follows it. */
-const AFTER_HERO = 1.15
+/**
+ * The showcase is the last step of the hero's chronological entrance
+ * (nav → headline → subtext → CTA → showcase), so it chains off the hero's
+ * own timeline rather than hardcoding a guess at when that finishes. Imported
+ * so the two can never drift apart when the hero's pacing is retuned.
+ */
+const AFTER_HERO = HERO_DONE
 
 /**
  * True once the element has reached the reveal line - and, crucially, also true
@@ -400,8 +409,8 @@ function Reveal({ delay = 0, className, children }: { delay?: number; className?
     <motion.div
       ref={ref}
       className={className}
-      initial={{ opacity: 0, y: 24 }}
-      animate={shown ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      initial={{ opacity: 0 }}
+      animate={shown ? { opacity: 1 } : { opacity: 0 }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
       {children}
@@ -445,8 +454,8 @@ const bandVariants = {
 }
 
 const colVariants = {
-  hidden: { opacity: 0, y: 22 },
-  shown: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
+  hidden: { opacity: 0 },
+  shown: { opacity: 1, transition: { duration: 0.55, ease: EASE } },
 }
 
 function Col({ w, gap = 32, children }: { w: number; gap?: number; children: ReactNode }) {
