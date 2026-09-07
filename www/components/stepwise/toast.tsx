@@ -115,7 +115,7 @@ function playToasterSound() {
 // ── stack tuning ─────────────────────────────────────────────────────────────
 /** Corner radius of a toast card, shared by the squircle and the elevation
  *  shadow's wrapper so the two trace the same shape. */
-const RADIUS      = 26
+const RADIUS      = 22
 const MAX_VISIBLE = 3     // toasts kept visible in the collapsed deck
 const PEEK        = 15    // px each stacked toast peeks above the one in front
 const SCALE_STEP  = 0.05  // per-level shrink for the collapsed deck
