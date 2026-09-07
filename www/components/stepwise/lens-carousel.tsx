@@ -96,6 +96,11 @@ export function LensCarousel({
   const rootRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  /** Strip offset the cards are currently painted at - see `apply`. */
+  const lastPosRef = useRef(NaN)
+  /** Whether the strip is on screen. Starts true so the first frame paints
+   *  before the observer has had a chance to report. */
+  const visibleRef = useRef(true)
   // useId carries colons, which are not valid in a CSS identifier.
   const uid = `axlns${useId().replace(/[^a-zA-Z0-9]/g, '')}`
 
@@ -170,7 +175,16 @@ export function LensCarousel({
   // Writes every card's transform for a given strip offset. Each card wraps
   // into [-count/2, count/2), so the one that falls off the left end
   // reappears at the right - always beyond the rim, never on screen.
+  //
+  // Skips the whole pass when the strip has not actually moved. The row rests
+  // between advances for `interval` seconds and only glides for `transition`,
+  // so at the defaults most frames used to rewrite every card with the string
+  // it already had - style invalidation on each one, for no visible change.
+  // `lastPos` is reset to NaN whenever the geometry is rebuilt below, and NaN
+  // never equals itself, so a resize always repaints.
   const apply = (pos: number) => {
+    if (pos === lastPosRef.current) return
+    lastPosRef.current = pos
     for (let i = 0; i < count; i++) {
       const el = cardRefs.current[i]
       if (!el) continue
@@ -197,6 +211,10 @@ export function LensCarousel({
       paused: (pauseOnHover && hover) || dragging,
       reduce: Boolean(reduce),
     }
+    // `apply` above closes over the current geometry (count, xOf, scaleAt). A
+    // render can change it, so drop the cached position - otherwise a resize
+    // that leaves `pos` untouched would keep the cards at their old sizes.
+    lastPosRef.current = NaN
   })
 
   const posRef = useRef(0)
@@ -218,10 +236,23 @@ export function LensCarousel({
   /** One card forward (1) or back (-1), from wherever the row currently sits. */
   const step = (d: number) => glide(Math.round(posRef.current) + d)
 
+  /*
+   * The loop runs only while the strip is both on screen and in a foreground
+   * tab. It used to start on mount and stop on unmount, so a carousel scrolled
+   * far out of view kept advancing and repainting every card indefinitely.
+   *
+   * It is NOT gated on reduced motion. Dragging and wheeling only move
+   * `posRef` and rely on this loop to paint them (see the pointer handlers
+   * below), so stopping it there would leave those interactions silently
+   * doing nothing. With the redundant-write skip in `apply`, a resting loop
+   * now costs one callback and one comparison per frame.
+   */
   useEffect(() => {
     if (!width) return
     let live = true
     let raf = 0
+    let running = false
+
     const frame = (now: number) => {
       if (!live) return
       const c = cfg.current
@@ -243,8 +274,45 @@ export function LensCarousel({
       c.apply(posRef.current)
       raf = requestAnimationFrame(frame)
     }
-    raf = requestAnimationFrame(frame)
-    return () => { live = false; cancelAnimationFrame(raf) }
+
+    const start = () => {
+      if (running || !live) return
+      running = true
+      // Absolute timestamp - after a long pause it would already be in the
+      // past and fire an advance the instant the strip came back. Re-arm so
+      // it resumes on the frame the reader left it at.
+      nextAtRef.current = 0
+      raf = requestAnimationFrame(frame)
+    }
+
+    const stop = () => {
+      if (!running) return
+      running = false
+      cancelAnimationFrame(raf)
+      // Land any glide that was in flight. Nothing is watching, and leaving a
+      // tween half-finished would make it jump on resume against a stale
+      // `start` timestamp.
+      const tw = tweenRef.current
+      if (tw) { posRef.current = tw.to; tweenRef.current = null }
+    }
+
+    const sync = () => (visibleRef.current && !document.hidden ? start() : stop())
+
+    const io = new IntersectionObserver(([entry]) => {
+      visibleRef.current = entry.isIntersecting
+      sync()
+    })
+    if (rootRef.current) io.observe(rootRef.current)
+    document.addEventListener('visibilitychange', sync)
+    sync()
+
+    return () => {
+      live = false
+      running = false
+      cancelAnimationFrame(raf)
+      io.disconnect()
+      document.removeEventListener('visibilitychange', sync)
+    }
   }, [width, count])
 
   // Drag: the pointer's own position decides the conversion, so the card
