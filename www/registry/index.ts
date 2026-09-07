@@ -102,7 +102,7 @@ export const registry: RegistryComponent[] = [
     name: 'calendar',
     description: "Standalone month-view calendar components.",
     category: 'components',
-    dependencies: ['@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
+    dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', '@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
     peerDependencies: ['react'],
     registryDependencies: [],
     files: [
@@ -176,7 +176,7 @@ export const registry: RegistryComponent[] = [
     name: 'combobox',
     description: "A dropdown you can type into.",
     category: 'components',
-    dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', '@lisse/react', 'clsx', 'iconsax-react', 'motion', 'tailwind-merge'],
+    dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', '@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
     peerDependencies: ['react'],
     registryDependencies: ['scroll-area'],
     files: [
@@ -405,7 +405,7 @@ export const registry: RegistryComponent[] = [
     name: 'modal',
     description: "A confirmation dialog that blocks the page until the user makes a choice.",
     category: 'components',
-    dependencies: ['@lisse/react', 'clsx', 'iconsax-react', 'motion', 'tailwind-merge'],
+    dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', '@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
     peerDependencies: ['react', 'react-dom'],
     registryDependencies: ['button'],
     files: [
@@ -418,7 +418,7 @@ export const registry: RegistryComponent[] = [
     name: 'multiselect',
     description: "Multi-option selector with removable pills in the trigger for selected values.",
     category: 'components',
-    dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', '@lisse/react', 'clsx', 'iconsax-react', 'motion', 'tailwind-merge'],
+    dependencies: ['@hugeicons/core-free-icons', '@hugeicons/react', '@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
     peerDependencies: ['react'],
     registryDependencies: ['scroll-area'],
     files: [

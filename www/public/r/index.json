@@ -127,6 +127,8 @@
     "description": "Standalone month-view calendar components.",
     "category": "components",
     "dependencies": [
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
       "@lisse/react",
       "clsx",
       "motion",
@@ -244,7 +246,6 @@
       "@hugeicons/react",
       "@lisse/react",
       "clsx",
-      "iconsax-react",
       "motion",
       "tailwind-merge"
     ],
@@ -608,9 +609,10 @@
     "description": "A confirmation dialog that blocks the page until the user makes a choice.",
     "category": "components",
     "dependencies": [
+      "@hugeicons/core-free-icons",
+      "@hugeicons/react",
       "@lisse/react",
       "clsx",
-      "iconsax-react",
       "motion",
       "tailwind-merge"
     ],
@@ -635,7 +637,6 @@
       "@hugeicons/react",
       "@lisse/react",
       "clsx",
-      "iconsax-react",
       "motion",
       "tailwind-merge"
     ],

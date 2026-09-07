@@ -2,6 +2,8 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { ArrowLeft01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
 import { Surface } from '@/components/stepwise/primitives/surface'
 import { cn } from '@/lib/utils/cn'
 
@@ -36,8 +38,12 @@ function sameDay(a: Date | null, b: Date | null) {
 }
 
 /* ── Icons ─────────────────────────────────────────────────────────────────── */
-function ChevLeft()  { return <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 1L1 6L6 11"/></svg> }
-function ChevRight() { return <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1L6 6L1 11"/></svg> }
+/* Hugeicons rather than hand-rolled paths, so the month arrows match the icon
+ * set the rest of the library draws from. strokeWidth 2 preserves the weight
+ * the inline SVGs had - the glyph is 16px where the old paths were 7x12, so a
+ * lighter stroke would read thinner than what it replaced. */
+function ChevLeft()  { return <HugeiconsIcon icon={ArrowLeft01Icon}  size={16} strokeWidth={2} color="currentColor" /> }
+function ChevRight() { return <HugeiconsIcon icon={ArrowRight01Icon} size={16} strokeWidth={2} color="currentColor" /> }
 
 function ChevDown({ open }: { open: boolean }) {
   return (

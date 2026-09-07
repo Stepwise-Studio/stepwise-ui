@@ -25,17 +25,18 @@ const variantsCode = `import { Button } from '@/components/stepwise/button'
 <Button variant="soft">soft</Button>
 <Button variant="destructive">destructive</Button>`
 
-const iconsCode = `import { Add, ArrowRight, Trash } from 'iconsax-react'
+const iconsCode = `import { HugeiconsIcon } from '@hugeicons/react'
+import { PlusSignIcon, ArrowRight02Icon, Delete02Icon } from '@hugeicons/core-free-icons'
 
 // icon on the left (default)
-<Button icon={<Add size={16} variant="Linear" color="currentColor" />}>
+<Button icon={<HugeiconsIcon icon={PlusSignIcon} size={16} strokeWidth={2} color="currentColor" />}>
   New item
 </Button>
 
 // icon on the right
 <Button
   variant="outline"
-  icon={<ArrowRight size={16} variant="Linear" color="currentColor" />}
+  icon={<HugeiconsIcon icon={ArrowRight02Icon} size={16} strokeWidth={2} color="currentColor" />}
   iconPosition="right"
 >
   Continue
@@ -44,16 +45,17 @@ const iconsCode = `import { Add, ArrowRight, Trash } from 'iconsax-react'
 // destructive with icon
 <Button
   variant="destructive"
-  icon={<Trash size={16} variant="Linear" color="currentColor" />}
+  icon={<HugeiconsIcon icon={Delete02Icon} size={16} strokeWidth={2} color="currentColor" />}
 >
   Delete
 </Button>`
 
-const slideCode = `import { ArrowRight } from 'iconsax-react'
+const slideCode = `import { HugeiconsIcon } from '@hugeicons/react'
+import { ArrowRight02Icon } from '@hugeicons/core-free-icons'
 
 // icon hides on desktop until hover - always visible on touch
 <Button
-  icon={<ArrowRight size={16} variant="Linear" color="currentColor" />}
+  icon={<HugeiconsIcon icon={ArrowRight02Icon} size={16} strokeWidth={2} color="currentColor" />}
   iconPosition="right"
   slideIcon
 >

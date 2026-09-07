@@ -2,9 +2,8 @@
 
 import { useState, useRef, useEffect, forwardRef } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { TickCircle } from 'iconsax-react'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Cancel01Icon } from '@hugeicons/core-free-icons'
+import { Cancel01Icon, CheckmarkCircle02Icon } from '@hugeicons/core-free-icons'
 import { Surface } from '@/components/stepwise/primitives/surface'
 import { Chevron } from '@/components/stepwise/primitives/chevron'
 import { ScrollArea } from '@/components/stepwise/scroll-area'
@@ -253,7 +252,12 @@ export function Multiselect({
                                 exit={{ scale: 0.5, opacity: 0 }}
                                 transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
                               >
-                                <TickCircle variant="Bold" size={16} className="text-zinc-900 dark:text-white" color="currentColor" />
+                                {/* strokeWidth 2 - this replaced a filled
+                                    (Bold) iconsax tick, and Hugeicons' free
+                                    set is stroke-only, so the weight has to
+                                    come from the stroke to keep the selected
+                                    state reading as firmly as it did. */}
+                                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={16} strokeWidth={2} className="text-zinc-900 dark:text-white" color="currentColor" />
                               </motion.span>
                             )}
                           </AnimatePresence>

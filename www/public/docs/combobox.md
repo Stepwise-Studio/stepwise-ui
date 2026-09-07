@@ -39,7 +39,7 @@ const options = [
 
 Also installs: [scroll-area](https://ui.stepwise.studio/docs/scroll-area.md)
 
-npm packages: `@hugeicons/core-free-icons`, `@hugeicons/react`, `@lisse/react`, `clsx`, `iconsax-react`, `motion`, `tailwind-merge`
+npm packages: `@hugeicons/core-free-icons`, `@hugeicons/react`, `@lisse/react`, `clsx`, `motion`, `tailwind-merge`
 
 ## Setup this needs
 

@@ -3,7 +3,8 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react'
-import { InfoCircle, Danger } from 'iconsax-react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { AlertCircleIcon, InformationCircleIcon } from '@hugeicons/core-free-icons'
 import { cn } from '@/lib/utils/cn'
 import { Surface } from '@/components/stepwise/primitives/surface'
 import { Button } from '@/components/stepwise/button'
@@ -231,10 +232,14 @@ export function Modal({
                           : 'bg-gradient-to-b from-sky-50 to-sky-100/80 dark:from-sky-950/50 dark:to-sky-900/30',
                       )}
                     >
+                      {/* strokeWidth 2: these replaced filled (Bold) iconsax
+                          glyphs, and Hugeicons' free set is stroke-only - at
+                          18px inside a tinted badge a 1.5 stroke reads as
+                          washed out next to the heading it sits beside. */}
                       {icon ?? (destructive ? (
-                        <Danger variant="Bold" size={18} color="currentColor" className="text-rose-500" aria-hidden />
+                        <HugeiconsIcon icon={AlertCircleIcon} size={18} strokeWidth={2} color="currentColor" className="text-rose-500" aria-hidden />
                       ) : (
-                        <InfoCircle variant="Bold" size={18} color="currentColor" className="text-sky-500" aria-hidden />
+                        <HugeiconsIcon icon={InformationCircleIcon} size={18} strokeWidth={2} color="currentColor" className="text-sky-500" aria-hidden />
                       ))}
                     </Surface>
 

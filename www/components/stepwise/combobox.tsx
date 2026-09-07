@@ -2,9 +2,8 @@
 
 import { useState, useRef, useEffect, useMemo, useId } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { SearchNormal1 } from 'iconsax-react'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { SearchRemoveIcon } from '@hugeicons/core-free-icons'
+import { Search01Icon, SearchRemoveIcon } from '@hugeicons/core-free-icons'
 import { Surface } from '@/components/stepwise/primitives/surface'
 import { Chevron } from '@/components/stepwise/primitives/chevron'
 import { ScrollArea } from '@/components/stepwise/scroll-area'
@@ -200,7 +199,7 @@ export function Combobox({
               isActive ? 'text-zinc-600 dark:text-zinc-300' : 'text-zinc-400 dark:text-zinc-500',
             )}
           >
-            <SearchNormal1 size={17} variant="Linear" color="currentColor" />
+            <HugeiconsIcon icon={Search01Icon} size={17} strokeWidth={1.8} color="currentColor" />
           </span>
 
           <input

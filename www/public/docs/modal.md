@@ -35,7 +35,7 @@ const [open, setOpen] = useState(false)
 
 Also installs: [button](https://ui.stepwise.studio/docs/button.md)
 
-npm packages: `@lisse/react`, `clsx`, `iconsax-react`, `motion`, `tailwind-merge`
+npm packages: `@hugeicons/core-free-icons`, `@hugeicons/react`, `@lisse/react`, `clsx`, `motion`, `tailwind-merge`
 
 ## Setup this needs
 

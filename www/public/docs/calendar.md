@@ -38,7 +38,7 @@ const [to,   setTo]   = useState<Date | null>(null)
 - `components/stepwise/primitives/surface.tsx`
 - `lib/utils/cn.ts`
 
-npm packages: `@lisse/react`, `clsx`, `motion`, `tailwind-merge`
+npm packages: `@hugeicons/core-free-icons`, `@hugeicons/react`, `@lisse/react`, `clsx`, `motion`, `tailwind-merge`
 
 ## Setup this needs
 

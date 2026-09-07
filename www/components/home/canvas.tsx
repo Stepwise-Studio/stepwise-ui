@@ -7,8 +7,8 @@ import {
   Rocket01Icon, UserGroupIcon, Settings02Icon, CreditCardIcon,
   Copy01Icon, PencilEdit02Icon, Delete02Icon,
   SparklesIcon, InformationCircleIcon, Share08Icon, Archive02Icon, ArrowRight02Icon,
+  Refresh01Icon, GhostIcon,
 } from '@hugeicons/core-free-icons'
-import { Refresh, Ghost } from 'iconsax-react'
 import { HERO_DONE } from '@/components/home/hero'
 import { DotGridLoader } from '@/components/stepwise/dot-grid-loader'
 import { Combobox } from '@/components/stepwise/combobox'
@@ -746,11 +746,11 @@ function ChipIconShowcase() {
     <div className="flex flex-col gap-2.5 whitespace-nowrap text-[13px]">
       <div className="flex items-center justify-between gap-5">
         <span className="text-zinc-500 dark:text-zinc-400">Rank exam</span>
-        <Chip icon={<Refresh variant="TwoTone" size={14} color="#0284c7" className="[&_path]:stroke-2" />} color="info" variant="soft">In progress</Chip>
+        <Chip icon={<HugeiconsIcon icon={Refresh01Icon} size={14} strokeWidth={2} color="#0284c7" />} color="info" variant="soft">In progress</Chip>
       </div>
       <div className="flex items-center justify-between gap-5">
         <span className="text-zinc-500 dark:text-zinc-400">That titan</span>
-        <Chip icon={<Ghost variant="TwoTone" size={14} color="#4f46e5" className="[&_path]:stroke-2" />} color="magical" variant="soft">Still out there</Chip>
+        <Chip icon={<HugeiconsIcon icon={GhostIcon} size={14} strokeWidth={2} color="#4f46e5" />} color="magical" variant="soft">Still out there</Chip>
       </div>
     </div>
   )
