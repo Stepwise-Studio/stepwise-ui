@@ -92,6 +92,15 @@ interface PreviewCodeProps {
   preview: React.ReactNode
   code: React.ReactNode
   minHeight?: number
+  /**
+   * Raises the mobile height cap for this box only. Below `sm` every preview
+   * is clamped to `MOBILE_MAX_HEIGHT` so a tall demo does not swallow the
+   * screen - but a few components (the Folder, whose fan lifts cards well
+   * above its own box) genuinely need more than that and get visibly cut off
+   * instead of merely scrolling. Raise it for those rather than shrinking the
+   * demo until it fits. Defaults to the shared cap.
+   */
+  mobileMaxHeight?: number
   className?: string
   allowOverflow?: boolean
   /** Let preview content (glows, popovers) paint outside the box. */
@@ -116,11 +125,20 @@ const STANDARD_MIN_HEIGHT = 440
  * cannot live there. Below `sm` the requested height is capped at 280px - a
  * calendar still gets its room and scrolls, a three-line snippet no longer
  * reserves half a screen. From `sm` up the caller's height is honoured. */
-const BOX_HEIGHT = 'min-h-[min(var(--preview-h),280px)] sm:min-h-[var(--preview-h)]'
+const MOBILE_MAX_HEIGHT = 280
+/* The cap is a custom property rather than a literal so a single box can raise
+ * it (see `mobileMaxHeight`) without every other page inheriting the change. */
+const BOX_HEIGHT = 'min-h-[min(var(--preview-h),var(--preview-h-max))] sm:min-h-[var(--preview-h)]'
 
-export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, className, allowOverflow, overflowVisible, bleed }: PreviewCodeProps) {
+export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, mobileMaxHeight = MOBILE_MAX_HEIGHT, className, allowOverflow, overflowVisible, bleed }: PreviewCodeProps) {
   const previewPad = bleed ? '' : 'p-4 sm:p-8'
   const h               = Math.max(minHeight, STANDARD_MIN_HEIGHT)
+  /** Both fed to `min()` in BOX_HEIGHT, so a raised cap still never exceeds
+   *  the caller's own requested height. */
+  const boxVars = {
+    ['--preview-h' as string]: `${h}px`,
+    ['--preview-h-max' as string]: `${mobileMaxHeight}px`,
+  }
   const uid             = useId()
   const [tab, setTab]   = useState<Tab>('preview')
   const [busy, setBusy] = useState(false)
@@ -235,7 +253,7 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
               BOX_HEIGHT,
               tab !== 'preview' && 'hidden',
             )}
-            style={{ ['--preview-h' as string]: `${h}px` }}
+            style={boxVars}
           >
             {preview}
           </div>
@@ -246,7 +264,7 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
               BOX_HEIGHT,
               tab !== 'code' && 'hidden',
             )}
-            style={{ ['--preview-h' as string]: `${h}px` }}
+            style={boxVars}
           >
             {code}
           </div>
@@ -256,7 +274,7 @@ export function PreviewCode({ preview, code, minHeight = STANDARD_MIN_HEIGHT, cl
           radius={24}
           lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border-subtle, rgb(151 151 154 / 0.106))' } }}
           className={cn('[overflow:clip] relative', BOX_HEIGHT)}
-          style={{ ['--preview-h' as string]: `${h}px` }}
+          style={boxVars}
         >
           <div
             ref={previewRef}

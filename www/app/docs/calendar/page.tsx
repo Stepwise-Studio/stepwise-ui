@@ -56,7 +56,7 @@ export default async function CalendarPage() {
         <section id="preview" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Calendar</Text>
           <PreviewCode
-            minHeight={480}
+            minHeight={480} mobileMaxHeight={340}
             preview={<CalendarPreview />}
             code={<CodeBlock code={usageCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -70,7 +70,7 @@ export default async function CalendarPage() {
             the would-be range. Clicking an already-selected start clears the selection.
           </Text>
           <PreviewCode
-            minHeight={520}
+            minHeight={520} mobileMaxHeight={340}
             preview={<CalendarRangePreview />}
             code={<CodeBlock code={usageCode} lang="tsx" className="rounded-none" flat />}
           />

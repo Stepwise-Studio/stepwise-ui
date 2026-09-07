@@ -76,7 +76,7 @@ export default function FileUploaderPage() {
             onto it.
           </Text>
           <PreviewCode
-            minHeight={480}
+            minHeight={480} mobileMaxHeight={440}
             preview={<FileUploaderDropzonePreview />}
             code={<CodeBlock code={dropzoneCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -93,7 +93,7 @@ export default function FileUploaderPage() {
             something&apos;s selected.
           </Text>
           <PreviewCode
-            minHeight={220}
+            minHeight={220} mobileMaxHeight={300}
             preview={<FileUploaderCompactPreview />}
             code={<CodeBlock code={compactCode} lang="tsx" className="rounded-none" flat />}
           />

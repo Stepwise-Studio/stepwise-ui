@@ -54,7 +54,7 @@ export default function FolderPage() {
 
         <section id="showcase" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Showcase</Text>
-          <PreviewCode minHeight={520} preview={<FolderShowcasePreview />} code={<CodeBlock code={showcaseCode} lang="tsx" className="rounded-none" flat />} />
+          <PreviewCode minHeight={520} mobileMaxHeight={360} preview={<FolderShowcasePreview />} code={<CodeBlock code={showcaseCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="fan" className="scroll-mt-20 flex flex-col gap-4">
@@ -63,7 +63,7 @@ export default function FolderPage() {
             Hover, tap, or focus the folder and the cards lift out into a shallow arc. Hovering
             one shows its name; arrows page through five at a time and wrap around at either end.
           </Text>
-          <PreviewCode minHeight={560} preview={<FolderFanPreview />} code={<CodeBlock code={fanCode} lang="tsx" className="rounded-none" flat />} />
+          <PreviewCode minHeight={560} mobileMaxHeight={400} preview={<FolderFanPreview />} code={<CodeBlock code={fanCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="colors" className="scroll-mt-20 flex flex-col gap-4">
@@ -71,7 +71,7 @@ export default function FolderPage() {
           <Text variant="body" className="text-zinc-500 dark:text-zinc-400 -mt-1">
             Drive the folder color live with the <code className="rounded bg-zinc-100 px-1.5 py-0.5 text-[13px] dark:bg-zinc-800">ColorSwatch</code> component, and pick any Hugeicons badge - it adopts a darker shade of the folder.
           </Text>
-          <PreviewCode minHeight={560} preview={<FolderColorPreview />} code={<CodeBlock code={colorCode} lang="tsx" className="rounded-none" flat />} />
+          <PreviewCode minHeight={560} mobileMaxHeight={420} preview={<FolderColorPreview />} code={<CodeBlock code={colorCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">

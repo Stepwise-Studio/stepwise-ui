@@ -45,7 +45,7 @@ export default function AccordionPage() {
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
           <PreviewCode
-            minHeight={280}
+            minHeight={280} mobileMaxHeight={360}
             preview={<AccordionBasicPreview />}
             code={<CodeBlock code={basicCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -54,7 +54,7 @@ export default function AccordionPage() {
         <section id="multiple" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Multiple open</Text>
           <PreviewCode
-            minHeight={240}
+            minHeight={240} mobileMaxHeight={440}
             preview={<AccordionMultiplePreview />}
             code={<CodeBlock code={multipleCode} lang="tsx" className="rounded-none" flat />}
           />

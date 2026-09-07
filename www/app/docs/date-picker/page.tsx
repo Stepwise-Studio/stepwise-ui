@@ -57,7 +57,7 @@ export default async function DatePickerPage() {
         {/* Preview */}
         <section id="preview" className="scroll-mt-20">
           <PreviewCode
-            minHeight={280}
+            minHeight={280} mobileMaxHeight={440}
             allowOverflow
             preview={<DatePickerPreview />}
             code={<CodeBlock code={usageCode} lang="tsx" className="rounded-none" flat />}

@@ -81,7 +81,7 @@ export default function MultiselectPage() {
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
           <PreviewCode
-            minHeight={680}
+            minHeight={680} mobileMaxHeight={520}
             preview={<MultiselectBasicPreview />}
             code={<CodeBlock code={basicCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -90,7 +90,7 @@ export default function MultiselectPage() {
         <section id="label" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">With label</Text>
           <PreviewCode
-            minHeight={680}
+            minHeight={680} mobileMaxHeight={520}
             preview={<MultiselectWithLabelPreview />}
             code={<CodeBlock code={labelCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -106,7 +106,7 @@ export default function MultiselectPage() {
             for controlled usage. The component manages state internally when uncontrolled.
           </Text>
           <PreviewCode
-            minHeight={680}
+            minHeight={680} mobileMaxHeight={520}
             preview={<MultiselectControlledPreview />}
             code={<CodeBlock code={controlledCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -122,7 +122,7 @@ export default function MultiselectPage() {
             chip. Click the trigger to see all options.
           </Text>
           <PreviewCode
-            minHeight={680}
+            minHeight={680} mobileMaxHeight={520}
             preview={<MultiselectOverflowPreview />}
             code={<CodeBlock code={overflowCode} lang="tsx" className="rounded-none" flat />}
           />

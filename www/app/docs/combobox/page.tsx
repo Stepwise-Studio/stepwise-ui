@@ -72,7 +72,7 @@ export default function ComboboxPage() {
             - it's searched alongside the label.
           </Text>
           <PreviewCode
-            minHeight={600}
+            minHeight={600} mobileMaxHeight={420}
             preview={<ComboboxBasicPreview />}
             code={<CodeBlock code={basicCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -81,7 +81,7 @@ export default function ComboboxPage() {
         <section id="plain" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Without descriptions</Text>
           <PreviewCode
-            minHeight={600}
+            minHeight={600} mobileMaxHeight={420}
             preview={<ComboboxPlainPreview />}
             code={<CodeBlock code={plainCode} lang="tsx" className="rounded-none" flat />}
           />
@@ -90,7 +90,7 @@ export default function ComboboxPage() {
         <section id="empty" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Empty state</Text>
           <PreviewCode
-            minHeight={600}
+            minHeight={600} mobileMaxHeight={420}
             preview={<ComboboxEmptyPreview />}
             code={<CodeBlock code={emptyCode} lang="tsx" className="rounded-none" flat />}
           />

@@ -78,7 +78,7 @@ export default function DropdownMenuPage() {
 
         <section id="default" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Default</Text>
-          <PreviewCode minHeight={240} allowOverflow preview={<DropdownBasicPreview />} code={<CodeBlock code={basicCode} lang="tsx" className="rounded-none" flat />} />
+          <PreviewCode minHeight={240} mobileMaxHeight={520} allowOverflow preview={<DropdownBasicPreview />} code={<CodeBlock code={basicCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="text-only" className="scroll-mt-20 flex flex-col gap-4">
@@ -87,7 +87,7 @@ export default function DropdownMenuPage() {
             Omit <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">icon</code> on
             every item - no icon gutter is reserved, labels start flush at the leading edge.
           </Text>
-          <PreviewCode minHeight={220} allowOverflow preview={<DropdownTextOnlyPreview />} code={<CodeBlock code={textOnlyCode} lang="tsx" className="rounded-none" flat />} />
+          <PreviewCode minHeight={220} mobileMaxHeight={460} allowOverflow preview={<DropdownTextOnlyPreview />} code={<CodeBlock code={textOnlyCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="nested" className="scroll-mt-20 flex flex-col gap-4">
@@ -98,12 +98,12 @@ export default function DropdownMenuPage() {
             opens on hover, click, or <code className="text-[13px] bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">→</code>.
             Flips to the left edge automatically if it would overflow the viewport.
           </Text>
-          <PreviewCode minHeight={340} allowOverflow preview={<DropdownNestedPreview />} code={<CodeBlock code={nestedCode} lang="tsx" className="rounded-none" flat />} />
+          <PreviewCode minHeight={340} mobileMaxHeight={560} allowOverflow preview={<DropdownNestedPreview />} code={<CodeBlock code={nestedCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="align" className="scroll-mt-20 flex flex-col gap-4">
           <Text variant="h3" className="text-zinc-900 dark:text-white">Alignment</Text>
-          <PreviewCode minHeight={220} allowOverflow preview={<DropdownAlignPreview />} code={<CodeBlock code={alignCode} lang="tsx" className="rounded-none" flat />} />
+          <PreviewCode minHeight={220} mobileMaxHeight={460} allowOverflow preview={<DropdownAlignPreview />} code={<CodeBlock code={alignCode} lang="tsx" className="rounded-none" flat />} />
         </section>
 
         <section id="props" className="scroll-mt-20 flex flex-col gap-4">

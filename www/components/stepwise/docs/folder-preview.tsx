@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Image02Icon, File01Icon, MusicNote01Icon, Video01Icon, StarIcon, CameraLensIcon,
 } from '@hugeicons/core-free-icons'
@@ -28,15 +28,51 @@ const COBALT = '#2563eb'
  */
 const SKY    = '#bfdbfe'
 
+/* ── Sizing ───────────────────────────────────────────────────────────
+ * `Folder` takes a fixed pixel `size` (default 260) and derives its whole
+ * geometry from it - there is no intrinsic responsive behaviour. 260px still
+ * *fits* a phone horizontally, but the docs preview box is capped at 280px
+ * tall below `sm` (see BOX_HEIGHT in preview-code.tsx, a deliberate global
+ * rule so a tall demo doesn't reserve half a phone screen). A 260px folder
+ * plus its label, count and controls needs ~325px, so it scrolled inside the
+ * box and read as clipped. Scaling the folder itself is the contained fix -
+ * it keeps that shared cap intact for the other 62 docs pages. */
+const SIZE_DESKTOP = 260
+/* A real scale-down for phones, but not squeezed to fit a fixed box - the
+ * previews on this page raise their own mobile height cap (`mobileMaxHeight`)
+ * so the folder does not have to shrink to ~150px just to avoid being cut. */
+const SIZE_COMPACT = 200
+
+/** `true` below the `sm` breakpoint. Starts `false` so SSR and the first
+ *  client render agree, then corrects on mount. */
+function useCompact() {
+  const [compact, setCompact] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 639px)')
+    const sync = () => setCompact(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+  return compact
+}
+
+/** The folder size every preview on this page uses. */
+function useFolderSize() {
+  return useCompact() ? SIZE_COMPACT : SIZE_DESKTOP
+}
+
 /* ── Showcase - empty ↔ filled toggle ─────────────────────────────── */
 export function FolderShowcasePreview() {
   const [state, setState] = useState<'empty' | 'filled'>('filled')
+  const size = useFolderSize()
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-3 sm:gap-6">
       <Folder
         label="Product shots"
         count={state === 'empty' ? 'Empty' : '36 photos'}
         color={SKY}
+        size={size}
         icon={Image02Icon}
         peek={state === 'empty' ? 0 : 3}
       />
@@ -63,9 +99,10 @@ const CASE_FILES = [
 ]
 
 export function FolderFanPreview() {
+  const size = useFolderSize()
   return (
     <div className="flex flex-col items-center">
-      <Folder label="Case files" count="8 documents" color={SKY} icon={File01Icon} files={CASE_FILES} />
+      <Folder label="Case files" count="8 documents" color={SKY} size={size} icon={File01Icon} files={CASE_FILES} />
     </div>
   )
 }
@@ -88,11 +125,16 @@ const ICONS: { icon: IconSvgElement; key: string }[] = [
 export function FolderColorPreview() {
   const [color, setColor] = useState(SKY)
   const [iconIdx, setIconIdx] = useState(0)
+  const compact = useCompact()
+  const size = compact ? SIZE_COMPACT : SIZE_DESKTOP
   return (
-    <div className="flex flex-col items-center gap-6">
-      <Folder color={color} icon={ICONS[iconIdx].icon} label="Design assets" count="24 files" />
-      <ColorSwatch colors={SWATCH} value={color} onChange={setColor} labels={['Aura', 'Cobalt', 'Amber', 'Sky', 'Rose', 'Mint']} />
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center gap-3 sm:gap-6">
+      <Folder color={color} size={size} icon={ICONS[iconIdx].icon} label="Design assets" count="24 files" />
+      {/* Swatches and icon badges both tighten on a phone. This section stacks
+          two control rows under the folder, so it is the tallest preview on the
+          page and the one that runs into the docs' 280px mobile box cap. */}
+      <ColorSwatch size={compact ? 20 : 26} colors={SWATCH} value={color} onChange={setColor} labels={['Aura', 'Cobalt', 'Amber', 'Sky', 'Rose', 'Mint']} />
+      <div className="flex items-center gap-1.5 sm:gap-2">
         {ICONS.map((it, i) => (
           <button
             key={it.key}
@@ -100,7 +142,7 @@ export function FolderColorPreview() {
             aria-label={it.key}
             aria-pressed={i === iconIdx}
             className={cn(
-              'flex h-9 w-9 items-center justify-center rounded-xl border transition-colors duration-150',
+              'flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border transition-colors duration-150',
               i === iconIdx
                 ? 'border-zinc-900 bg-zinc-900 text-white dark:border-white dark:bg-white dark:text-zinc-900'
                 : 'border-zinc-200 text-zinc-500 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800',
