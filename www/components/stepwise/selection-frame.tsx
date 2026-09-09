@@ -73,8 +73,14 @@ export function SelectionFrame({
   const marching = animated && !!resolvedDash && !reduceMotion
   const animateHandles = animated && !reduceMotion
 
+  // The rect is drawn inset by STROKE/2 so its stroke centres inside the SVG
+  // box - its visible corner tip is at (STROKE/2, STROKE/2), not (0, 0). Place
+  // the handles on those centreline corners; using the box corners instead
+  // leaves every handle 0.75px diagonally outward from the tip it marks.
+  const half = STROKE / 2
   const corners: Array<[string, number, number]> = [
-    ['tl', 0, 0], ['tr', fw, 0], ['bl', 0, fh], ['br', fw, fh],
+    ['tl', half, half], ['tr', fw - half, half],
+    ['bl', half, fh - half], ['br', fw - half, fh - half],
   ]
 
   const handleSize = handles === 'circle' ? 8 : 7

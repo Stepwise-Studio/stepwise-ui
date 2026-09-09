@@ -112,8 +112,8 @@ export function Avatar({
         className={cn(
           'flex h-full w-full shrink-0 items-center justify-center overflow-hidden select-none rounded-full shadow-sm',
           showImage
-            ? cn('bg-white', bordered && 'border border-[var(--ui-border,rgb(138_138_141_/_0.23))]')
-            : cn('bg-zinc-100 dark:bg-zinc-900', bordered && 'border border-[var(--ui-border,rgb(138_138_141_/_0.23))]'),
+            ? cn('bg-white', bordered && 'border border-[var(--ui-border-subtle,rgb(151_151_154_/_0.106))]')
+            : cn('bg-zinc-100 dark:bg-zinc-900', bordered && 'border border-[var(--ui-border-subtle,rgb(151_151_154_/_0.106))]'),
           showTooltip && 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-sky-600 dark:focus-visible:ring-sky-400',
           className,
         )}

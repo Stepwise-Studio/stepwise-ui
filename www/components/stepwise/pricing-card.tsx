@@ -75,7 +75,7 @@ export function PricingCard({
   const isFramed = surface === 'framed'
 
   // The header goes dark when highlighted, inverting with the page theme.
-  const headerBg   = highlighted ? 'bg-zinc-800 dark:bg-zinc-100' : isFramed ? 'bg-zinc-100 dark:bg-zinc-900' : 'bg-zinc-50 dark:bg-zinc-950'
+  const headerBg   = highlighted ? 'bg-zinc-800 dark:bg-zinc-100' : isFramed ? 'bg-zinc-200 dark:bg-zinc-900' : 'bg-zinc-100 dark:bg-zinc-950'
   const headerText = highlighted ? 'text-zinc-100 dark:text-zinc-800' : 'text-zinc-800 dark:text-zinc-100'
   const descText   = highlighted ? 'text-zinc-300 dark:text-zinc-600' : 'text-zinc-600 dark:text-zinc-400'
   const unitText   = highlighted ? 'text-zinc-500 dark:text-zinc-400' : 'text-zinc-500 dark:text-zinc-400'
@@ -165,7 +165,7 @@ export function PricingCard({
         // clip-path measures the box before a relative width has resolved in
         // this flex-centred layout, so cards with different CTA labels end up
         // different widths. `max-w-full` keeps it responsive on narrow screens.
-        className={cn('flex w-[280px] max-w-full flex-col gap-0 bg-zinc-50 p-1 dark:bg-zinc-950', elevation, className)}
+        className={cn('flex w-[280px] max-w-full flex-col gap-0 bg-zinc-100 p-1 dark:bg-zinc-950', elevation, className)}
       >
         {header}
         {featureList}
