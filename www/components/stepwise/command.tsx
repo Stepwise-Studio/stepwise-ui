@@ -165,7 +165,7 @@ export function CommandPalette({
               className="overflow-hidden bg-white shadow-[0_20px_60px_-12px_rgba(0,0,0,0.28)] dark:bg-zinc-900 dark:shadow-[0_24px_70px_-12px_rgba(0,0,0,0.8)]"
             >
               {/* search row */}
-              <div className="flex items-center gap-3 border-b border-zinc-100 px-4 dark:border-zinc-800">
+              <div className="flex items-center gap-3 border-b border-[var(--ui-border-subtle,rgb(151_151_154_/_0.106))] px-4">
                 <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" className="shrink-0 text-zinc-400">
                   <circle cx="9" cy="9" r="6" />
                   <path d="m14 14 3 3" />

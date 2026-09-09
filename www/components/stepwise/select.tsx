@@ -113,10 +113,11 @@ export function Select({
     }
   }
 
-  // Border tokens - idle matches Input; open steps up one notch like Input's
-  // own focus state (zinc-400/500), not a near-black/near-white ring.
-  const idleBorder = dark ? '#27272a' : '#e4e4e7'
-  const openBorder = dark ? '#71717a' : '#a1a1aa'
+  // Idle is the library-wide resting hairline; open steps up one notch
+  // (zinc-400/500), not a near-black/near-white ring. Both go through tokens
+  // with inline fallbacks so a host project can retheme them.
+  const idleBorder = 'var(--ui-border, rgb(138 138 141 / 0.23))'
+  const openBorder = `var(--ui-border-open, ${dark ? '#71717a' : '#a1a1aa'})`
   const borderColor = disabled ? idleBorder : (isOpen ? openBorder : idleBorder)
   const middleBorder = { width: 1, opacity: 1, color: borderColor }
 

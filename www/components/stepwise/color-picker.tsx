@@ -403,7 +403,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
           type="button"
           onClick={pickFromScreen}
           aria-label="Pick color from screen"
-          className="group relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-zinc-200 dark:border-zinc-700"
+          className="group relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-[var(--ui-border,rgb(138_138_141_/_0.23))]"
         >
           <span className="absolute inset-0" style={{ background: CHECKER }} />
           <span className="absolute inset-0" style={{ background: hex }} />
@@ -417,7 +417,7 @@ export function ColorPicker({ value = '#3b82f6', onChange, showPresets = false, 
           spellCheck={false}
           maxLength={9}
           aria-label="Hex color value"
-          className="h-8 min-w-0 flex-1 rounded-[13.5px] border border-zinc-200 bg-transparent px-2.5 text-center font-mono text-[12px] tracking-wider text-zinc-700 outline-none transition-colors focus:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:focus:border-zinc-500"
+          className="h-8 min-w-0 flex-1 rounded-[13.5px] border border-[var(--ui-border,rgb(138_138_141_/_0.23))] bg-transparent px-2.5 text-center font-mono text-[12px] tracking-wider text-zinc-700 outline-none transition-colors focus:border-[var(--ui-border-focus,#3f3f46)] dark:text-zinc-300 dark:focus:border-[var(--ui-border-focus,#d4d4d8)]"
         />
       </div>
 

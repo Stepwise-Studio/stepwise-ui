@@ -656,6 +656,7 @@
     "description": "A row of individual digit boxes for one-time codes.",
     "category": "components",
     "dependencies": [
+      "@lisse/react",
       "clsx",
       "motion",
       "tailwind-merge"

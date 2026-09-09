@@ -23,9 +23,10 @@ const [otp, setOtp] = useState('')
 ## What gets written
 
 - `components/stepwise/otp-input.tsx`
+- `components/stepwise/primitives/surface.tsx`
 - `lib/utils/cn.ts`
 
-npm packages: `clsx`, `motion`, `tailwind-merge`
+npm packages: `@lisse/react`, `clsx`, `motion`, `tailwind-merge`
 
 ## Setup this needs
 

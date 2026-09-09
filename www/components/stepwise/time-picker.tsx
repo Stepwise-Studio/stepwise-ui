@@ -496,8 +496,10 @@ export function TimePicker({
 
   const active = open || focused
   const borderColor = disabled
-    ? (dark ? '#27272a' : '#e4e4e7')
-    : active ? (dark ? '#d4d4d8' : '#3f3f46') : (dark ? '#27272a' : '#e4e4e7')
+    ? 'var(--ui-border, rgb(138 138 141 / 0.23))'
+    : active
+      ? `var(--ui-border-focus, ${dark ? '#d4d4d8' : '#3f3f46'})`
+      : 'var(--ui-border, rgb(138 138 141 / 0.23))'
 
   const panelMotion = reduce
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
@@ -522,7 +524,7 @@ export function TimePicker({
       )}
 
       <div className={cn('relative h-11 w-full', disabled && 'pointer-events-none opacity-50')}>
-        <Surface radius={18} className="relative h-11 w-full bg-white dark:bg-zinc-900">
+        <Surface radius={18} lisse={{ middleBorder: { width: 1, opacity: 1, color: borderColor } }} className="relative h-11 w-full bg-white dark:bg-zinc-900">
           <button
             type="button"
             onClick={() => setOpen(o => !o)}
@@ -571,11 +573,6 @@ export function TimePicker({
             </button>
           )}
         </Surface>
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ borderRadius: 18, borderWidth: 1, borderStyle: 'solid', borderColor, transition: 'border-color 250ms ease' }}
-        />
 
         <AnimatePresence initial={false}>
           {open && (
@@ -598,13 +595,9 @@ export function TimePicker({
                   fontFamily: FONT,
                 }}
               >
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 z-10"
-                  style={{ borderRadius: 20, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border, rgb(138 138 141 / 0.23))' }}
-                />
                 <Surface
                   radius={20}
+                  lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
                   className={cn(
                     'w-full bg-white shadow-[0_12px_32px_-8px_rgba(0,0,0,0.18)] dark:bg-zinc-900',
                     use12Hour ? 'px-3 py-3.5' : 'px-3 py-5',

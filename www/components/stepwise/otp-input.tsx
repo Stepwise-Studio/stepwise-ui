@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, KeyboardEvent, ClipboardEvent, ChangeEvent } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { cn } from '@/lib/utils/cn'
+import { Surface } from '@/components/stepwise/primitives/surface'
 
 export interface OtpInputProps {
   length?     : number
@@ -22,6 +23,18 @@ export interface OtpInputProps {
   disabled?   : boolean
   className?  : string
 }
+
+// One cell's edge. The resting state is the library-wide hairline - the same
+// token Segment, Input and Toast read - so a cell matches every other field on
+// the page. Error and focus get their own tokens. Each carries an inline
+// fallback: the registry ships source, not this site's stylesheet, so a bare
+// var() would arrive with no border at all.
+const cellBorder = (error: boolean, focused: boolean) =>
+  error
+    ? { width: 2, opacity: 1, color: 'var(--ui-border-error, #fb7185)' }
+    : focused
+      ? { width: 2, opacity: 1, color: '#38bdf8' } // sky-400, matching every other focus indicator in the library
+      : { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' }
 
 export function OtpInput({
   length      = 6,
@@ -135,40 +148,45 @@ export function OtpInput({
               animate={{ y: isFocused ? -2 : 0, scale: isFilled && !isFocused ? 1 : isFocused ? 1.04 : 1 }}
               transition={{ type: 'spring', duration: 0.25, bounce: 0 }}
             >
-              <input
-                ref={el => { refs.current[i] = el }}
-                type="text"
-                inputMode={isAlpha ? 'text' : 'numeric'}
-                pattern={isAlpha ? '[a-zA-Z0-9]*' : '[0-9]*'}
-                autoCapitalize={isAlpha ? 'characters' : 'off'}
-                autoComplete="one-time-code"
-                spellCheck={false}
-                maxLength={1}
-                value={digits[i] ?? ''}
-                disabled={disabled}
-                onChange={e => handleChange(i, e)}
-                onKeyDown={e => handleKeyDown(i, e)}
-                onPaste={handlePaste}
-                onFocus={e => { setFocusedIdx(i); e.target.select() }}
-                onBlur={() => setFocusedIdx(null)}
-                aria-label={`Digit ${i + 1}`}
-                aria-invalid={error || undefined}
+              {/* Surface, not a bare rounded input: every rounded element in
+                  the library is a squircle, and a ring/box-shadow would be
+                  clipped away by the corner mask anyway - so the edge is a
+                  middleBorder stroked along the squircle path itself. */}
+              <Surface
+                radius={14}
+                lisse={{ middleBorder: cellBorder(error, isFocused) }}
                 className={cn(
-                  'h-14 w-11 rounded-[12px] text-center outline-none',
-                  'text-[22px] font-semibold tracking-[-0.01em]',
-                  'bg-zinc-50 dark:bg-zinc-900',
-                  'text-transparent caret-transparent', // real glyph is the animated span below
-                  'transition-[box-shadow,background-color] duration-150',
-                  error
-                    ? 'ring-2 ring-rose-400 dark:ring-rose-500'
-                    : isFocused
-                      ? 'ring-2 ring-sky-400 bg-white dark:bg-zinc-800'
-                      : isFilled
-                        ? 'ring-1 ring-zinc-300 dark:ring-zinc-600'
-                        : 'ring-1 ring-zinc-200 dark:ring-zinc-700',
-                  disabled && 'cursor-not-allowed opacity-40',
+                  'h-14 w-11 transition-colors duration-150',
+                  isFocused ? 'bg-white dark:bg-zinc-800' : 'bg-zinc-50 dark:bg-zinc-900',
+                  disabled && 'opacity-40',
                 )}
-              />
+              >
+                <input
+                  ref={el => { refs.current[i] = el }}
+                  type="text"
+                  inputMode={isAlpha ? 'text' : 'numeric'}
+                  pattern={isAlpha ? '[a-zA-Z0-9]*' : '[0-9]*'}
+                  autoCapitalize={isAlpha ? 'characters' : 'off'}
+                  autoComplete="one-time-code"
+                  spellCheck={false}
+                  maxLength={1}
+                  value={digits[i] ?? ''}
+                  disabled={disabled}
+                  onChange={e => handleChange(i, e)}
+                  onKeyDown={e => handleKeyDown(i, e)}
+                  onPaste={handlePaste}
+                  onFocus={e => { setFocusedIdx(i); e.target.select() }}
+                  onBlur={() => setFocusedIdx(null)}
+                  aria-label={`Digit ${i + 1}`}
+                  aria-invalid={error || undefined}
+                  className={cn(
+                    'h-full w-full bg-transparent text-center outline-none',
+                    'text-[22px] font-semibold tracking-[-0.01em]',
+                    'text-transparent caret-transparent', // real glyph is the animated span below
+                    disabled && 'cursor-not-allowed',
+                  )}
+                />
+              </Surface>
               {/* digit pops in with a blurred spring; input text is transparent */}
               <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
                 <AnimatePresence mode="popLayout" initial={false}>

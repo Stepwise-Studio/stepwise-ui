@@ -139,8 +139,8 @@ export function DatePicker({
     <HugeiconsIcon icon={Calendar03Icon} size={18} strokeWidth={active ? 2 : 1.5} color="currentColor" />
   )
   const borderColor = active
-    ? (dark ? '#d4d4d8' : '#3f3f46')
-    : (dark ? '#27272a' : '#e4e4e7')
+    ? `var(--ui-border-focus, ${dark ? '#d4d4d8' : '#3f3f46'})`
+    : 'var(--ui-border, rgb(138 138 141 / 0.23))'
 
   const displayValue = variant === 'date'  ? fmtDate(value ?? null)
     : variant === 'range' ? fmtRange(from ?? null, to ?? null)
@@ -160,7 +160,7 @@ export function DatePicker({
       )}
 
       <div ref={inputRef} className="relative w-full h-11">
-        <Surface radius={18} className="relative h-11 w-full bg-white dark:bg-zinc-900">
+        <Surface radius={18} lisse={{ middleBorder: { width: 1, opacity: 1, color: borderColor } }} className="relative h-11 w-full bg-white dark:bg-zinc-900">
 
           {/* Calendar icon */}
           {variant === 'text' ? (
@@ -236,16 +236,6 @@ export function DatePicker({
             </button>
           )}
         </Surface>
-
-        {/* Border overlay */}
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            borderRadius: 18, borderWidth: '1px', borderStyle: 'solid', borderColor,
-            transition: 'border-color 200ms ease-in-out',
-          }}
-        />
 
         {/* Calendar - absolute below the input, clipped by the parent overflow container */}
         <AnimatePresence initial={false}>

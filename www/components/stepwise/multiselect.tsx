@@ -58,7 +58,7 @@ const SelectedPill = forwardRef<HTMLSpanElement, {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       transition={PILL_TRANSITION}
-      className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-[100px] border border-zinc-200 bg-zinc-100 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+      className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-[100px] border border-[var(--ui-border,rgb(138_138_141_/_0.23))] bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
       style={{ fontSize: 13, fontFamily: FONT, lineHeight: 1, paddingTop: 5, paddingBottom: 5, paddingLeft: 8, paddingRight: 6, ...style }}
     >
       {label}
@@ -124,9 +124,9 @@ export function Multiselect({
   const visibleChips = selected.slice(0, maxVisible)
   const overflow = selected.length - maxVisible
 
-  // Open steps up one notch, matching Input's focus state.
-  const idleBorder = dark ? '#27272a' : '#e4e4e7'
-  const openBorder = dark ? '#71717a' : '#a1a1aa'
+  // Open steps up one notch, matching Select and Combobox.
+  const idleBorder = 'var(--ui-border, rgb(138 138 141 / 0.23))'
+  const openBorder = `var(--ui-border-open, ${dark ? '#71717a' : '#a1a1aa'})`
   const borderColor = disabled ? idleBorder : (isOpen ? openBorder : idleBorder)
   const openToggle = () => { if (!disabled) setIsOpen(o => !o) }
 
@@ -147,7 +147,7 @@ export function Multiselect({
           off the outer column - otherwise a taller (wrapped) trigger pushes
           straight through a panel still parked at the old, shorter offset. */}
       <div className="relative min-h-11 w-full">
-        <Surface radius={18} className="relative min-h-11 w-full bg-white dark:bg-zinc-900">
+        <Surface radius={18} lisse={{ middleBorder: { width: 1, opacity: 1, color: borderColor } }} className="relative min-h-11 w-full bg-white dark:bg-zinc-900">
           <button
             type="button"
             onClick={openToggle}
@@ -184,7 +184,7 @@ export function Multiselect({
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
                       transition={PILL_TRANSITION}
-                      className="inline-flex shrink-0 items-center rounded-[100px] border border-zinc-200 bg-zinc-100 text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                      className="inline-flex shrink-0 items-center rounded-[100px] border border-[var(--ui-border,rgb(138_138_141_/_0.23))] bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
                       style={{ fontSize: 12, fontFamily: FONT, lineHeight: 1, padding: '5px 8px', fontWeight: 500 }}
                     >
                       +{overflow}
@@ -202,11 +202,6 @@ export function Multiselect({
             </motion.span>
           </button>
         </Surface>
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{ borderRadius: 18, borderWidth: 1, borderStyle: 'solid', borderColor, transition: 'border-color 250ms ease' }}
-        />
 
         {/* panel - floats below the trigger, matches Select/Combobox */}
         <AnimatePresence>
@@ -221,6 +216,7 @@ export function Multiselect({
             >
               <Surface
                 radius={18}
+                lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }}
                 className="w-full bg-white dark:bg-zinc-900 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.18),0_2px_8px_rgba(0,0,0,0.06)]"
               >
                 <ScrollArea maxHeight={240} className="p-1.5">
@@ -240,7 +236,7 @@ export function Multiselect({
                       >
                         <span className="relative block shrink-0" style={{ width: 16, height: 16 }}>
                           {!checked && (
-                            <span className="absolute inset-0 block rounded-full border-[1.5px] border-zinc-300 dark:border-zinc-600" />
+                            <span className="absolute inset-0 block rounded-full border-[1.5px] border-[var(--ui-border,rgb(138_138_141_/_0.23))]" />
                           )}
                           <AnimatePresence>
                             {checked && (
@@ -276,11 +272,6 @@ export function Multiselect({
                   })}
                 </ScrollArea>
               </Surface>
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{ borderRadius: 18, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border, rgb(138 138 141 / 0.23))' }}
-              />
             </motion.div>
           )}
         </AnimatePresence>

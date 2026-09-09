@@ -187,7 +187,7 @@ export function Drawer({
 
               {/* Header */}
               {title && (
-                <div className="flex items-center justify-between px-5 py-4 shrink-0 border-b border-zinc-100 dark:border-zinc-800">
+                <div className="flex items-center justify-between px-5 py-4 shrink-0 border-b border-[var(--ui-border-subtle,rgb(151_151_154_/_0.106))]">
                   <h2 id={titleId} className="text-[16px] font-semibold tracking-[-0.02em] text-zinc-900 dark:text-zinc-50">
                     {title}
                   </h2>

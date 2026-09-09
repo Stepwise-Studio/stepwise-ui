@@ -85,12 +85,20 @@ html.dark .shiki span {
   --background: oklch(0.98 0 0);
   --foreground: oklch(0.13 0 0);
 
-  /* --ui-border / --ui-border-subtle are NOT defined here on purpose. They
-     ship with the components themselves (see primitives/surface.tsx), so an
-     installed component arrives with working borders. Defining them here too
-     would mean this site renders from a copy its users never receive, and a
-     break in the shipped one would go unnoticed. Override them here if the
-     site ever wants different borders from the default. */
+  /* The --ui-border-* tokens are NOT defined here on purpose. Every component
+     that draws a border reads one through var() with its own inline fallback,
+     so an installed component arrives with working borders whether or not the
+     host project defines anything. Defining them here would mean this site
+     renders from values its users never receive, and a break in the shipped
+     fallbacks would go unnoticed. To retheme, set them in the host project's
+     own CSS, or per instance with a Tailwind arbitrary property:
+     <Segment className="[--ui-border:var(--color-sky-500)]" />
+
+       --ui-border         resting hairline on fields, cards, panels
+       --ui-border-subtle  faint internal dividers
+       --ui-border-focus   field border while focused
+       --ui-border-open    trigger border while its panel is open
+       --ui-border-error   field border in an error state */
 
   /* Modal motion - transitions.dev */
   --modal-open-dur: 250ms;

@@ -98,7 +98,7 @@ export function Table<T = Record<string, unknown>>({
 
   return (
     <div className={cn('relative', className)}>
-      <Surface radius={24} className="overflow-x-auto">
+      <Surface radius={24} lisse={{ middleBorder: { width: 1, opacity: 1, color: 'var(--ui-border, rgb(138 138 141 / 0.23))' } }} className="overflow-x-auto">
         <div role="table" style={{ minWidth }}>
           {/* Header */}
           <div
@@ -166,7 +166,7 @@ export function Table<T = Record<string, unknown>>({
 
             {/* Footer - page read-out + arrows */}
             {paginated && (
-              <div className="flex items-center justify-between border-t border-zinc-200/70 bg-zinc-50 px-4 py-2.5 dark:border-zinc-700/40 dark:bg-zinc-900">
+              <div className="flex items-center justify-between border-t border-[var(--ui-border,rgb(138_138_141_/_0.23))] bg-zinc-50 px-4 py-2.5 dark:bg-zinc-900">
                 <span className="pl-2 text-[12px] tabular-nums text-zinc-400 dark:text-zinc-500">
                   {pageLabel ? pageLabel(current, pages) : `Page ${current} of ${pages}`}
                 </span>
@@ -179,13 +179,6 @@ export function Table<T = Record<string, unknown>>({
           </div>
         </div>
       </Surface>
-
-      {/* border overlay - outside the squircle clip so it never gets shaved */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ borderRadius: 24, borderWidth: 1, borderStyle: 'solid', borderColor: 'var(--ui-border, rgb(138 138 141 / 0.23))' }}
-      />
     </div>
   )
 }

@@ -433,11 +433,12 @@ export const registry: RegistryComponent[] = [
     name: 'otp-input',
     description: "A row of individual digit boxes for one-time codes.",
     category: 'components',
-    dependencies: ['clsx', 'motion', 'tailwind-merge'],
+    dependencies: ['@lisse/react', 'clsx', 'motion', 'tailwind-merge'],
     peerDependencies: ['react'],
     registryDependencies: [],
     files: [
       { src: 'components/stepwise/otp-input.tsx', dest: 'components/stepwise/otp-input.tsx' },
+      { src: 'components/stepwise/primitives/surface.tsx', dest: 'components/stepwise/primitives/surface.tsx' },
       { src: 'lib/utils/cn.ts', dest: 'lib/utils/cn.ts' },
     ],
   },

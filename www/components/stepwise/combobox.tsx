@@ -166,10 +166,10 @@ export function Combobox({
   // not a near-black/near-white ring.
   const isActive = focused || open
   const borderColor = disabled
-    ? (dark ? '#27272a' : '#e4e4e7')
+    ? 'var(--ui-border, rgb(138 138 141 / 0.23))'
     : isActive
-      ? (dark ? '#71717a' : '#a1a1aa')
-      : (dark ? '#27272a' : '#e4e4e7')
+      ? `var(--ui-border-open, ${dark ? '#71717a' : '#a1a1aa'})`
+      : 'var(--ui-border, rgb(138 138 141 / 0.23))'
   const fieldMiddleBorder = { width: 1, opacity: 1, color: borderColor }
 
   return (

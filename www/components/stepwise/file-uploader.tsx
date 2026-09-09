@@ -60,7 +60,7 @@ function FileList({ files, onRemove }: { files: FileEntry[]; onRemove?: (id: str
               className={cn(
                 'flex items-center gap-2.5 px-3 py-2',
                 'bg-zinc-50 dark:bg-zinc-800/60',
-                'border border-zinc-200/80 dark:border-zinc-700/60',
+                'border border-[var(--ui-border,rgb(138_138_141_/_0.23))]',
               )}
             >
               <HugeiconsIcon icon={File01Icon} size={16} strokeWidth={1.8} className="shrink-0 text-zinc-400 dark:text-zinc-500" />

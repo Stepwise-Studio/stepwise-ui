@@ -59,7 +59,7 @@ export function Segment<T extends string = string>({
   let control: ReactNode
   if (variant === 'underline') {
     control = (
-      <div className="flex w-fit items-center gap-1 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex w-fit items-center gap-1 border-b border-[var(--ui-border,rgb(138_138_141_/_0.23))]">
         {options.map(opt => {
           const isActive = opt.value === active
           return (

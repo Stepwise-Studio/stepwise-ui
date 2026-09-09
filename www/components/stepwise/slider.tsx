@@ -335,6 +335,12 @@ export function Slider({
     <div className={cn('relative w-full', disabled && 'opacity-50', className)} style={{ height: ROW_H }}>
       <Surface
         radius={18}
+        lisse={{ middleBorder: {
+          width: 1, opacity: 1,
+          color: disabled || !dragging
+            ? 'var(--ui-border, rgb(138 138 141 / 0.23))'
+            : 'var(--ui-border-focus, rgb(138 138 141 / 0.6))',
+        } }}
         className={cn('relative w-full bg-zinc-100 dark:bg-zinc-900', disabled ? 'cursor-not-allowed' : 'cursor-pointer')}
         style={{ height: ROW_H }}
       >
@@ -423,17 +429,6 @@ export function Slider({
           )}
         </div>
       </Surface>
-
-      <div
-        aria-hidden
-        className={cn(
-          'absolute inset-0 pointer-events-none rounded-[18px] border border-solid',
-          'transition-[border-color] duration-250 motion-reduce:transition-none',
-          disabled || !dragging
-            ? 'border-[var(--ui-border,rgb(138_138_141_/_0.23))]'
-            : 'border-zinc-300 dark:border-zinc-600',
-        )}
-      />
     </div>
   )
 }

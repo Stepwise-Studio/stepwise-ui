@@ -212,7 +212,7 @@ function MonthYearPanel({ viewYear, viewMonth, onPick, onYearSet }: PickerPanelP
       >
         <div className="flex">
           {/* Year scroller - left column */}
-          <div className="w-[76px] shrink-0 border-r border-zinc-200/80 dark:border-zinc-800/80 px-1 py-1 relative">
+          <div className="w-[76px] shrink-0 border-r border-[var(--ui-border-subtle,rgb(151_151_154_/_0.106))] px-1 py-1 relative">
             {/* Fade masks top/bottom */}
             <div className="pointer-events-none absolute top-0 inset-x-0 h-12 z-10 bg-gradient-to-b from-zinc-50 dark:from-zinc-900 to-transparent" />
             <div className="pointer-events-none absolute bottom-0 inset-x-0 h-12 z-10 bg-gradient-to-t from-zinc-50 dark:from-zinc-900 to-transparent" />

@@ -189,13 +189,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((
   const inputPl = hasLeftIcon  ? '42px' : '14px'
   const inputPr = (hasRightIcon || variant === 'password') ? '44px' : '14px'
 
+  // Resting hairline is the library-wide token (same one Segment, Toast and
+  // Modal read). The stateful colours get their own tokens so a host project
+  // can retheme focus and error without touching the resting edge. Every one
+  // carries an inline fallback - the registry ships source, not this site's
+  // stylesheet, so a component with a bare var() arrives with no border.
   const borderColor = disabled
-    ? (dark ? '#27272a' : '#e4e4e7')
+    ? 'var(--ui-border, rgb(138 138 141 / 0.23))'
     : hasError
-      ? (dark ? '#ef4444' : '#f87171')
+      ? `var(--ui-border-error, ${dark ? '#ef4444' : '#f87171'})`
       : focused
-        ? (dark ? '#d4d4d8' : '#3f3f46')
-        : (dark ? '#27272a' : '#e4e4e7')
+        ? `var(--ui-border-focus, ${dark ? '#d4d4d8' : '#3f3f46'})`
+        : 'var(--ui-border, rgb(138 138 141 / 0.23))'
 
   // Password-specific hint: real-time color based on length (no need for blur)
   const passwordHintText =
