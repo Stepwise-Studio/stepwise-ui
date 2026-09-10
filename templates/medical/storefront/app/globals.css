@@ -1,0 +1,328 @@
+@import "tailwindcss";
+
+/* Class-based dark mode - Tailwind v4. Matches the Stepwise library, whose
+   components all key their dark styles off `html.dark`. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RISO PHARMA EDITORIAL - palette
+
+   The vendored Stepwise components are zinc-based: `bg-zinc-50`,
+   `text-zinc-700`, `dark:bg-zinc-950`, `focus-visible:ring-sky-600` and so on,
+   hard-coded across ~15 files. Rather than fork every one of them, the SCALES
+   THEMSELVES are redefined here. Tailwind v4 resolves `bg-zinc-50` through
+   `--color-zinc-50`, so redefining that token re-tints every vendored
+   component at once and keeps them byte-identical to the registry source.
+
+   zinc  → warm ivory paper at the light end, deep navy ink at the dark end
+   white → warm ivory (riso paper is never pure white)
+   black → navy-charcoal (riso ink is never pure black)
+   sky   → cobalt (every focus ring and accent in the library)
+   green → deep botanical green
+   amber → warm coral / orange
+   red / rose are left alone: they carry error and destructive meaning, and a
+   warning that reads as "brand coral" is a worse outcome than a hue clash.
+
+   See THEMING.md for the full record.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Inter Display is loaded by next/font/local in app/layout.tsx, straight from
+     public/fonts - four weights, no italics, Latin + Latin Extended subset. */
+  --font-sans: var(--font-inter-display), ui-sans-serif, system-ui, sans-serif;
+
+  /* ── Named Riso inks ─────────────────────────────────────────────────────
+     The seven-colour core palette, addressable directly as `text-ink`,
+     `bg-cobalt`, `border-coral` … for art that is not going through zinc. */
+  --color-paper:     oklch(0.965 0.014 85);   /* cream / warm ivory        */
+  --color-paper-alt: oklch(0.938 0.019 82);   /* second paper stock, warmer */
+  --color-ink:       oklch(0.255 0.052 255);  /* deep navy                  */
+  --color-cobalt:    oklch(0.520 0.180 262);  /* cobalt blue                */
+  --color-teal:      oklch(0.605 0.072 197);  /* muted teal                 */
+  --color-botanical: oklch(0.455 0.092 156);  /* deep botanical green       */
+  --color-coral:     oklch(0.680 0.166 45);   /* warm coral / orange        */
+  --color-charcoal:  oklch(0.315 0.014 62);   /* charcoal                   */
+  --color-lavender:  oklch(0.640 0.110 300);  /* skin-care accent only      */
+
+  /* ── zinc, retinted ──────────────────────────────────────────────────────
+     Warm at the light end, navy at the dark end, hue interpolating from 85°
+     (paper) to 256° (ink) as lightness drops - so a card fill reads as paper
+     and body copy reads as ink without either being a neutral grey. */
+  --color-zinc-50:  oklch(0.980 0.010 85);
+  --color-zinc-100: oklch(0.958 0.015 84);
+  --color-zinc-200: oklch(0.918 0.020 80);
+  --color-zinc-300: oklch(0.855 0.024 76);
+  --color-zinc-400: oklch(0.605 0.028 66);
+  --color-zinc-500: oklch(0.525 0.030 62);
+  --color-zinc-600: oklch(0.440 0.034 58);
+  --color-zinc-700: oklch(0.345 0.040 250);
+  --color-zinc-800: oklch(0.262 0.050 253);
+  --color-zinc-900: oklch(0.205 0.046 255);
+  --color-zinc-950: oklch(0.152 0.036 257);
+
+  /* Riso paper is never pure white and riso ink is never pure black. */
+  --color-white: oklch(0.985 0.008 86);
+  --color-black: oklch(0.160 0.030 258);
+
+  /* ── sky → cobalt ────────────────────────────────────────────────────────
+     Focus rings, links and the library's accent all route through sky-*. */
+  --color-sky-50:  oklch(0.960 0.020 262);
+  --color-sky-100: oklch(0.915 0.040 262);
+  --color-sky-200: oklch(0.845 0.070 262);
+  --color-sky-400: oklch(0.680 0.145 262);
+  --color-sky-500: oklch(0.605 0.170 262);
+  --color-sky-600: oklch(0.520 0.180 262);
+  --color-sky-700: oklch(0.440 0.160 262);
+  --color-sky-800: oklch(0.335 0.120 262);
+
+  /* ── green / emerald → botanical ─────────────────────────────────────────
+     Prices, in-stock states, success chips. */
+  --color-green-50:  oklch(0.960 0.018 156);
+  --color-green-200: oklch(0.860 0.055 156);
+  --color-green-500: oklch(0.545 0.105 156);
+  --color-green-600: oklch(0.455 0.092 156);
+  --color-green-800: oklch(0.320 0.065 156);
+  --color-emerald-400: oklch(0.640 0.105 156);
+  --color-emerald-500: oklch(0.545 0.105 156);
+
+  /* ── amber → coral ───────────────────────────────────────────────────────
+     Discounts, offers, the "needs a prescription" caution tone. */
+  --color-amber-50:  oklch(0.962 0.026 60);
+  --color-amber-200: oklch(0.878 0.070 54);
+  --color-amber-400: oklch(0.760 0.130 48);
+  --color-amber-500: oklch(0.680 0.166 45);
+  --color-amber-600: oklch(0.598 0.155 42);
+
+  /* ── Motion tokens - transitions.dev ─────────────────────────────────────
+     Referenced as var(--duration-*) / var(--ease-*) from component styles, and
+     as `duration-fast` / `ease-smooth-out` utilities. */
+  --duration-stagger:   40ms;
+  --duration-micro:     80ms;
+  --duration-quick:     150ms;
+  --duration-fast:      250ms;
+  --duration-medium:    350ms;
+  --duration-slow:      400ms;
+  --duration-very-slow: 500ms;
+
+  --ease-smooth-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out:        ease-in-out;
+  --ease-out:           ease-out;
+  --ease-linear:        linear;
+  --ease-bounce:        cubic-bezier(0.34, 1.36, 0.64, 1);
+
+  --distance-micro:  4px;
+  --distance-base:   8px;
+  --distance-medium: 12px;
+
+  --scale-large:  0.96;
+  --scale-medium: 0.97;
+  --scale-small:  0.98;
+
+  --blur-small:  2px;
+  --blur-medium: 3px;
+}
+
+/* ─── Border tokens ──────────────────────────────────────────────────────────
+   Every Stepwise component that draws an edge reads one of these through
+   `var()` and hands it to `middleBorder` - a CSS `border` would be sliced off
+   by the squircle clip-path. Defining them here is what retints every vendored
+   hairline from zinc-grey to warm ink.                                       */
+:root {
+  --ui-border:        oklch(0.255 0.052 255 / 0.16);
+  --ui-border-subtle: oklch(0.255 0.052 255 / 0.09);
+  --ui-border-focus:  oklch(0.520 0.180 262 / 0.85);
+  --ui-border-open:   oklch(0.255 0.052 255 / 0.34);
+  --ui-border-error:  oklch(0.577 0.203 27 / 0.85);
+
+  --background: oklch(0.965 0.014 85);
+  --foreground: oklch(0.255 0.052 255);
+
+  /* Two paper stocks so alternating sections read as different sheets rather
+     than as one page with a stripe painted on it. */
+  --surface-raised: oklch(0.985 0.008 86);
+  --surface-sunken: oklch(0.938 0.019 82);
+
+  --scrollbar-thumb:        oklch(0.255 0.052 255 / 0.22);
+  --scrollbar-thumb-hover:  oklch(0.255 0.052 255 / 0.30);
+  --scrollbar-thumb-active: oklch(0.520 0.180 262);
+
+  /* Modal motion - transitions.dev */
+  --modal-open-dur:  250ms;
+  --modal-close-dur: 150ms;
+  --modal-scale:     0.96;
+  --modal-ease:      cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark theme. Not a mechanical inversion: the paper becomes a deep navy stock
+   and the ink becomes warm ivory, chroma pulled back so the accents stay
+   readable against it rather than glowing. */
+html.dark {
+  --ui-border:        oklch(0.985 0.008 86 / 0.14);
+  --ui-border-subtle: oklch(0.985 0.008 86 / 0.07);
+  --ui-border-focus:  oklch(0.680 0.145 262 / 0.85);
+  --ui-border-open:   oklch(0.985 0.008 86 / 0.28);
+  --ui-border-error:  oklch(0.645 0.190 27 / 0.85);
+
+  --background: oklch(0.152 0.036 257);
+  --foreground: oklch(0.938 0.019 82);
+
+  --surface-raised: oklch(0.205 0.046 255);
+  --surface-sunken: oklch(0.128 0.032 257);
+
+  --scrollbar-thumb:        oklch(0.938 0.019 82 / 0.18);
+  --scrollbar-thumb-hover:  oklch(0.938 0.019 82 / 0.26);
+  --scrollbar-thumb-active: oklch(0.680 0.145 262);
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+
+html {
+  scrollbar-gutter: stable;
+  overscroll-behavior-y: none;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+  /* ss03 round quotes, cv05/cv11 the humanist l and single-storey a - the
+     letterforms that keep Inter from reading as generic UI sans in editorial
+     settings. tnum stays off globally; prices opt in per element. */
+  font-feature-settings: "ss03" 1, "cv05" 1, "cv11" 1;
+}
+
+::selection {
+  background-color: oklch(0.520 0.180 262 / 0.16);
+  color: oklch(0.440 0.160 262);
+}
+html.dark ::selection {
+  background-color: oklch(0.680 0.145 262 / 0.24);
+  color: oklch(0.915 0.040 262);
+}
+
+/* ─── Paper grain ────────────────────────────────────────────────────────────
+   The tactile half of "riso". A fractal-noise tile laid over the page at very
+   low alpha, plus a halftone dot lattice at an even lower one. Both are inline
+   SVG data URIs so the template ships with no image dependency at all, and
+   both sit under `pointer-events: none` so they never intercept a click.
+
+   `background-attachment: fixed` keeps the grain still while the page scrolls,
+   which is what makes it read as the texture of the sheet rather than as a
+   pattern printed on the content.                                            */
+.paper-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+html.dark .paper-grain::after {
+  opacity: 0.35;
+  mix-blend-mode: screen;
+}
+
+/* ─── Illustration plates ────────────────────────────────────────────────────
+   An illustration is a printed plate, not a UI surface, so it gets its own
+   token set rather than reading the interface colours. The inks barely move
+   between themes - a riso ink is the same ink whatever it is printed on - and
+   only the paper stock and the two darkest tones flip, exactly as a real
+   two-colour print on cream vs on a dark stock would.
+
+   Every art component in `components/riso/` paints from these and nothing
+   else, so re-inking the whole illustration system is one edit here.         */
+/* ─── Squircle height chains ─────────────────────────────────────────────────
+   @lisse/react inserts an unstyled `position: relative` wrapper between the
+   element you styled and its parent, to host the SVG that draws the border.
+   That wrapper is `height: auto`, and it silently breaks every `height: 100%`
+   chain that passes through it - a card in a stretched grid cell stops at its
+   own content height and leaves the rest of the cell as bare paper.
+
+   Put `squircle-fill` on the PARENT (the grid, or the cell) and both the
+   wrapper and the clipped node stretch to it. A structural fix for a
+   structural gap, which is why it lives here rather than being worked around
+   card by card.                                                              */
+.squircle-fill > *,
+.squircle-fill > * > div,
+.squircle-fill > * > div > [data-slot='smooth-corners'],
+.squircle-fill > div > [data-slot='smooth-corners'] {
+  height: 100%;
+}
+
+.riso-plate {
+  --plate-bg:       oklch(0.938 0.019 82);   /* the sheet                     */
+  --plate-cream:    oklch(0.972 0.016 84);   /* lightest ink, object bodies   */
+  --plate-stone:    oklch(0.836 0.021 74);   /* pedestals, shadow side        */
+  --plate-ink:      oklch(0.255 0.052 255);  /* deep navy, the outline ink    */
+  --plate-cobalt:   oklch(0.520 0.180 262);
+  --plate-teal:     oklch(0.605 0.072 197);
+  --plate-green:    oklch(0.455 0.092 156);
+  --plate-coral:    oklch(0.680 0.166 45);
+  --plate-lavender: oklch(0.640 0.110 300);
+}
+
+html.dark .riso-plate {
+  --plate-bg:       oklch(0.198 0.042 256);
+  --plate-cream:    oklch(0.905 0.028 82);
+  --plate-stone:    oklch(0.365 0.036 250);
+  --plate-ink:      oklch(0.128 0.032 257);
+  --plate-cobalt:   oklch(0.620 0.165 262);
+  --plate-teal:     oklch(0.665 0.070 197);
+  --plate-green:    oklch(0.560 0.098 156);
+  --plate-coral:    oklch(0.720 0.155 45);
+  --plate-lavender: oklch(0.700 0.105 300);
+}
+
+/* Halftone - a 4px dot lattice. Used on illustration plates, never on text. */
+.halftone {
+  background-image: radial-gradient(currentColor 0.9px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+/* ─── Print registration ─────────────────────────────────────────────────────
+   Real riso runs each ink through the drum separately, so layers land a
+   fraction of a millimetre out of true. `--reg-x` / `--reg-y` offset a shape
+   by a sub-pixel amount to reproduce that. Applied per-layer in the art
+   components, never to text.                                                 */
+.misregister {
+  translate: var(--reg-x, 0.5px) var(--reg-y, -0.5px);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 150ms ease-out;
+}
+::-webkit-scrollbar-thumb:hover  { background-color: var(--scrollbar-thumb-hover); }
+::-webkit-scrollbar-thumb:active { background-color: var(--scrollbar-thumb-active); }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* ─── Motion ─────────────────────────────────────────────────────────────────
+   One global guard. Individual components also check `useReducedMotion()`;
+   this catches the CSS-only transitions that never reach JS.                 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

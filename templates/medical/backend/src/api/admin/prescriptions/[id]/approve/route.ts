@@ -1,0 +1,11 @@
+import type { MedusaRequest, MedusaResponse } from '@medusajs/framework/http'
+
+import { reviewPrescription } from '../../../../utils/review'
+
+/** POST /admin/prescriptions/:id/approve — body `{ note?: string }`. */
+export const POST = async (req: MedusaRequest, res: MedusaResponse) => {
+  const { note } = (req.body ?? {}) as { note?: unknown }
+  res.json({
+    prescription: await reviewPrescription(req, 'approved', note, false),
+  })
+}

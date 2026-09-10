@@ -1,0 +1,35 @@
+/dist
+.env
+.DS_Store
+/uploads
+/node_modules
+yarn-error.log
+
+.idea
+
+coverage
+
+!src/**
+
+./tsconfig.tsbuildinfo
+medusa-db.sql
+build
+.cache
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+.medusa
+.env.test
+.env.local
+
+# Local file provider upload dir (dev prescriptions land here).
+static/
+
+# Committed: the env template the README/CONTRACT point at.
+# The repo root ignores .env*, so re-include it explicitly.
+!.env.example
