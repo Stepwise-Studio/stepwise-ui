@@ -27,7 +27,7 @@ export const GET = async (req: MedusaRequest, res: MedusaResponse) => {
   )
 
   res.json({
-    prescriptions: prescriptions.map(toPrescriptionDTO),
+    prescriptions: prescriptions.map((p: any) => toPrescriptionDTO(p, 'admin')),
     count,
     limit: take,
     offset: skip,

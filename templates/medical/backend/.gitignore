@@ -33,3 +33,6 @@ static/
 # Committed: the env template the README/CONTRACT point at.
 # The repo root ignores .env*, so re-include it explicitly.
 !.env.example
+
+# private uploads (prescription scans — never commit)
+uploads/

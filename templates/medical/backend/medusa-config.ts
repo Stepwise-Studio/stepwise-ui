@@ -45,6 +45,26 @@ module.exports = defineConfig({
             options: {
               upload_dir: 'static',
               backend_url: `${BACKEND_URL}/static`,
+              // Prescriptions are medical records, and this is the line that
+              // keeps them off the public web.
+              //
+              // `@medusajs/file-local` defaults `private_upload_dir` to the SAME
+              // `static/` folder it serves over HTTP — its own source says so:
+              // "there is no way to serve private files through a static
+              // server, so we simply place them in static". The framework mounts
+              // express.static on /static before Medusa's API router, so no
+              // route middleware can intercept it either. Result on the default
+              // config: an uploaded prescription scan is readable by anyone with
+              // the filename, no session required. Verified before this change.
+              //
+              // Pointing private uploads outside the served directory is the
+              // provider's own supported escape hatch. The documented cost is
+              // that presigned URLs stop working, which costs us nothing:
+              // pharmacists read scans through GET /admin/prescriptions/:id/file,
+              // which streams via `getAsBuffer` — and that resolves the private
+              // directory from the `private-` filename prefix, so it keeps
+              // working unchanged.
+              private_upload_dir: 'uploads/private',
             },
           },
         ],

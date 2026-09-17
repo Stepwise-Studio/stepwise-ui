@@ -41,5 +41,5 @@ export async function reviewPrescription(
     reviewed_at: new Date(),
   })
 
-  return toPrescriptionDTO(Array.isArray(updated) ? updated[0] : updated)
+  return toPrescriptionDTO(Array.isArray(updated) ? updated[0] : updated, 'admin')
 }

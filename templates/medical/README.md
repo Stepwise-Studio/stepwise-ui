@@ -165,20 +165,27 @@ live keys.
 
 Do not skip this section.
 
-### 🔴 Prescription files are patient health data
+### ✅ Prescription files (fixed — but know how it works)
 
-In local development, uploads are written to `backend/static/` by Medusa's local file
-provider, which **serves them publicly to anyone who guesses the URL**. That is fine
-on your laptop and completely unacceptable in production — these are medical records.
+Prescription scans are patient health data, and the template now keeps them off the
+public web by default.
 
-Before going live, switch to S3 (or any provider with signed, expiring URLs):
+Worth knowing why, because the default is a trap: `@medusajs/file-local` defaults its
+*private* upload directory to the same `static/` folder it serves over HTTP, and the
+framework mounts that static handler ahead of the API router, so no route middleware
+can guard it. On a stock config an uploaded prescription is readable by anyone with
+the filename — no login. We verified that, then fixed it:
 
-```bash
-npm install @medusajs/file-s3
-```
+- `private_upload_dir` points outside the served directory, so scans are never in a
+  public folder at all.
+- The store API returns **no link and no filename** for a scan. The customer uploaded
+  it; nothing needs it served back to them.
+- Pharmacists read scans through `GET /admin/prescriptions/:id/file`, behind admin
+  auth, sent with `no-store` so it never lands in a shared cache.
 
-then replace the file provider in `backend/medusa-config.ts` with the S3 provider and
-its bucket credentials. Nothing else in the template changes.
+**If you swap the file provider, re-check this.** Moving to S3 is now a choice about
+scale and durability, not a security fix — but if you do, make the bucket private and
+serve through signed URLs. A public bucket puts you right back where the default was.
 
 ### 🟠 Two things that are not finished yet
 
@@ -196,7 +203,7 @@ Either wire them up or remove the codes from `storefront/lib/offers.ts`.
 ### The rest of the list
 
 - [ ] Stock display fixed, and offer codes either wired or removed (above)
-- [ ] File storage moved off local disk (above)
+- [ ] If you changed the file provider, confirm scans are still not publicly readable (above)
 - [ ] `JWT_SECRET`, `COOKIE_SECRET`, `AUTH_MFA_ENCRYPTION_KEY` set to fresh random values — never the example ones
 - [ ] `STORE_CORS` / `ADMIN_CORS` / `AUTH_CORS` set to your real domains, not `localhost`
 - [ ] Redis configured — without it, sessions and background jobs live in one process's memory and won't survive a restart or scale past one instance

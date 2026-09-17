@@ -681,9 +681,9 @@ function mockUpload(file: File, patientName?: string): Prescription {
     id,
     status      : 'pending',
     file_id     : `file_${id}`,
-    // Never a data URI: a multi-megabyte one would blow the storage quota.
-    // An object URL is valid for the life of the document and no longer.
-    file_url    : typeof URL === 'undefined' ? '' : URL.createObjectURL(file),
+    // No file_url, matching the live store API: a prescription scan is a medical
+    // record and is only readable by a logged-in pharmacist. The offline mock
+    // holds the same line so the two paths cannot drift.
     customer_id : null,
     cart_id     : null,
     order_id    : null,

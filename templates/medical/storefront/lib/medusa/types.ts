@@ -72,7 +72,9 @@ export type Prescription = {
   id          : string
   status      : PrescriptionStatus
   file_id     : string        // Medusa file module id
-  file_url    : string
+  // No file_url: a prescription scan is a medical record and the store API
+  // deliberately returns no link to it. The customer uploaded the file; only a
+  // logged-in pharmacist can read it back.
   customer_id : string | null // null = guest upload
   cart_id     : string | null
   order_id    : string | null
